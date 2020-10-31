@@ -24,6 +24,7 @@ from __future__ import (absolute_import, division, print_function,
 
 import backtrader as bt
 from . import MovAv
+from ..settings import sell_color
 
 
 __all__ = ['haDelta', 'haD']
@@ -59,8 +60,8 @@ class haDelta(bt.Indicator):
     plotinfo = dict(subplot=True)
 
     plotlines = dict(
-        haDelta=dict(color='red'),
-        smoothed=dict(color='grey', _fill_gt=(0, 'green'), _fill_lt=(0, 'red'))
+        haDelta=dict(color='green'),
+        smoothed=dict(color='grey', _fill_gt=(0, 'green'), _fill_lt=(0, sell_color))
     )
 
     def __init__(self):

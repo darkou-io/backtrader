@@ -32,8 +32,8 @@ class MTradeObserver(bt.observer.Observer):
     plotinfo = dict(plot=True, subplot=True, plotlinelabels=True)
 
     plotlines = dict(
-        Id_0=dict(marker='*', markersize=8.0, color='lime', fillstyle='full'),
-        Id_1=dict(marker='o', markersize=8.0, color='red', fillstyle='full'),
+        Id_0=dict(marker='*', markersize=8.0, color=buy_color, fillstyle='full'),
+        Id_1=dict(marker='o', markersize=8.0, color='green', fillstyle='full'),
         Id_2=dict(marker='s', markersize=8.0, color='blue', fillstyle='full')
     )
 

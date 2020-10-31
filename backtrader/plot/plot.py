@@ -39,8 +39,8 @@ import matplotlib.ticker as mticker
 from ..utils.py3 import range, with_metaclass, string_types, integer_types
 from .. import AutoInfoClass, MetaParams, TimeFrame, date2num
 
-from .finance import plot_candlestick, plot_ohlc, plot_volume, plot_lineonclose
-from .formatters import (MyVolFormatter, MyDateFormatter, getlocator)
+from .finance import plot_candlestick, plot_ohlc, plot_volume, plot_line_on_close
+from .formatters import (MyVolFormatter, MyDateFormatter, get_locator)
 from . import locator as loc
 from .multicursor import MultiCursor
 from .scheme import PlotScheme
@@ -69,7 +69,7 @@ class PInfo(object):
         self.prop = mfontmgr.FontProperties(size=self.sch.subtxtsize)
 
     def newfig(self, figid, numfig, mpyplot):
-        fig = mpyplot.figure(figid + numfig)
+        fig = mpyplot.figure(figid + numfig, facecolor='#C7E5C8', constrained_layout=True)
         self.figs.append(fig)
         self.daxis = collections.OrderedDict()
         self.vaxis = list()
@@ -127,12 +127,13 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
                 matplotlib.use('nbagg')
 
         # this import must not happen before matplotlib.use
-        import matplotlib.pyplot as mpyplot
-        self.mpyplot = mpyplot
-
+        import matplotlib.pyplot as plt
+        plt.rcParams['font.sans-serif'] = ['KaiTi']
+        plt.rcParams['font.serif'] = ['KaiTi']
+        self.mpyplot = plt
         self.pinf = PInfo(self.p.scheme)
-        self.sortdataindicators(strategy)
-        self.calcrows(strategy)
+        self.sort_data_indicators(strategy)
+        self.calc_rows(strategy)
 
         st_dtime = strategy.lines.datetime.plot()
         if start is None:
@@ -186,7 +187,7 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
             # Things that go always at the top (observers)
             self.pinf.xdata = self.pinf.x
             for ptop in self.dplotstop:
-                self.plotind(None, ptop, subinds=self.dplotsover[ptop])
+                self.plot_index(None, ptop, subinds=self.dplotsover[ptop])
 
             # Create the rest on a per data basis
             dt0, dt1 = self.pinf.xreal[0], self.pinf.xreal[-1]
@@ -210,17 +211,17 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
                     self.pinf.xend = bisect.bisect_right(dts, xtemp[-1])
 
                 for ind in self.dplotsup[data]:
-                    self.plotind(
+                    self.plot_index(
                         data,
                         ind,
                         subinds=self.dplotsover[ind],
                         upinds=self.dplotsup[ind],
                         downinds=self.dplotsdown[ind])
 
-                self.plotdata(data, self.dplotsover[data])
+                self.plot_data(data, self.dplotsover[data])
 
                 for ind in self.dplotsdown[data]:
-                    self.plotind(
+                    self.plot_index(
                         data,
                         ind,
                         subinds=self.dplotsover[ind],
@@ -233,7 +234,7 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
                 horizOn=True, vertOn=True,
                 horizMulti=False, vertMulti=True,
                 horizShared=True, vertShared=False,
-                color='black', lw=1, ls=':')
+                color='gray', lw=1, ls=':')
 
             self.pinf.cursors.append(cursor)
 
@@ -252,7 +253,7 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
 
                 i -= 1
 
-            self.setlocators(lastax)  # place the locators/fmts
+            self.set_locators(lastax)  # place the locators/fmts
 
             # Applying fig.autofmt_xdate if the data axis is the last one
             # breaks the presentation of the date labels. why?
@@ -270,7 +271,7 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
 
         return figs
 
-    def setlocators(self, ax):
+    def set_locators(self, ax):
         clock = sorted(self.pinf.clock.datas,
                        key=lambda x: (x._timeframe, x._compression))[0]
 
@@ -311,7 +312,7 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
                                       fmt=self.pinf.sch.fmt_x_ticks)
         ax.xaxis.set_major_formatter(autofmt)
 
-    def calcrows(self, strategy):
+    def calc_rows(self, strategy):
         # Calculate the total number of rows
         rowsmajor = self.pinf.sch.rowsmajor
         rowsminor = self.pinf.sch.rowsminor
@@ -376,9 +377,9 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
 
         return ax
 
-    def plotind(self, iref, ind,
-                subinds=None, upinds=None, downinds=None,
-                masterax=None):
+    def plot_index(self, iref, ind,
+                   subinds=None, upinds=None, downinds=None,
+                   masterax=None):
 
         sch = self.p.scheme
 
@@ -389,7 +390,7 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
 
         # plot subindicators on self with independent axis above
         for upind in upinds:
-            self.plotind(iref, upind)
+            self.plot_index(iref, upind)
 
         # Get an axis for this plot
         ax = masterax or self.newaxis(ind, rowspan=self.pinf.sch.rowsminor)
@@ -475,7 +476,7 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
             plottedline = pltmethod(xdata, lplotarray, **plotkwargs)
             try:
                 plottedline = plottedline[0]
-            except:
+            except BaseException:
                 # Possibly a container of artists (when plotting bars)
                 pass
 
@@ -518,8 +519,8 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
 
         # plot subindicators that were created on self
         for subind in subinds:
-            self.plotind(iref, subind, subinds=self.dplotsover[subind],
-                         masterax=ax)
+            self.plot_index(iref, subind, subinds=self.dplotsover[subind],
+                            masterax=ax)
 
         if not masterax:
             # adjust margin if requested ... general of particular
@@ -570,9 +571,9 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
 
         # plot subindicators on self with independent axis below
         for downind in downinds:
-            self.plotind(iref, downind)
+            self.plot_index(iref, downind)
 
-    def plotvolume(self, data, opens, highs, lows, closes, volumes, label):
+    def plot_volume(self, data, opens, highs, lows, closes, volumes, label):
         pmaster = data.plotinfo.plotmaster
         if pmaster is data:
             pmaster = None
@@ -636,14 +637,14 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
 
         return volplot
 
-    def plotdata(self, data, indicators):
+    def plot_data(self, data, indicators):
         for ind in indicators:
             upinds = self.dplotsup[ind]
             for upind in upinds:
-                self.plotind(data, upind,
-                             subinds=self.dplotsover[upind],
-                             upinds=self.dplotsup[upind],
-                             downinds=self.dplotsdown[upind])
+                self.plot_index(data, upind,
+                                subinds=self.dplotsover[upind],
+                                upinds=self.dplotsup[upind],
+                                downinds=self.dplotsdown[upind])
 
         opens = data.open.plotrange(self.pinf.xstart, self.pinf.xend)
         highs = data.high.plotrange(self.pinf.xstart, self.pinf.xend)
@@ -651,7 +652,7 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
         closes = data.close.plotrange(self.pinf.xstart, self.pinf.xend)
         volumes = data.volume.plotrange(self.pinf.xstart, self.pinf.xend)
 
-        vollabel = 'Volume'
+        vol_label = '成交量'
         pmaster = data.plotinfo.plotmaster
         if pmaster is data:
             pmaster = None
@@ -663,13 +664,13 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
         voloverlay = (self.pinf.sch.voloverlay and pmaster is None)
 
         if not voloverlay:
-            vollabel += ' ({})'.format(datalabel)
+            vol_label += ' ({})'.format(datalabel)
 
         # if self.pinf.sch.volume and self.pinf.sch.voloverlay:
         axdatamaster = None
         if self.pinf.sch.volume and voloverlay:
-            volplot = self.plotvolume(
-                data, opens, highs, lows, closes, volumes, vollabel)
+            volplot = self.plot_volume(
+                data, opens, highs, lows, closes, volumes, vol_label)
             axvol = self.pinf.daxis[data.volume]
             ax = axvol.twinx()
             self.pinf.daxis[data] = ax
@@ -701,7 +702,7 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
                 self.pinf.nextcolor(axdatamaster)
                 color = self.pinf.color(axdatamaster)
 
-            plotted = plot_lineonclose(
+            plotted = plot_line_on_close(
                 ax, self.pinf.xdata, closes,
                 color=color, label=datalabel)
         else:
@@ -743,8 +744,8 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
         if self.pinf.sch.volume:
             # if not self.pinf.sch.voloverlay:
             if not voloverlay:
-                self.plotvolume(
-                    data, opens, highs, lows, closes, volumes, vollabel)
+                self.plot_volume(
+                    data, opens, highs, lows, closes, volumes, vol_label)
             else:
                 # Prepare overlay scaling/pushup or manage own axis
                 if self.pinf.sch.volpushup:
@@ -754,7 +755,11 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
                     ax.set_ylim(axbot, axtop)
 
         for ind in indicators:
-            self.plotind(data, ind, subinds=self.dplotsover[ind], masterax=ax)
+            self.plot_index(
+                data,
+                ind,
+                subinds=self.dplotsover[ind],
+                masterax=ax)
 
         handles, labels = ax.get_legend_handles_labels()
         a = axdatamaster or ax
@@ -768,7 +773,7 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
             if self.pinf.sch.volume and voloverlay:
                 if volplot:
                     # even if volume plot was requested, there may be no volume
-                    labels.insert(ai, vollabel)
+                    labels.insert(ai, vol_label)
                     handles.insert(ai, volplot)
 
             didx = labels.index(datalabel)
@@ -802,10 +807,10 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
         for ind in indicators:
             downinds = self.dplotsdown[ind]
             for downind in downinds:
-                self.plotind(data, downind,
-                             subinds=self.dplotsover[downind],
-                             upinds=self.dplotsup[downind],
-                             downinds=self.dplotsdown[downind])
+                self.plot_index(data, downind,
+                                subinds=self.dplotsover[downind],
+                                upinds=self.dplotsup[downind],
+                                downinds=self.dplotsdown[downind])
 
         self.pinf.legpos[a] = len(self.pinf.handles[a])
 
@@ -814,6 +819,8 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
             a.set_yscale('log')
 
     def show(self):
+        self.mpyplot.suptitle(
+            self.params.scheme.title, x=0.5, y=0.96, verticalalignment='baseline', fontsize=24)
         self.mpyplot.show()
 
     def savefig(self, fig, filename, width=16, height=9, dpi=300, tight=True):
@@ -821,7 +828,7 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
         bbox_inches = 'tight' * tight or None
         fig.savefig(filename, dpi=dpi, bbox_inches=bbox_inches)
 
-    def sortdataindicators(self, strategy):
+    def sort_data_indicators(self, strategy):
         # These lists/dictionaries hold the subplots that go above each data
         self.dplotstop = list()
         self.dplotsup = collections.defaultdict(list)

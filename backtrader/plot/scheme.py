@@ -20,6 +20,7 @@
 ###############################################################################
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
+from ..settings import buy_color, sell_color
 
 
 tableau20 = [
@@ -114,7 +115,7 @@ class PlotScheme(object):
         # Default color for a bullish bar/candle (0.75 -> intensity of gray)
         self.barup = '0.75'
         # Default color for a bearish bar/candle
-        self.bardown = 'red'
+        self.bardown = sell_color
         # Level of transparency to apply to bars/cancles (NOT USED)
         self.bartrans = 1.0
 
@@ -141,9 +142,9 @@ class PlotScheme(object):
         self.volpushup = 0.00
 
         # Default colour for the volume of a bullish day
-        self.volup = '#aaaaaa'  # 0.66 of gray
+        self.volup = buy_color  # 0.66 of gray
         # Default colour for the volume of a bearish day
-        self.voldown = '#cc6073'  # (204, 96, 115)
+        self.voldown = sell_color  # (204, 96, 115)
         # Transparency to apply to the volume when overlaying
         self.voltrans = 0.50
 

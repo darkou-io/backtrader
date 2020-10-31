@@ -22,8 +22,8 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import math
-
 from ..observer import Observer
+from ..settings import buy_color, sell_color
 
 
 class BuySell(Observer):
@@ -46,9 +46,9 @@ class BuySell(Observer):
 
     plotinfo = dict(plot=True, subplot=False, plotlinelabels=True)
     plotlines = dict(
-        buy=dict(marker='^', markersize=8.0, color='lime',
+        buy=dict(marker='^', markersize=8.0, color=buy_color,
                  fillstyle='full', ls=''),
-        sell=dict(marker='v', markersize=8.0, color='red',
+        sell=dict(marker='v', markersize=8.0, color=sell_color,
                   fillstyle='full', ls='')
     )
 

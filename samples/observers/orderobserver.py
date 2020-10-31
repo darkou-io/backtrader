@@ -21,9 +21,8 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-import math
-
 import backtrader as bt
+from settings import buy_color, sell_color
 
 
 class OrderObserver(bt.observer.Observer):
@@ -32,8 +31,8 @@ class OrderObserver(bt.observer.Observer):
     plotinfo = dict(plot=True, subplot=True, plotlinelabels=True)
 
     plotlines = dict(
-        created=dict(marker='*', markersize=8.0, color='lime', fillstyle='full'),
-        expired=dict(marker='s', markersize=8.0, color='red', fillstyle='full')
+        created=dict(marker='*', markersize=8.0, color=buy_color, fillstyle='full'),
+        expired=dict(marker='s', markersize=8.0, color=sell_color, fillstyle='full')
     )
 
     def next(self):

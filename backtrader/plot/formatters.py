@@ -96,7 +96,7 @@ def patch_locator(locator, xdates):
 
 
 def patch_formatter(formatter, xdates):
-    def newcall(self, x, pos=0):
+    def new_call(self, x, pos=0):
         if False and x < 0:
             raise ValueError('DateFormatter found a value of x=0, which is '
                              'an illegal date.  This usually occurs because '
@@ -107,11 +107,11 @@ def patch_formatter(formatter, xdates):
         dt = num2date(x, self.tz)
         return self.strftime(dt, self.fmt)
 
-    bound_call = newcall.__get__(formatter, formatter.__class__)
+    bound_call = new_call.__get__(formatter, formatter.__class__)
     formatter.__call__ = bound_call
 
 
-def getlocator(xdates, numticks=5, tz=None):
+def get_locator(xdates, numticks=5, tz=None):
     span = xdates[-1] - xdates[0]
 
     locator, formatter = mdates.date_ticker_factory(

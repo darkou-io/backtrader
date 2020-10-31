@@ -25,6 +25,7 @@ import uuid
 
 from .. import Observer
 from ..utils.py3 import with_metaclass
+from ..settings import buy_color, sell_color
 
 from ..trade import Trade
 
@@ -56,10 +57,10 @@ class Trades(Observer):
 
     plotlines = dict(
         pnlplus=dict(_name='Positive',
-                     ls='', marker='o', color='blue',
+                     ls='', marker='o', color=buy_color,
                      markersize=8.0, fillstyle='full'),
         pnlminus=dict(_name='Negative',
-                      ls='', marker='o', color='red',
+                      ls='', marker='o', color=sell_color,
                       markersize=8.0, fillstyle='full')
     )
 

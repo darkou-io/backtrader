@@ -81,7 +81,7 @@ class CandlestickPlotHandler(object):
         else:
             self.tickdown = self.edgedown
 
-        self.barcol, self.tickcol = self.barcollection(
+        self.barcol, self.tickcol = self.bar_collection(
             x, opens, highs, lows, closes,
             width, tickwidth, edgeadjust,
             label=label,
@@ -108,7 +108,7 @@ class CandlestickPlotHandler(object):
         # Generate the x axis coordinates (handlebox based)
         xs = [x0 + width * (i + 0.5) for i in range(len(self.legend_opens))]
 
-        barcol, tickcol = self.barcollection(
+        barcol, tickcol = self.bar_collection(
             xs,
             self.legend_opens, self.legend_highs,
             self.legend_lows, self.legend_closes,
@@ -122,19 +122,19 @@ class CandlestickPlotHandler(object):
 
         return barcol, tickcol
 
-    def barcollection(self,
-                      xs,
-                      opens, highs, lows, closes,
-                      width, tickwidth=1, edgeadjust=0,
-                      label='_nolegend',
-                      scaling=1.0, bot=0,
-                      fillup=True, filldown=True,
-                      **kwargs):
+    def bar_collection(self,
+                       xs,
+                       opens, highs, lows, closes,
+                       width, tickwidth=1, edgeadjust=0,
+                       label='_nolegend',
+                       scaling=1.0, bot=0,
+                       fillup=True, filldown=True,
+                       **kwargs):
 
         # Prepack different zips of the series values
-        oc = lambda: zip(opens, closes)  # NOQA: E731
-        xoc = lambda: zip(xs, opens, closes)  # NOQA: E731
-        iohlc = lambda: zip(xs, opens, highs, lows, closes)  # NOQA: E731
+        def oc(): return zip(opens, closes)  # NOQA: E731
+        def xoc(): return zip(xs, opens, closes)  # NOQA: E731
+        def iohlc(): return zip(xs, opens, highs, lows, closes)  # NOQA: E731
 
         colorup = self.colorup if fillup else 'None'
         colordown = self.colordown if filldown else 'None'
@@ -275,7 +275,7 @@ class VolumePlotHandler(object):
         ax.update_datalim(corners)
         ax.autoscale_view()
 
-        self.barcol = self.barcollection(
+        self.barcol = self.bar_collection(
             x, opens, closes, volumes,
             width=width, edgeadjust=edgeadjust,
             **kwargs)
@@ -295,7 +295,7 @@ class VolumePlotHandler(object):
         # Generate the x axis coordinates (handlebox based)
         xs = [x0 + width * (i + 0.5) for i in range(len(self.legend_vols))]
 
-        barcol = self.barcollection(
+        barcol = self.bar_collection(
             xs, self.legend_opens, self.legend_closes, self.legend_vols,
             width=width, vscaling=height, vbot=y0)
 
@@ -304,14 +304,14 @@ class VolumePlotHandler(object):
 
         return barcol
 
-    def barcollection(self,
-                      x, opens, closes, vols,
-                      width, edgeadjust=0,
-                      vscaling=1.0, vbot=0,
-                      **kwargs):
+    def bar_collection(self,
+                       x, opens, closes, vols,
+                       width, edgeadjust=0,
+                       vscaling=1.0, vbot=0,
+                       **kwargs):
 
         # Prepare the data
-        openclose = lambda: zip(opens, closes)  # NOQA: E731
+        def openclose(): return zip(opens, closes)  # NOQA: E731
 
         # Calculate bars colors
         colord = {True: self.colorup, False: self.colordown}
@@ -379,7 +379,7 @@ class OHLCPlotHandler(object):
         r, g, b = mcolors.colorConverter.to_rgb(colordown)
         self.colordown = r, g, b, alpha
 
-        bcol, ocol, ccol = self.barcollection(
+        bcol, ocol, ccol = self.bar_collection(
             x, opens, highs, lows, closes,
             width=width, tickwidth=tickwidth,
             label=label,
@@ -410,7 +410,7 @@ class OHLCPlotHandler(object):
         # Generate the x axis coordinates (handlebox based)
         xs = [x0 + width * (i + 0.5) for i in range(len(self.legend_opens))]
 
-        barcol, opencol, closecol = self.barcollection(
+        barcol, opencol, closecol = self.bar_collection(
             xs,
             self.legend_opens, self.legend_highs,
             self.legend_lows, self.legend_closes,
@@ -426,19 +426,19 @@ class OHLCPlotHandler(object):
 
         return barcol, opencol, closecol
 
-    def barcollection(self,
-                      xs,
-                      opens, highs, lows, closes,
-                      width, tickwidth,
-                      label='_nolegend',
-                      scaling=1.0, bot=0,
-                      **kwargs):
+    def bar_collection(self,
+                       xs,
+                       opens, highs, lows, closes,
+                       width, tickwidth,
+                       label='_nolegend',
+                       scaling=1.0, bot=0,
+                       **kwargs):
 
         # Prepack different zips of the series values
-        ihighlow = lambda: zip(xs, highs, lows)  # NOQA: E731
-        iopen = lambda: zip(xs, opens)  # NOQA: E731
-        iclose = lambda: zip(xs, closes)  # NOQA: E731
-        openclose = lambda: zip(opens, closes)  # NOQA: E731
+        def ihighlow(): return zip(xs, highs, lows)  # NOQA: E731
+        def iopen(): return zip(xs, opens)  # NOQA: E731
+        def iclose(): return zip(xs, closes)  # NOQA: E731
+        def openclose(): return zip(opens, closes)  # NOQA: E731
 
         colord = {True: self.colorup, False: self.colordown}
         colors = [colord[open < close] for open, close in openclose()]
@@ -522,7 +522,7 @@ class LineOnClosePlotHandler(object):
         self.color = color
         self.alpha = alpha
 
-        self.loc, = self.barcollection(
+        self.loc, = self.bar_collection(
             x, closes,
             width=width,
             label=label,
@@ -547,7 +547,7 @@ class LineOnClosePlotHandler(object):
         # Generate the x axis coordinates (handlebox based)
         xs = [x0 + width * (i + 0.5) for i in range(len(self.legend_closes))]
 
-        linecol, = self.barcollection(
+        linecol, = self.bar_collection(
             xs, self.legend_closes,
             width=1.5,
             scaling=height, bot=y0)
@@ -557,12 +557,12 @@ class LineOnClosePlotHandler(object):
 
         return linecol,
 
-    def barcollection(self,
-                      xs, closes,
-                      width,
-                      label='_nolegend',
-                      scaling=1.0, bot=0,
-                      **kwargs):
+    def bar_collection(self,
+                       xs, closes,
+                       width,
+                       label='_nolegend',
+                       scaling=1.0, bot=0,
+                       **kwargs):
 
         # Prepack different zips of the series values
         scaled = [close * scaling + bot for close in closes]
@@ -578,12 +578,12 @@ class LineOnClosePlotHandler(object):
         return loc,
 
 
-def plot_lineonclose(ax, x, closes,
-                     color='k',
-                     width=1.5,
-                     alpha=1.0,
-                     label='_nolegend',
-                     **kwargs):
+def plot_line_on_close(ax, x, closes,
+                       color='k',
+                       width=1.5,
+                       alpha=1.0,
+                       label='_nolegend',
+                       **kwargs):
 
     handler = LineOnClosePlotHandler(
         ax, x, closes,
