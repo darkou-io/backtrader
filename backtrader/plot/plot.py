@@ -240,7 +240,7 @@ class Plot_OldSync(with_metaclass(MetaParams, object)):
 
             # Put the subplots as indicated by hspace
             fig.subplots_adjust(hspace=self.pinf.sch.plotdist,
-                                top=0.98, left=0.05, bottom=0.05, right=0.95)
+                                top=0.94, left=0.04, bottom=0.02, right=0.95)
 
             laxis = list(self.pinf.daxis.values())
 
