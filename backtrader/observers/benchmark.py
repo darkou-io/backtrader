@@ -45,7 +45,7 @@ class Benchmark(TimeReturn):
         Reference asset to track to allow for comparison.
 
         .. note:: this data must have been added to a ``cerebro`` instance with
-                  ``addata``, ``resampledata`` or ``replaydata``.
+                  ``addata``, ``resample_data`` or ``replay_data``.
 
 
       - ``_doprenext`` (default: ``False``)

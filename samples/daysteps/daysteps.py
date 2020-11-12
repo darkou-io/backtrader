@@ -78,9 +78,9 @@ def runstrat():
     data = bt.feeds.BacktraderCSVData(dataname=args.data)
 
     data.addfilter(bt.filters.DayStepsFilter)
-    cerebro.adddata(data)
+    cerebro.add_data(data)
 
-    cerebro.addstrategy(St)
+    cerebro.add_strategy(St)
 
     cerebro._doreplay = True
     cerebro.run(**(eval('dict(' + args.cerebro + ')')))

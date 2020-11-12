@@ -140,7 +140,7 @@ class MetaLineIterator(LineSeries.__class__):
         # Register (my)self as indicator to owner once
         # _minperiod has been calculated
         if _obj._owner is not None:
-            _obj._owner.addindicator(_obj)
+            _obj._owner.add_indicator(_obj)
 
         return _obj, args, kwargs
 
@@ -205,7 +205,7 @@ class LineIterator(with_metaclass(MetaLineIterator, LineSeries)):
     def getobservers(self):
         return self._lineiterators[LineIterator.ObsType]
 
-    def addindicator(self, indicator):
+    def add_indicator(self, indicator):
         # store in right queue
         self._lineiterators[indicator._ltype].append(indicator)
 

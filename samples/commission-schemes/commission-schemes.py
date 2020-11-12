@@ -97,10 +97,10 @@ def runstrategy():
         todate=todate)
 
     # Add the 1st data to cerebro
-    cerebro.adddata(data)
+    cerebro.add_data(data)
 
     # Add a strategy
-    cerebro.addstrategy(SMACrossOver, period=args.period, stake=args.stake)
+    cerebro.add_strategy(SMACrossOver, period=args.period, stake=args.stake)
 
     # Add the commission - only stocks like a for each operation
     cerebro.broker.setcash(args.cash)

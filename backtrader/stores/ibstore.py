@@ -192,7 +192,7 @@ class IBStore(with_metaclass(MetaSingleton, object)):
         return cls.DataCls(*args, **kwargs)
 
     @classmethod
-    def getbroker(cls, *args, **kwargs):
+    def get_broker(cls, *args, **kwargs):
         '''Returns broker with *args, **kwargs from registered ``BrokerCls``'''
         return cls.BrokerCls(*args, **kwargs)
 

@@ -133,10 +133,10 @@ def runstrategy():
         todate=todate)
 
     # Add the 1st data to cerebro
-    cerebro.adddata(data)
+    cerebro.add_data(data)
 
     # Add the strategy
-    cerebro.addstrategy(LongShortStrategy,
+    cerebro.add_strategy(LongShortStrategy,
                         period=args.period,
                         onlylong=args.onlylong,
                         csvcross=args.csvcross,
@@ -150,9 +150,9 @@ def runstrategy():
                                  mult=args.mult,
                                  margin=args.margin)
 
-    cerebro.addanalyzer(SQN)
+    cerebro.add_analyzer(SQN)
 
-    cerebro.addwriter(bt.WriterFile, csv=args.writercsv, rounding=2)
+    cerebro.add_writer(bt.WriterFile, csv=args.writercsv, rounding=2)
 
     # And run it
     cerebro.run()

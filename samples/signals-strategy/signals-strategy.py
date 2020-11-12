@@ -75,7 +75,7 @@ def runstrat(args=None):
 
     # if dataset is None, args.data has been given
     data = bt.feeds.BacktraderCSVData(dataname=args.data, **dkwargs)
-    cerebro.adddata(data)
+    cerebro.add_data(data)
 
     cerebro.add_signal(MAINSIGNALS[args.signal],
                        SMACloseSignal, period=args.smaperiod)

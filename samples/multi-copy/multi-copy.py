@@ -153,19 +153,19 @@ def runstrat(args=None):
 
     # if dataset is None, args.data has been given
     data0 = bt.feeds.YahooFinanceCSVData(dataname=args.data0, **dkwargs)
-    cerebro.adddata(data0, name='MyData0')
+    cerebro.add_data(data0, name='MyData0')
 
     st0kwargs = dict()
     if args.st0 is not None:
         tmpdict = eval('dict(' + args.st0 + ')')  # args were passed
         st0kwargs.update(tmpdict)
 
-    cerebro.addstrategy(TheStrategy,
+    cerebro.add_strategy(TheStrategy,
                         myname='St1', dtarget='MyData0', **st0kwargs)
 
     if args.copydata:
         data1 = data0.copyas('MyData1')
-        cerebro.adddata(data1)
+        cerebro.add_data(data1)
         dtarget = 'MyData1'
 
     else:  # use same target
@@ -176,7 +176,7 @@ def runstrat(args=None):
         tmpdict = eval('dict(' + args.st1 + ')')  # args were passed
         st1kwargs.update(tmpdict)
 
-    cerebro.addstrategy(TheStrategy2,
+    cerebro.add_strategy(TheStrategy2,
                         myname='St2', dtarget=dtarget, **st1kwargs)
 
     results = cerebro.run()

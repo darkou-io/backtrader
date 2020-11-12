@@ -136,10 +136,10 @@ def runstrategy():
         todate=todate)
 
     # Add the 1st data to cerebro
-    cerebro.adddata(data)
+    cerebro.add_data(data)
 
     # Add the strategy
-    cerebro.addstrategy(MultiTradeStrategy,
+    cerebro.add_strategy(MultiTradeStrategy,
                         period=args.period,
                         onlylong=args.onlylong,
                         stake=args.stake,
@@ -155,7 +155,7 @@ def runstrategy():
                                  margin=args.margin)
 
     # Add the MultiTradeObserver
-    cerebro.addobserver(mtradeobserver.MTradeObserver)
+    cerebro.add_observer(mtradeobserver.MTradeObserver)
 
     # And run it
     cerebro.run()

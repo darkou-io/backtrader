@@ -108,24 +108,24 @@ def runstrat(args=None):
         dkwargs['todate'] = todate
 
     data0 = bt.feeds.YahooFinanceCSVData(dataname=args.data0, **dkwargs)
-    cerebro.adddata(data0, name='Data0')
+    cerebro.add_data(data0, name='Data0')
 
-    cerebro.addstrategy(St,
+    cerebro.add_strategy(St,
                         period=args.period,
                         stake=args.stake,
                         printout=args.printout)
 
     if args.timereturn:
-        cerebro.addobserver(bt.observers.TimeReturn,
+        cerebro.add_observer(bt.observers.TimeReturn,
                             timeframe=TIMEFRAMES[args.timeframe])
     else:
         benchdata = data0
         if args.benchdata1:
             data1 = bt.feeds.YahooFinanceCSVData(dataname=args.data1, **dkwargs)
-            cerebro.adddata(data1, name='Data1')
+            cerebro.add_data(data1, name='Data1')
             benchdata = data1
 
-        cerebro.addobserver(bt.observers.Benchmark,
+        cerebro.add_observer(bt.observers.Benchmark,
                             data=benchdata,
                             timeframe=TIMEFRAMES[args.timeframe])
 

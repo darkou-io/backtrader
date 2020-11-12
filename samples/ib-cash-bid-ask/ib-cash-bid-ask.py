@@ -89,7 +89,7 @@ def run(args=None):
     data0 = store.getdata(dataname=ib_symbol,
                           timeframe=bt.TimeFrame.Ticks,
                           )
-    cerebro.resampledata(data0,
+    cerebro.resample_data(data0,
                          timeframe=bt.TimeFrame.Seconds,
                          compression=compression
                          )
@@ -98,13 +98,13 @@ def run(args=None):
                           timeframe=bt.TimeFrame.Ticks,
                           what='ASK'
                           )
-    cerebro.resampledata(data1,
+    cerebro.resample_data(data1,
                          timeframe=bt.TimeFrame.Seconds,
                          compression=compression
                          )
 
-    cerebro.broker = store.getbroker()
-    cerebro.addstrategy(St)
+    cerebro.broker = store.get_broker()
+    cerebro.add_strategy(St)
     cerebro.run()
 
 

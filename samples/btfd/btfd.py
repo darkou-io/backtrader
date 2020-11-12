@@ -159,7 +159,7 @@ def runstrat(args=None):
 
     # Data feed - no plot - observer will do the job
     data = YahooData(dataname=args.data, plot=False, **kwargs)
-    cerebro.adddata(data)
+    cerebro.add_data(data)
 
     # Broker
     cerebro.broker = bt.brokers.BackBroker(**eval('dict(' + args.broker + ')'))
@@ -168,10 +168,10 @@ def runstrat(args=None):
     cerebro.broker.setcommission(**eval('dict(' + args.comminfo + ')'))
 
     # Strategy
-    cerebro.addstrategy(St, **eval('dict(' + args.strat + ')'))
+    cerebro.add_strategy(St, **eval('dict(' + args.strat + ')'))
 
     # Add specific observer
-    cerebro.addobserver(ValueUnlever, **eval('dict(' + args.valobserver + ')'))
+    cerebro.add_observer(ValueUnlever, **eval('dict(' + args.valobserver + ')'))
 
     # Execute
     cerebro.run(**eval('dict(' + args.cerebro + ')'))

@@ -60,10 +60,10 @@ def runstrat(pargs=None):
         dataname=args.data,
         fromdate=datetime.datetime.strptime(args.fromdate, '%Y-%m-%d'),
         todate=datetime.datetime.strptime(args.todate, '%Y-%m-%d'))
-    cerebro.adddata(data0)
+    cerebro.add_data(data0)
 
-    cerebro.addstrategy(SmaCross, **(eval('dict(' + args.strat + ')')))
-    cerebro.addsizer(bt.sizers.FixedSize, stake=args.stake)
+    cerebro.add_strategy(SmaCross, **(eval('dict(' + args.strat + ')')))
+    cerebro.add_sizer(bt.sizers.FixedSize, stake=args.stake)
 
     cerebro.run()
     if args.plot:

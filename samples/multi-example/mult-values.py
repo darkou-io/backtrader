@@ -144,26 +144,26 @@ def runstrat(args=None):
 
     # Data feed
     data0 = bt.feeds.YahooFinanceCSVData(dataname=args.data0, **kwargs)
-    cerebro.adddata(data0, name='d0')
+    cerebro.add_data(data0, name='d0')
 
     data1 = bt.feeds.YahooFinanceCSVData(dataname=args.data1, **kwargs)
     data1.plotinfo.plotmaster = data0
-    cerebro.adddata(data1, name='d1')
+    cerebro.add_data(data1, name='d1')
 
     data2 = bt.feeds.YahooFinanceCSVData(dataname=args.data2, **kwargs)
     data2.plotinfo.plotmaster = data0
-    cerebro.adddata(data2, name='d2')
+    cerebro.add_data(data2, name='d2')
 
     # Broker
     cerebro.broker = bt.brokers.BackBroker(**eval('dict(' + args.broker + ')'))
     cerebro.broker.setcommission(commission=0.001)
 
     # Sizer
-    # cerebro.addsizer(bt.sizers.FixedSize, **eval('dict(' + args.sizer + ')'))
-    cerebro.addsizer(TestSizer, **eval('dict(' + args.sizer + ')'))
+    # cerebro.add_sizer(bt.sizers.FixedSize, **eval('dict(' + args.sizer + ')'))
+    cerebro.add_sizer(TestSizer, **eval('dict(' + args.sizer + ')'))
 
     # Strategy
-    cerebro.addstrategy(St, **eval('dict(' + args.strat + ')'))
+    cerebro.add_strategy(St, **eval('dict(' + args.strat + ')'))
 
     # Execute
     cerebro.run(**eval('dict(' + args.cerebro + ')'))

@@ -265,7 +265,7 @@ class VCData(with_metaclass(MetaVCData, DataBase)):
         '''Receives an environment (cerebro) and passes it over to the store it
         belongs to'''
         super(VCData, self).setenvironment(env)
-        env.addstore(self.store)
+        env.add_store(self.store)
 
     def start(self):
         '''Starts the VC connecction and gets the real contract and

@@ -252,7 +252,7 @@
   - Oanda support for bracket orders
   - Oanda support for stop trailing order
   - Filling in plotting support numeric values and control of alpha blending
-  - Documentation updates (filling, addobservermulti)
+  - Documentation updates (filling, add_observer_multi)
   - Fix wrong calling of sizer with fixed isbuy=True after refactoring for
     mixing of buy/sell and order_target_xxx
 
@@ -687,7 +687,7 @@
   - Add stash to feeds to allow filtered output to be resent to filters
   - Restore deprecated setsizing method in FixedSize sizer for old quickstart
     guide
-  - Rework quickstart tutorial and samples to use addsizer and deprecate
+  - Rework quickstart tutorial and samples to use add_sizer and deprecate
     setsizing
   - Allow BuySell observer to plot above / below high / low for clarity,
     especially when plotting ohlc/candles bars
@@ -836,8 +836,8 @@
     the indicator mix for writers
 
 1.2.4.88
-  - Improved detection in cerebro.resampledata of existing datas before cloning
-  - Added detection in cerebro.replaydata of existing datas before cloning
+  - Improved detection in cerebro.resample_data of existing datas before cloning
+  - Added detection in cerebro.replay_data of existing datas before cloning
 
 1.2.3.88:
   - Add samples following 'Close' order corrections/improvements for
@@ -852,7 +852,7 @@
   - If datas have been passed to cerebro, ensure cerebro has a
     strategy to run against (which can get indicators, analyzers,
     observers and other through the appropriate interface)
-  - Addresses #64 by auto-cloning datas in resampledata if the data
+  - Addresses #64 by auto-cloning datas in resample_data if the data
     was already in the system
   - Return a list in case cerebro.run is not run due to missing datas
 
@@ -993,7 +993,7 @@
   - Refactoring of minute/seconds/microseconds bar compression scheme to allow
     time adjusted bars
   - Added tick_last to datas - alias of tick_close
-  - resampledata and replaydata methods added to cerebro
+  - resample_data and replay_data methods added to cerebro
   - Added tick_last to datas - alias of tick_close
   - Added multitrade support and sample
   - Added helper time2num and num2time to complement date2num and num2date
@@ -1009,7 +1009,7 @@
   - Further rework of minute (and sub-minute) Data Resampling/Replaying
   - Added tia/visualize-wealth/QSTK/TradingWithPython to README
   - Added tick_last to set of tick variables (open/high/low/close)
-  - Added resampledata and replaydata to cerebro to avoid having to instantiate
+  - Added resample_data and replay_data to cerebro to avoid having to instantiate
     DataReplayer/DataResampler
 
 1.1.11.88:

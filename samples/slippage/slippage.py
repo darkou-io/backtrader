@@ -69,7 +69,7 @@ def runstrat(args=None):
 
     # if dataset is None, args.data has been given
     data = bt.feeds.BacktraderCSVData(dataname=args.data, **dkwargs)
-    cerebro.adddata(data)
+    cerebro.add_data(data)
 
     cerebro.signal_strategy(SlipSt)
     if not args.longonly:

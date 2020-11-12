@@ -102,11 +102,11 @@ def btrun(pargs=''):
 
     for data in getdatas(args):
         if args.resample is not None:
-            cerebro.resampledata(data, timeframe=tf, compression=cp)
+            cerebro.resample_data(data, timeframe=tf, compression=cp)
         elif args.replay is not None:
-            cerebro.replaydata(data, timeframe=tf, compression=cp)
+            cerebro.replay_data(data, timeframe=tf, compression=cp)
         else:
-            cerebro.adddata(data)
+            cerebro.add_data(data)
 
     # get and add signals
     signals = getobjects(args.signals, bt.Indicator, bt.signals, issignal=True)
@@ -117,25 +117,25 @@ def btrun(pargs=''):
     # get and add strategies
     strategies = getobjects(args.strategies, bt.Strategy, bt.strategies)
     for strat, kwargs in strategies:
-        cerebro.addstrategy(strat, **kwargs)
+        cerebro.add_strategy(strat, **kwargs)
 
     inds = getobjects(args.indicators, bt.Indicator, bt.indicators)
     for ind, kwargs in inds:
-        cerebro.addindicator(ind, **kwargs)
+        cerebro.add_indicator(ind, **kwargs)
 
     obs = getobjects(args.observers, bt.Observer, bt.observers)
     for ob, kwargs in obs:
-        cerebro.addobserver(ob, **kwargs)
+        cerebro.add_observer(ob, **kwargs)
 
     ans = getobjects(args.analyzers, bt.Analyzer, bt.analyzers)
     for an, kwargs in ans:
-        cerebro.addanalyzer(an, **kwargs)
+        cerebro.add_analyzer(an, **kwargs)
 
-    setbroker(args, cerebro)
+    set_broker(args, cerebro)
 
     for wrkwargs_str in args.writers or []:
         wrkwargs = eval('dict(' + wrkwargs_str + ')')
-        cerebro.addwriter(bt.WriterFile, **wrkwargs)
+        cerebro.add_writer(bt.WriterFile, **wrkwargs)
 
     ans = getfunctions(args.hooks, bt.Cerebro)
     for hook, kwargs in ans:
@@ -168,8 +168,8 @@ def btrun(pargs=''):
         cerebro.plot(**pkwargs)
 
 
-def setbroker(args, cerebro):
-    broker = cerebro.getbroker()
+def set_broker(args, cerebro):
+    broker = cerebro.get_broker()
 
     if args.cash is not None:
         broker.setcash(args.cash)
@@ -497,7 +497,7 @@ def parse_args(pargs=''):
               'If module is omitted then hookfunction will be sought\n'
               'as the built-in cerebro method. Example:\n'
               '\n'
-              '  - :addtz:tz=America/St_Johns\n'
+              '  - :add_tz:tz=America/St_Johns\n'
               '\n'
               'If name is omitted, then the 1st function found in the\n'
               'mod will be used. Such as in:\n'

@@ -79,10 +79,10 @@ def runstrat(args=None):
 
     # if dataset is None, args.data has been given
     data = bt.feeds.BacktraderCSVData(dataname=args.data, **dkwargs)
-    cerebro.adddata(data)
+    cerebro.add_data(data)
 
     cerebro.signal_strategy(St)
-    cerebro.addsizer(bt.sizers.FixedSize, stake=args.stake)
+    cerebro.add_sizer(bt.sizers.FixedSize, stake=args.stake)
 
     sigtype = bt.signal.SIGNAL_LONGSHORT
     if args.long:

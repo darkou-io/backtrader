@@ -34,8 +34,8 @@ class PivotPoint(Indicator):
     Example of using this indicator:
 
       data = btfeeds.ADataFeed(dataname=x, timeframe=bt.TimeFrame.Days)
-      cerebro.adddata(data)
-      cerebro.resampledata(data, timeframe=bt.TimeFrame.Months)
+      cerebro.add_data(data)
+      cerebro.resample_data(data, timeframe=bt.TimeFrame.Months)
 
     In the ``__init__`` method of the strategy:
 
@@ -115,8 +115,8 @@ class FibonacciPivotPoint(Indicator):
     Example of using this indicator:
 
       data = btfeeds.ADataFeed(dataname=x, timeframe=bt.TimeFrame.Days)
-      cerebro.adddata(data)
-      cerebro.resampledata(data, timeframe=bt.TimeFrame.Months)
+      cerebro.add_data(data)
+      cerebro.resample_data(data, timeframe=bt.TimeFrame.Months)
 
     In the ``__init__`` method of the strategy:
 
@@ -199,8 +199,8 @@ class DemarkPivotPoint(Indicator):
     Example of using this indicator:
 
       data = btfeeds.ADataFeed(dataname=x, timeframe=bt.TimeFrame.Days)
-      cerebro.adddata(data)
-      cerebro.resampledata(data, timeframe=bt.TimeFrame.Months)
+      cerebro.add_data(data)
+      cerebro.resample_data(data, timeframe=bt.TimeFrame.Months)
 
     In the ``__init__`` method of the strategy:
 

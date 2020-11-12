@@ -52,7 +52,7 @@ class DaySplitter_Close(bt.with_metaclass(bt.MetaParams, object)):
         absolute terms from 0.0 to 1.0, has to be assigned to the *closing*
         tick. The rest will be assigned to the ``OHLX`` tick.
 
-    **This filter is meant to be used together with** ``cerebro.replaydata``
+    **This filter is meant to be used together with** ``cerebro.replay_data``
 
     '''
     params = (

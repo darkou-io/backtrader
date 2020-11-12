@@ -123,7 +123,7 @@ class TestStrategy(bt.Strategy):
         if self.counttostop:  # stop after x live lines
             self.counttostop -= 1
             if not self.counttostop:
-                self.env.runstop()
+                self.env.run_stop()
                 return
 
         if not self.p.trade:
@@ -226,11 +226,11 @@ def runstrategy():
 
     if args.broker:
         if args.usestore:
-            broker = ibstore.getbroker()
+            broker = ibstore.get_broker()
         else:
             broker = bt.brokers.IBBroker(**storekwargs)
 
-        cerebro.setbroker(broker)
+        cerebro.set_broker(broker)
 
     timeframe = bt.TimeFrame.TFrame(args.timeframe)
     # Manage data1 parameters
@@ -290,32 +290,32 @@ def runstrategy():
     )
 
     if args.replay:
-        cerebro.replaydata(data0, **rekwargs)
+        cerebro.replay_data(data0, **rekwargs)
 
         if data1 is not None:
             rekwargs['timeframe'] = tf1
             rekwargs['compression'] = cp1
-            cerebro.replaydata(data1, **rekwargs)
+            cerebro.replay_data(data1, **rekwargs)
 
     elif args.resample:
-        cerebro.resampledata(data0, **rekwargs)
+        cerebro.resample_data(data0, **rekwargs)
 
         if data1 is not None:
             rekwargs['timeframe'] = tf1
             rekwargs['compression'] = cp1
-            cerebro.resampledata(data1, **rekwargs)
+            cerebro.resample_data(data1, **rekwargs)
 
     else:
-        cerebro.adddata(data0)
+        cerebro.add_data(data0)
         if data1 is not None:
-            cerebro.adddata(data1)
+            cerebro.add_data(data1)
 
     if args.valid is None:
         valid = None
     else:
         valid = datetime.timedelta(seconds=args.valid)
     # Add the strategy
-    cerebro.addstrategy(TestStrategy,
+    cerebro.add_strategy(TestStrategy,
                         smaperiod=args.smaperiod,
                         trade=args.trade,
                         exectype=bt.Order.ExecType(args.exectype),

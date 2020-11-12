@@ -112,7 +112,7 @@ def runstrat():
     data = bt.feeds.BacktraderCSVData(dataname=args.data, **datakwargs)
 
     cerebro = bt.Cerebro()
-    cerebro.adddata(data)
+    cerebro.add_data(data)
 
     cerebro.broker.set_cash(args.cash)
     if args.filler is not None:
@@ -123,7 +123,7 @@ def runstrat():
         filler = FILLERS[args.filler](**fillerkwargs)
         cerebro.broker.set_filler(filler)
 
-    cerebro.addstrategy(St, stakeperc=args.stakeperc, opbreak=args.opbreak)
+    cerebro.add_strategy(St, stakeperc=args.stakeperc, opbreak=args.opbreak)
 
     cerebro.run()
     if args.plot:

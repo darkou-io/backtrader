@@ -98,17 +98,17 @@ def runstrat(args=None):
         dkwargs['todate'] = todate
 
     data0 = bt.feeds.YahooFinanceCSVData(dataname=args.data0, **dkwargs)
-    cerebro.adddata(data0, name='Data0')
+    cerebro.add_data(data0, name='Data0')
 
     data1 = bt.feeds.YahooFinanceCSVData(dataname=args.data1, **dkwargs)
-    cerebro.adddata(data1, name='Data1')
+    cerebro.add_data(data1, name='Data1')
 
     data2 = bt.feeds.YahooFinanceCSVData(dataname=args.data2, **dkwargs)
-    cerebro.adddata(data2, name='Data2')
+    cerebro.add_data(data2, name='Data2')
 
-    cerebro.addstrategy(St, printout=args.printout)
+    cerebro.add_strategy(St, printout=args.printout)
     if not args.no_pyfolio:
-        cerebro.addanalyzer(bt.analyzers.PyFolio, _name='pyfolio')
+        cerebro.add_analyzer(bt.analyzers.PyFolio, _name='pyfolio')
 
     results = cerebro.run()
     if not args.no_pyfolio:

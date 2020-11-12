@@ -92,8 +92,8 @@ def runstrat():
     args = parse_args()
 
     cerebro = bt.Cerebro()
-    cerebro.adddata(getdata(args))
-    cerebro.addstrategy(St)
+    cerebro.add_data(getdata(args))
+    cerebro.add_strategy(St)
     if args.eosbar:
         cerebro.broker.seteosbar(True)
 

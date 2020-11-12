@@ -70,7 +70,7 @@ class MetaStrategy(StrategyBase.__class__):
 
         # Find the owner and store it
         _obj.env = _obj.cerebro = cerebro = findowner(_obj, bt.Cerebro)
-        _obj._id = cerebro._next_stid()
+        _obj._id = cerebro._next_st_id()
 
         return _obj, args, kwargs
 
@@ -1595,7 +1595,7 @@ class SignalStrategy(with_metaclass(MetaSigStrategy, Strategy)):
         - An ``int``: indicating the data that was inserted at that position
 
         - An ``str``: name given to the data when creating it (parameter
-          ``name``) or when adding it cerebro with ``cerebro.adddata(...,
+          ``name``) or when adding it cerebro with ``cerebro.add_data(...,
           name=)``
 
         - A ``data`` instance

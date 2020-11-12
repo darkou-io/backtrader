@@ -563,7 +563,7 @@ class MetaLineActions(LineBuffer.__class__):
             super(MetaLineActions, cls).dopostinit(_obj, *args, **kwargs)
 
         # register with _owner to be kicked later
-        _obj._owner.addindicator(_obj)
+        _obj._owner.add_indicator(_obj)
 
         return _obj, args, kwargs
 

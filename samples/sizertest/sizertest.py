@@ -83,14 +83,14 @@ def runstrat(args=None):
         dkwargs['todate'] = todate
 
     data0 = bt.feeds.YahooFinanceCSVData(dataname=args.data0, **dkwargs)
-    cerebro.adddata(data0, name='Data0')
+    cerebro.add_data(data0, name='Data0')
 
-    cerebro.addstrategy(CloseSMA, period=args.period)
+    cerebro.add_strategy(CloseSMA, period=args.period)
 
     if args.longonly:
-        cerebro.addsizer(LongOnly, stake=args.stake)
+        cerebro.add_sizer(LongOnly, stake=args.stake)
     else:
-        cerebro.addsizer(bt.sizers.FixedReverser, stake=args.stake)
+        cerebro.add_sizer(bt.sizers.FixedReverser, stake=args.stake)
 
     cerebro.run()
     if args.plot:

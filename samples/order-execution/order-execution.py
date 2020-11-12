@@ -167,9 +167,9 @@ def runstrat():
     cerebro = bt.Cerebro()
 
     data = getdata(args)
-    cerebro.adddata(data)
+    cerebro.add_data(data)
 
-    cerebro.addstrategy(
+    cerebro.add_strategy(
         OrderExecutionStrategy,
         exectype=args.exectype,
         perc1=args.perc1,

@@ -178,17 +178,17 @@ def runstrat(args=None):
             kwargs[d] = datetime.datetime.strptime(a, strpfmt)
 
     data0 = bt.feeds.BacktraderCSVData(dataname=args.data0, **kwargs)
-    cerebro.adddata(data0)
+    cerebro.add_data(data0)
 
     # Broker
     cerebro.broker = bt.brokers.BackBroker(**eval('dict(' + args.broker + ')'))
 
     # Sizer
-    cerebro.addsizer(bt.sizers.FixedSize, **eval('dict(' + args.sizer + ')'))
+    cerebro.add_sizer(bt.sizers.FixedSize, **eval('dict(' + args.sizer + ')'))
 
     # Strategy
     StClass = APPROACHES[args.approach]
-    cerebro.addstrategy(StClass, **eval('dict(' + args.strat + ')'))
+    cerebro.add_strategy(StClass, **eval('dict(' + args.strat + ')'))
 
     # Execute
     cerebro.run(**eval('dict(' + args.cerebro + ')'))

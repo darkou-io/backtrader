@@ -126,10 +126,10 @@ def runstrat(args=None):
 
     # data
     data = bt.feeds.YahooFinanceCSVData(dataname=args.data, **dkwargs)
-    cerebro.adddata(data)
+    cerebro.add_data(data)
 
     # strategy
-    cerebro.addstrategy(TheStrategy,
+    cerebro.add_strategy(TheStrategy,
                         use_target_size=args.target_size,
                         use_target_value=args.target_value,
                         use_target_percent=args.target_percent)

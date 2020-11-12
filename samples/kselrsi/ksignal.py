@@ -71,13 +71,13 @@ def runstrat(pargs=None):
         todate=datetime.datetime.strptime(args.todate, '%Y-%m-%d'),
         round=False)
 
-    cerebro.adddata(data0)
+    cerebro.add_data(data0)
 
-    cerebro.addsizer(bt.sizers.FixedSize, stake=args.stake)
-    cerebro.addstrategy(TheStrategy, **(eval('dict(' + args.strat + ')')))
-    cerebro.addobserver(bt.observers.Value)
-    cerebro.addobserver(bt.observers.Trades)
-    cerebro.addobserver(bt.observers.BuySell, barplot=True)
+    cerebro.add_sizer(bt.sizers.FixedSize, stake=args.stake)
+    cerebro.add_strategy(TheStrategy, **(eval('dict(' + args.strat + ')')))
+    cerebro.add_observer(bt.observers.Value)
+    cerebro.add_observer(bt.observers.Trades)
+    cerebro.add_observer(bt.observers.BuySell, barplot=True)
 
     cerebro.run(stdstats=False)
     if args.plot:

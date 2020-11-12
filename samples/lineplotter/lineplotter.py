@@ -57,9 +57,9 @@ def runstrat(pargs=None):
         dkwargs['todate'] = todate
 
     data = bt.feeds.BacktraderCSVData(dataname=args.data, **dkwargs)
-    cerebro.adddata(data)
+    cerebro.add_data(data)
 
-    cerebro.addstrategy(St, ondata=args.ondata)
+    cerebro.add_strategy(St, ondata=args.ondata)
     cerebro.run(stdstats=False)
 
     # Plot if requested

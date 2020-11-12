@@ -55,7 +55,7 @@ class Store(with_metaclass(MetaSingleton, object)):
         return data
 
     @classmethod
-    def getbroker(cls, *args, **kwargs):
+    def get_broker(cls, *args, **kwargs):
         '''Returns broker with *args, **kwargs from registered ``BrokerCls``'''
         broker = cls.BrokerCls(*args, **kwargs)
         broker._store = cls

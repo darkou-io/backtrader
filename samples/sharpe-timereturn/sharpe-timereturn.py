@@ -46,10 +46,10 @@ def runstrat(pargs=None):
         fromdate=fromdate,
         todate=todate)
 
-    cerebro.adddata(data)  # Add the data to cerebro
+    cerebro.add_data(data)  # Add the data to cerebro
 
     # Add the strategy
-    cerebro.addstrategy(bt.strategies.SMA_CrossOver)
+    cerebro.add_strategy(bt.strategies.SMA_CrossOver)
 
     tframes = dict(
         days=bt.TimeFrame.Days,
@@ -58,7 +58,7 @@ def runstrat(pargs=None):
         years=bt.TimeFrame.Years)
 
     # Add the Analyzers
-    cerebro.addanalyzer(bt.analyzers.TimeReturn,
+    cerebro.add_analyzer(bt.analyzers.TimeReturn,
                         timeframe=tframes[args.tframe])
 
     shkwargs = dict()
@@ -77,12 +77,12 @@ def runstrat(pargs=None):
     if args.no_convertrate:
         shkwargs['convertrate'] = False
 
-    cerebro.addanalyzer(bt.analyzers.SharpeRatio,
+    cerebro.add_analyzer(bt.analyzers.SharpeRatio,
                         timeframe=tframes[args.tframe],
                         **shkwargs)
 
     # Add a writer to get output
-    cerebro.addwriter(bt.WriterFile, csv=args.writercsv, rounding=4)
+    cerebro.add_writer(bt.WriterFile, csv=args.writercsv, rounding=4)
 
     cerebro.run()  # And run it
 

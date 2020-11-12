@@ -125,8 +125,8 @@ def runstrat():
 
     cerebro = bt.Cerebro()
     data = btfeeds.YahooFinanceCSVData(dataname=args.data)
-    cerebro.adddata(data)
-    cerebro.addstrategy(
+    cerebro.add_data(data)
+    cerebro.add_strategy(
         St, datalines=args.datalines, lendetails=args.lendetails)
 
     cerebro.run(runonce=False, exactbars=args.save)

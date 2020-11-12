@@ -266,7 +266,7 @@ class IBData(with_metaclass(MetaIBData, DataBase)):
         '''Receives an environment (cerebro) and passes it over to the store it
         belongs to'''
         super(IBData, self).setenvironment(env)
-        env.addstore(self.ib)
+        env.add_store(self.ib)
 
     def parsecontract(self, dataname):
         '''Parses dataname generates a default contract'''

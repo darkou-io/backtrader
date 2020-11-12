@@ -56,7 +56,7 @@ class LogReturnsRolling(bt.TimeFrameAnalyzerBase):
         Reference asset to track instead of the portfolio value.
 
         .. note:: this data must have been added to a ``cerebro`` instance with
-                  ``addata``, ``resampledata`` or ``replaydata``
+                  ``addata``, ``resample_data`` or ``replay_data``
 
       - ``firstopen`` (default: ``True``)
 

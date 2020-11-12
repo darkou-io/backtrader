@@ -175,7 +175,7 @@ class OandaData(with_metaclass(MetaOandaData, DataBase)):
         '''Receives an environment (cerebro) and passes it over to the store it
         belongs to'''
         super(OandaData, self).setenvironment(env)
-        env.addstore(self.o)
+        env.add_store(self.o)
 
     def start(self):
         '''Starts the Oanda connecction and gets the real contract and

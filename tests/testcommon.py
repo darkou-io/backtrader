@@ -90,23 +90,23 @@ def runtest(datas,
                 if isinstance(datas, bt.LineSeries):
                     datas = [datas]
                 for data in datas:
-                    cerebro.adddata(data)
+                    cerebro.add_data(data)
 
                 if not optimize:
-                    cerebro.addstrategy(strategy, **kwargs)
+                    cerebro.add_strategy(strategy, **kwargs)
 
                     if writer:
                         wr = writer[0]
                         wrkwargs = writer[1]
-                        cerebro.addwriter(wr, **wrkwargs)
+                        cerebro.add_writer(wr, **wrkwargs)
 
                     if analyzer:
                         al = analyzer[0]
                         alkwargs = analyzer[1]
-                        cerebro.addanalyzer(al, **alkwargs)
+                        cerebro.add_analyzer(al, **alkwargs)
 
                 else:
-                    cerebro.optstrategy(strategy, **kwargs)
+                    cerebro.opt_strategy(strategy, **kwargs)
 
                 cerebro.run()
                 if plot:

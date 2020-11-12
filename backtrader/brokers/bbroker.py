@@ -75,8 +75,8 @@ class BackBroker(bt.BrokerBase):
 
         .. note::
 
-           ``cerebro.broker`` is a *property* supported by the ``getbroker``
-           and ``setbroker`` methods of ``Cerebro``
+           ``cerebro.broker`` is a *property* supported by the ``get_broker``
+           and ``set_broker`` methods of ``Cerebro``
 
       Params:
 

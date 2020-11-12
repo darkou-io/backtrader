@@ -537,7 +537,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
             tzdata=tzdata, strats=strats, cheat=cheat,
             *args, **kwargs)
 
-    def addtz(self, tz):
+    def add_tz(self, tz):
         '''
         This can also be done with the parameter ``tz``
 
@@ -558,7 +558,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
         '''
         self.p.tz = tz
 
-    def addcalendar(self, cal):
+    def add_calendar(self, cal):
         '''Adds a global trading calendar to the system. Individual data feeds
         may have separate calendars which override the global one
 
@@ -604,52 +604,52 @@ class Cerebro(with_metaclass(MetaParams, object)):
         allowed to increase a position'''
         self._signal_accumulate = onoff
 
-    def addstore(self, store):
+    def add_store(self, store):
         '''Adds an ``Store`` instance to the if not already present'''
         if store not in self.stores:
             self.stores.append(store)
 
-    def addwriter(self, wrtcls, *args, **kwargs):
+    def add_writer(self, wrtcls, *args, **kwargs):
         '''Adds an ``Writer`` class to the mix. Instantiation will be done at
         ``run`` time in cerebro
         '''
         self.writers.append((wrtcls, args, kwargs))
 
-    def addsizer(self, sizercls, *args, **kwargs):
+    def add_sizer(self, sizercls, *args, **kwargs):
         '''Adds a ``Sizer`` class (and args) which is the default sizer for any
         strategy added to cerebro
         '''
         self.sizers[None] = (sizercls, args, kwargs)
 
-    def addsizer_byidx(self, idx, sizercls, *args, **kwargs):
+    def add_sizer_by_idx(self, idx, sizercls, *args, **kwargs):
         '''Adds a ``Sizer`` class by idx. This idx is a reference compatible to
-        the one returned by ``addstrategy``. Only the strategy referenced by
+        the one returned by ``add_strategy``. Only the strategy referenced by
         ``idx`` will receive this size
         '''
         self.sizers[idx] = (sizercls, args, kwargs)
 
-    def addindicator(self, indcls, *args, **kwargs):
+    def add_indicator(self, indcls, *args, **kwargs):
         '''
         Adds an ``Indicator`` class to the mix. Instantiation will be done at
         ``run`` time in the passed strategies
         '''
         self.indicators.append((indcls, args, kwargs))
 
-    def addanalyzer(self, ancls, *args, **kwargs):
+    def add_analyzer(self, ancls, *args, **kwargs):
         '''
         Adds an ``Analyzer`` class to the mix. Instantiation will be done at
         ``run`` time
         '''
         self.analyzers.append((ancls, args, kwargs))
 
-    def addobserver(self, obscls, *args, **kwargs):
+    def add_observer(self, obscls, *args, **kwargs):
         '''
         Adds an ``Observer`` class to the mix. Instantiation will be done at
         ``run`` time
         '''
         self.observers.append((False, obscls, args, kwargs))
 
-    def addobservermulti(self, obscls, *args, **kwargs):
+    def add_observer_multi(self, obscls, *args, **kwargs):
         '''
         Adds an ``Observer`` class to the mix. Instantiation will be done at
         ``run`` time
@@ -661,7 +661,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
         '''
         self.observers.append((True, obscls, args, kwargs))
 
-    def addstorecb(self, callback):
+    def add_store_cb(self, callback):
         '''Adds a callback to get messages which would be handled by the
         notify_store method
 
@@ -694,7 +694,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
         '''
         pass
 
-    def _storenotify(self):
+    def _store_notify(self):
         for store in self.stores:
             for notif in store.get_notifications():
                 msg, args, kwargs = notif
@@ -703,7 +703,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
                 for strat in self.runningstrats:
                     strat.notify_store(msg, *args, **kwargs)
 
-    def adddatacb(self, callback):
+    def add_data_cb(self, callback):
         '''Adds a callback to get messages which would be handled by the
         notify_data method
 
@@ -718,7 +718,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
         '''
         self.datacbs.append(callback)
 
-    def _datanotify(self):
+    def _data_notify(self):
         for data in self.datas:
             for notif in data.get_notifications():
                 status, args, kwargs = notif
@@ -744,7 +744,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
         '''
         pass
 
-    def adddata(self, data, name=None):
+    def add_data(self, data, name=None):
         '''
         Adds a ``Data Feed`` instance to the mix.
 
@@ -768,7 +768,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
 
         return data
 
-    def chaindata(self, *args, **kwargs):
+    def chain_data(self, *args, **kwargs):
         '''
         Chains several data feeds into one
 
@@ -781,11 +781,11 @@ class Cerebro(with_metaclass(MetaParams, object)):
         if dname is None:
             dname = args[0]._dataname
         d = bt.feeds.Chainer(dataname=dname, *args)
-        self.adddata(d, name=dname)
+        self.add_data(d, name=dname)
 
         return d
 
-    def rolloverdata(self, *args, **kwargs):
+    def roll_over_data(self, *args, **kwargs):
         '''Chains several data feeds into one
 
         If ``name`` is passed as named argument and is not None it will be put
@@ -800,11 +800,11 @@ class Cerebro(with_metaclass(MetaParams, object)):
         if dname is None:
             dname = args[0]._dataname
         d = bt.feeds.RollOver(dataname=dname, *args, **kwargs)
-        self.adddata(d, name=dname)
+        self.add_data(d, name=dname)
 
         return d
 
-    def replaydata(self, dataname, name=None, **kwargs):
+    def replay_data(self, dataname, name=None, **kwargs):
         '''
         Adds a ``Data Feed`` to be replayed by the system
 
@@ -818,12 +818,12 @@ class Cerebro(with_metaclass(MetaParams, object)):
             dataname = dataname.clone()
 
         dataname.replay(**kwargs)
-        self.adddata(dataname, name=name)
+        self.add_data(dataname, name=name)
         self._doreplay = True
 
         return dataname
 
-    def resampledata(self, dataname, name=None, **kwargs):
+    def resample_data(self, dataname, name=None, **kwargs):
         '''
         Adds a ``Data Feed`` to be resample by the system
 
@@ -837,12 +837,12 @@ class Cerebro(with_metaclass(MetaParams, object)):
             dataname = dataname.clone()
 
         dataname.resample(**kwargs)
-        self.adddata(dataname, name=name)
+        self.add_data(dataname, name=name)
         self._doreplay = True
 
         return dataname
 
-    def optcallback(self, cb):
+    def opt_callback(self, cb):
         '''
         Adds a *callback* to the list of callbacks that will be called with the
         optimizations when each of the strategies has been run
@@ -851,7 +851,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
         '''
         self.optcbs.append(cb)
 
-    def optstrategy(self, strategy, *args, **kwargs):
+    def opt_strategy(self, strategy, *args, **kwargs):
         '''
         Adds a ``Strategy`` class to the mix for optimization. Instantiation
         will happen during ``run`` time.
@@ -859,13 +859,13 @@ class Cerebro(with_metaclass(MetaParams, object)):
         args and kwargs MUST BE iterables which hold the values to check.
 
         Example: if a Strategy accepts a parameter ``period``, for optimization
-        purposes the call to ``optstrategy`` looks like:
+        purposes the call to ``opt_strategy`` looks like:
 
-          - cerebro.optstrategy(MyStrategy, period=(15, 25))
+          - cerebro.opt_strategy(MyStrategy, period=(15, 25))
 
         This will execute an optimization for values 15 and 25. Whereas
 
-          - cerebro.optstrategy(MyStrategy, period=range(15, 25))
+          - cerebro.opt_strategy(MyStrategy, period=range(15, 25))
 
         will execute MyStrategy with ``period`` values 15 -> 25 (25 not
         included, because ranges are semi-open in Python)
@@ -873,14 +873,14 @@ class Cerebro(with_metaclass(MetaParams, object)):
         If a parameter is passed but shall not be optimized the call looks
         like:
 
-          - cerebro.optstrategy(MyStrategy, period=(15,))
+          - cerebro.opt_strategy(MyStrategy, period=(15,))
 
         Notice that ``period`` is still passed as an iterable ... of just 1
         element
 
         ``backtrader`` will anyhow try to identify situations like:
 
-          - cerebro.optstrategy(MyStrategy, period=15)
+          - cerebro.opt_strategy(MyStrategy, period=15)
 
         and will create an internal pseudo-iterable if possible
         '''
@@ -900,7 +900,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
         it = itertools.product([strategy], optargs, optkwargs)
         self.strats.append(it)
 
-    def addstrategy(self, strategy, *args, **kwargs):
+    def add_strategy(self, strategy, *args, **kwargs):
         '''
         Adds a ``Strategy`` class to the mix for a single pass run.
         Instantiation will happen during ``run`` time.
@@ -914,7 +914,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
         self.strats.append([(strategy, args, kwargs)])
         return len(self.strats) - 1
 
-    def setbroker(self, broker):
+    def set_broker(self, broker):
         '''
         Sets a specific ``broker`` instance for this strategy, replacing the
         one inherited from cerebro.
@@ -923,7 +923,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
         broker.cerebro = self
         return broker
 
-    def getbroker(self):
+    def get_broker(self):
         '''
         Returns the broker instance.
 
@@ -931,7 +931,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
         '''
         return self._broker
 
-    broker = property(getbroker, setbroker)
+    broker = property(get_broker, set_broker)
 
     def plot(self, plotter=None, numfigs=1, iplot=True, start=None, end=None,
              width=16, height=9, dpi=300, tight=True, use=None,
@@ -1004,7 +1004,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
         '''
 
         predata = self.p.optdatas and self._dopreload and self._dorunonce
-        return self.runstrategies(iterstrat, predata=predata)
+        return self.run_strategies(iterstrat, predata=predata)
 
     def __getstate__(self):
         '''
@@ -1017,7 +1017,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
             del(rv['runstrats'])
         return rv
 
-    def runstop(self):
+    def run_stop(self):
         '''If invoked from inside a strategy or anywhere else, including other
         threads the execution will stop as soon as possible.'''
         self._event_stop = True  # signal a stop has been requested
@@ -1032,10 +1032,10 @@ class Cerebro(with_metaclass(MetaParams, object)):
         It has different return values:
 
           - For No Optimization: a list contanining instances of the Strategy
-            classes added with ``addstrategy``
+            classes added with ``add_strategy``
 
           - For Optimization: a list of lists which contain instances of the
-            Strategy classes added with ``addstrategy``
+            Strategy classes added with ``add_strategy``
         '''
         self._event_stop = False  # Stop is requested
 
@@ -1109,7 +1109,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
                 signalst, sargs, skwargs = SignalStrategy, tuple(), dict()
 
             # Add the signal strategy
-            self.addstrategy(signalst,
+            self.add_strategy(signalst,
                              _accumulate=self._signal_accumulate,
                              _concurrent=self._signal_concurrent,
                              signals=self.signals,
@@ -1117,14 +1117,14 @@ class Cerebro(with_metaclass(MetaParams, object)):
                              **skwargs)
 
         if not self.strats:  # Datas are present, add a strategy
-            self.addstrategy(Strategy)
+            self.add_strategy(Strategy)
 
         iterstrats = itertools.product(*self.strats)
         if not self._dooptimize or self.p.maxcpus == 1:
             # If no optimmization is wished ... or 1 core is to be used
             # let's skip process "spawning"
             for iterstrat in iterstrats:
-                runstrat = self.runstrategies(iterstrat)
+                runstrat = self.run_strategies(iterstrat)
                 self.runstrats.append(runstrat)
                 if self._dooptimize:
                     for cb in self.optcbs:
@@ -1157,17 +1157,17 @@ class Cerebro(with_metaclass(MetaParams, object)):
 
         return self.runstrats
 
-    def _init_stcount(self):
+    def _init_st_count(self):
         self.stcount = itertools.count(0)
 
-    def _next_stid(self):
+    def _next_st_id(self):
         return next(self.stcount)
 
-    def runstrategies(self, iterstrat, predata=False):
+    def run_strategies(self, iterstrat, predata=False):
         '''
         Internal method invoked by ``run``` to run a set of strategies
         '''
-        self._init_stcount()
+        self._init_st_count()
 
         self.runningstrats = runstrats = list()
         for store in self.stores:
@@ -1290,12 +1290,12 @@ class Cerebro(with_metaclass(MetaParams, object)):
                 if self.p.oldsync:
                     self._runonce_old(runstrats)
                 else:
-                    self._runonce(runstrats)
+                    self._run_once(runstrats)
             else:
                 if self.p.oldsync:
                     self._runnext_old(runstrats)
                 else:
-                    self._runnext(runstrats)
+                    self._run_next(runstrats)
 
             for strat in runstrats:
                 strat._stop()
@@ -1352,7 +1352,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
             writer.writedict(dict(Cerebro=cerebroinfo))
             writer.stop()
 
-    def _brokernotify(self):
+    def _broker_notify(self):
         '''
         Internal method which kicks the broker and delivers any broker
         notification to the strategy
@@ -1380,10 +1380,10 @@ class Cerebro(with_metaclass(MetaParams, object)):
             lastret = False
             # Notify anything from the store even before moving datas
             # because datas may not move due to an error reported by the store
-            self._storenotify()
+            self._store_notify()
             if self._event_stop:  # stop if requested
                 return
-            self._datanotify()
+            self._data_notify()
             if self._event_stop:  # stop if requested
                 return
 
@@ -1411,11 +1411,11 @@ class Cerebro(with_metaclass(MetaParams, object)):
                     break
 
             # Datas may have generated a new notification after next
-            self._datanotify()
+            self._data_notify()
             if self._event_stop:  # stop if requested
                 return
 
-            self._brokernotify()
+            self._broker_notify()
             if self._event_stop:  # stop if requested
                 return
 
@@ -1428,10 +1428,10 @@ class Cerebro(with_metaclass(MetaParams, object)):
                     self._next_writers(runstrats)
 
         # Last notification chance before stopping
-        self._datanotify()
+        self._data_notify()
         if self._event_stop:  # stop if requested
             return
-        self._storenotify()
+        self._store_notify()
         if self._event_stop:  # stop if requested
             return
 
@@ -1455,7 +1455,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
             for data in datas:
                 data.advance(datamaster=data0)
 
-            self._brokernotify()
+            self._broker_notify()
             if self._event_stop:  # stop if requested
                 return
 
@@ -1490,7 +1490,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
         '''API for lineiterators to disable runonce (see HeikinAshi)'''
         self._dorunonce = False
 
-    def _runnext(self, runstrats):
+    def _run_next(self, runstrats):
         '''
         Actual implementation of run in full next mode. All objects have its
         ``next`` method invoke on each data arrival
@@ -1525,10 +1525,10 @@ class Cerebro(with_metaclass(MetaParams, object)):
             lastret = False
             # Notify anything from the store even before moving datas
             # because datas may not move due to an error reported by the store
-            self._storenotify()
+            self._store_notify()
             if self._event_stop:  # stop if requested
                 return
-            self._datanotify()
+            self._data_notify()
             if self._event_stop:  # stop if requested
                 return
 
@@ -1608,7 +1608,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
                     break
 
             # Datas may have generated a new notification after next
-            self._datanotify()
+            self._data_notify()
             if self._event_stop:  # stop if requested
                 return
 
@@ -1620,7 +1620,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
                         if self._event_stop:  # stop if requested
                             return
 
-            self._brokernotify()
+            self._broker_notify()
             if self._event_stop:  # stop if requested
                 return
 
@@ -1634,14 +1634,14 @@ class Cerebro(with_metaclass(MetaParams, object)):
                     self._next_writers(runstrats)
 
         # Last notification chance before stopping
-        self._datanotify()
+        self._data_notify()
         if self._event_stop:  # stop if requested
             return
-        self._storenotify()
+        self._store_notify()
         if self._event_stop:  # stop if requested
             return
 
-    def _runonce(self, runstrats):
+    def _run_once(self, runstrats):
         '''
         Actual implementation of run in vector mode.
 
@@ -1685,7 +1685,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
                     if self._event_stop:  # stop if requested
                         return
 
-            self._brokernotify()
+            self._broker_notify()
             if self._event_stop:  # stop if requested
                 return
 
