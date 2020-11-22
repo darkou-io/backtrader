@@ -187,7 +187,7 @@ def set_broker(args, cerebro):
         commkwargs['interest_long'] = args.interest_long
 
     if commkwargs:
-        broker.setcommission(**commkwargs)
+        broker.set_commission(**commkwargs)
 
     if args.slip_perc is not None:
         cerebro.broker.set_slippage_perc(args.slip_perc,

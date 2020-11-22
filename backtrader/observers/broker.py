@@ -36,7 +36,7 @@ class Cash(Observer):
     plotinfo = dict(plot=True, subplot=True)
 
     def next(self):
-        self.lines[0][0] = self._owner.broker.getcash()
+        self.lines[0][0] = self._owner.broker.get_cash()
 
 
 class Value(Observer):
@@ -47,7 +47,7 @@ class Value(Observer):
 
       - ``fund`` (default: ``None``)
 
-        If ``None`` the actual mode of the broker (fundmode - True/False) will
+        If ``None`` the actual mode of the broker (fund_mode - True/False) will
         be autodetected to decide if the returns are based on the total net
         asset value or on the fund value. See ``set_fund_mode`` in the broker
         documentation
@@ -67,13 +67,13 @@ class Value(Observer):
 
     def start(self):
         if self.p.fund is None:
-            self._fundmode = self._owner.broker.fundmode
+            self._fundmode = self._owner.broker.fund_mode
         else:
             self._fundmode = self.p.fund
 
     def next(self):
         if not self._fundmode:
-            self.lines[0][0] = self._owner.broker.getvalue()
+            self.lines[0][0] = self._owner.broker.get_value()
         else:
             self.lines[0][0] = self._owner.broker.fund_value
 
@@ -97,7 +97,7 @@ class Broker(Observer):
 
     def start(self):
         if self.p.fund is None:
-            self._fundmode = self._owner.broker.fundmode
+            self._fundmode = self._owner.broker.fund_mode
         else:
             self._fundmode = self.p.fund
 
@@ -107,8 +107,8 @@ class Broker(Observer):
 
     def next(self):
         if not self._fundmode:
-            self.lines.value[0] = value = self._owner.broker.getvalue()
-            self.lines.cash[0] = self._owner.broker.getcash()
+            self.lines.value[0] = value = self._owner.broker.get_value()
+            self.lines.cash[0] = self._owner.broker.get_cash()
         else:
             self.lines.value[0] = self._owner.broker.fund_value
 

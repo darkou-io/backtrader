@@ -25,7 +25,7 @@ import collections
 import datetime
 
 import backtrader as bt
-from backtrader.comminfo import CommInfoBase
+from backtrader.comm_info import CommInfoBase
 from backtrader.order import Order, BuyOrder, SellOrder
 from backtrader.position import Position
 from backtrader.utils.py3 import string_types, integer_types
@@ -214,7 +214,7 @@ class BackBroker(bt.BrokerBase):
           the amount of shares. Performance is not measured using the net
           asset value of the porftoflio but using the value of the fund
 
-        - ``fundmode`` (default: ``False``)
+        - ``fund_mode`` (default: ``False``)
 
           If this is set to ``True`` analyzers like ``TimeReturn`` can
           automatically calculate returns based on the fund value and not on
@@ -238,7 +238,7 @@ class BackBroker(bt.BrokerBase):
         ('int2pnl', True),
         ('shortcash', True),
         ('fundstartval', 100.0),
-        ('fundmode', False),
+        ('fund_mode', False),
     )
 
     def __init__(self):
@@ -288,20 +288,20 @@ class BackBroker(bt.BrokerBase):
 
         return None
 
-    def set_fund_mode(self, fundmode, fundstartval=None):
-        '''Set the actual fundmode (True or False)
+    def set_fund_mode(self, fund_mode, fundstartval=None):
+        '''Set the actual fund_mode (True or False)
 
         If the argument fundstartval is not ``None``, it will used
         '''
-        self.p.fundmode = fundmode
+        self.p.fund_mode = fund_mode
         if fundstartval is not None:
             self.set_fund_start_val(fundstartval)
 
     def get_fund_mode(self):
-        '''Returns the actual fundmode (True or False)'''
-        return self.p.fundmode
+        '''Returns the actual fund_mode (True or False)'''
+        return self.p.fund_mode
 
-    fundmode = property(get_fund_mode, set_fund_mode)
+    fund_mode = property(get_fund_mode, set_fund_mode)
 
     def set_fund_start_val(self, fundstartval):
         '''Set the starting value of the fund-like performance tracker'''
@@ -360,10 +360,10 @@ class BackBroker(bt.BrokerBase):
     seteosbar = set_eos_bar
 
     def get_cash(self):
-        '''Returns the current cash (alias: ``getcash``)'''
+        '''Returns the current cash (alias: ``get_cash``)'''
         return self.cash
 
-    getcash = get_cash
+    get_cash = get_cash
 
     def set_cash(self, cash):
         '''Sets the cash parameter (alias: ``setcash``)'''
@@ -404,7 +404,7 @@ class BackBroker(bt.BrokerBase):
 
     def get_value(self, datas=None, mkt=False, lever=False):
         '''Returns the portfolio value of the given datas (if datas is ``None``, then
-        the total portfolio value will be returned (alias: ``getvalue``)
+        the total portfolio value will be returned (alias: ``get_value``)
         '''
         if datas is None:
             if mkt:
@@ -414,7 +414,7 @@ class BackBroker(bt.BrokerBase):
 
         return self._get_value(datas=datas, lever=lever)
 
-    getvalue = get_value
+    get_value = get_value
 
     def get_value_lever(self, datas=None, mkt=False):
         return self.get_value(datas=datas, mkt=mkt)
@@ -430,20 +430,20 @@ class BackBroker(bt.BrokerBase):
             self.cash += c
 
         for data in datas or self.positions:
-            comminfo = self.getcommissioninfo(data)
+            comm_info = self.get_commission_info(data)
             position = self.positions[data]
             # use valuesize:  returns raw value, rather than negative adj val
             if not self.p.shortcash:
-                dvalue = comminfo.getvalue(position, data.close[0])
+                dvalue = comm_info.get_value(position, data.close[0])
             else:
-                dvalue = comminfo.getvaluesize(position.size, data.close[0])
+                dvalue = comm_info.getvaluesize(position.size, data.close[0])
 
-            dunrealized = comminfo.profitandloss(position.size, position.price,
+            dunrealized = comm_info.profitandloss(position.size, position.price,
                                                  data.close[0])
             if datas and len(datas) == 1:
                 if lever and dvalue > 0:
                     dvalue -= dunrealized
-                    return (dvalue / comminfo.get_leverage()) + dunrealized
+                    return (dvalue / comm_info.get_leverage()) + dunrealized
                 return dvalue  # raw data value requested, short selling is neg
 
             if not self.p.shortcash:
@@ -454,7 +454,7 @@ class BackBroker(bt.BrokerBase):
 
             if dvalue > 0:  # long position - unlever
                 dvalue -= dunrealized
-                pos_value_unlever += (dvalue / comminfo.get_leverage())
+                pos_value_unlever += (dvalue / comm_info.get_leverage())
                 pos_value_unlever += dunrealized
             else:
                 pos_value_unlever += dvalue
@@ -565,7 +565,7 @@ class BackBroker(bt.BrokerBase):
             if self._take_children(order) is None:  # children not taken
                 continue
 
-            comminfo = self.getcommissioninfo(order.data)
+            comm_info = self.get_commission_info(order.data)
 
             position = positions.setdefault(
                 order.data, self.positions[order.data].clone())
@@ -699,16 +699,16 @@ class BackBroker(bt.BrokerBase):
             if not order.isbuy():
                 size = -size
 
-        # Get comminfo object for the data
-        comminfo = self.getcommissioninfo(order.data)
+        # Get comm_info object for the data
+        comm_info = self.get_commission_info(order.data)
 
         # Check if something has to be compensated
         if order.data._compensate is not None:
             data = order.data._compensate
-            cinfocomp = self.getcommissioninfo(data)  # for actual commission
+            cinfocomp = self.get_commission_info(data)  # for actual commission
         else:
             data = order.data
-            cinfocomp = comminfo
+            cinfocomp = comm_info
 
         # Adjust position with operation size
         if ago is not None:
@@ -720,7 +720,7 @@ class BackBroker(bt.BrokerBase):
 
             # if part/all of a position has been closed, then there has been
             # a profitandloss ... record it
-            pnl = comminfo.profitandloss(-closed, pprice_orig, price)
+            pnl = comm_info.profitandloss(-closed, pprice_orig, price)
             cash = self.cash
         else:
             pnl = 0
@@ -741,23 +741,23 @@ class BackBroker(bt.BrokerBase):
         if closed:
             # Adjust to returned value for closed items & acquired opened items
             if self.p.shortcash:
-                closedvalue = comminfo.getvaluesize(-closed, pprice_orig)
+                closedvalue = comm_info.getvaluesize(-closed, pprice_orig)
             else:
-                closedvalue = comminfo.getoperationcost(closed, pprice_orig)
+                closedvalue = comm_info.getoperationcost(closed, pprice_orig)
 
             closecash = closedvalue
             if closedvalue > 0:  # long position closed
-                closecash /= comminfo.get_leverage()  # inc cash with lever
+                closecash /= comm_info.get_leverage()  # inc cash with lever
 
-            cash += closecash + pnl * comminfo.stocklike
+            cash += closecash + pnl * comm_info.stocklike
             # Calculate and substract commission
-            closedcomm = comminfo.getcommission(closed, price)
+            closedcomm = comm_info.getcommission(closed, price)
             cash -= closedcomm
 
             if ago is not None:
                 # Cashadjust closed contracts: prev close vs exec price
                 # The operation can inject or take cash out
-                cash += comminfo.cashadjust(-closed,
+                cash += comm_info.cashadjust(-closed,
                                             position.adjbase,
                                             price)
 
@@ -769,13 +769,13 @@ class BackBroker(bt.BrokerBase):
         popened = opened
         if opened:
             if self.p.shortcash:
-                openedvalue = comminfo.getvaluesize(opened, price)
+                openedvalue = comm_info.getvaluesize(opened, price)
             else:
-                openedvalue = comminfo.getoperationcost(opened, price)
+                openedvalue = comm_info.getoperationcost(opened, price)
 
             opencash = openedvalue
             if openedvalue > 0:  # long position being opened
-                opencash /= comminfo.get_leverage()  # dec cash with level
+                opencash /= comm_info.get_leverage()  # dec cash with level
 
             cash -= opencash  # original behavior
 
@@ -797,7 +797,7 @@ class BackBroker(bt.BrokerBase):
                     # futures from a common base price with regards to the
                     # close price
                     adjsize = psize - opened
-                    cash += comminfo.cashadjust(adjsize,
+                    cash += comm_info.cashadjust(adjsize,
                                                 position.adjbase, price)
 
                 # record adjust price base for end of bar cash adjustment
@@ -815,8 +815,8 @@ class BackBroker(bt.BrokerBase):
         execsize = closed + opened
 
         if execsize:
-            # Confimrm the operation to the comminfo object
-            comminfo.confirmexec(execsize, price)
+            # Confimrm the operation to the comm_info object
+            comm_info.confirmexec(execsize, price)
 
             # do a real position update if something was executed
             position.update(execsize, price, data.datetime.datetime())
@@ -829,10 +829,10 @@ class BackBroker(bt.BrokerBase):
                           execsize, price,
                           closed, closedvalue, closedcomm,
                           opened, openedvalue, openedcomm,
-                          comminfo.margin, pnl,
+                          comm_info.margin, pnl,
                           psize, pprice)
 
-            order.addcomminfo(comminfo)
+            order.addcomminfo(comm_info)
 
             self.notify(order)
             self._ococheck(order)
@@ -1184,9 +1184,9 @@ class BackBroker(bt.BrokerBase):
         credit = 0.0
         for data, pos in self.positions.items():
             if pos:
-                comminfo = self.getcommissioninfo(data)
+                comm_info = self.get_commission_info(data)
                 dt0 = data.datetime.datetime()
-                dcredit = comminfo.get_credit_interest(data, pos, dt0)
+                dcredit = comm_info.get_credit_interest(data, pos, dt0)
                 self.d_credit[data] += dcredit
                 credit += dcredit
                 pos.datetime = dt0  # mark last credit operation
@@ -1223,8 +1223,8 @@ class BackBroker(bt.BrokerBase):
         for data, pos in self.positions.items():
             # futures change cash every bar
             if pos:
-                comminfo = self.getcommissioninfo(data)
-                self.cash += comminfo.cashadjust(pos.size,
+                comm_info = self.get_commission_info(data)
+                self.cash += comm_info.cashadjust(pos.size,
                                                  pos.adjbase,
                                                  data.close[0])
                 # record the last adjustment price

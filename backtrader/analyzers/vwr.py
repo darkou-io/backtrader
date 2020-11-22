@@ -78,7 +78,7 @@ class VWR(TimeFrameAnalyzerBase):
 
       - ``fund`` (default: ``None``)
 
-        If ``None`` the actual mode of the broker (fundmode - True/False) will
+        If ``None`` the actual mode of the broker (fund_mode - True/False) will
         be autodetected to decide if the returns are based on the total net
         asset value or on the fund value. See ``set_fund_mode`` in the broker
         documentation
@@ -121,12 +121,12 @@ class VWR(TimeFrameAnalyzerBase):
         super(VWR, self).start()
         # Add an initial placeholder for [-1] operation
         if self.p.fund is None:
-            self._fundmode = self.strategy.broker.fundmode
+            self._fundmode = self.strategy.broker.fund_mode
         else:
             self._fundmode = self.p.fund
 
         if not self._fundmode:
-            self._pis = [self.strategy.broker.getvalue()]  # keep initial value
+            self._pis = [self.strategy.broker.get_value()]  # keep initial value
         else:
             self._pis = [self.strategy.broker.fund_value]  # keep initial value
 

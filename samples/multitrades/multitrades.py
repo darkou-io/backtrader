@@ -150,7 +150,7 @@ def runstrategy():
     cerebro.broker.setcash(args.cash)
 
     # Add the commission - only stocks like a for each operation
-    cerebro.broker.setcommission(commission=args.comm,
+    cerebro.broker.set_commission(commission=args.comm,
                                  mult=args.mult,
                                  margin=args.margin)
 

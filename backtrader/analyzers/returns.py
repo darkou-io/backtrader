@@ -66,7 +66,7 @@ class Returns(TimeFrameAnalyzerBase):
 
       - ``fund`` (default: ``None``)
 
-        If ``None`` the actual mode of the broker (fundmode - True/False) will
+        If ``None`` the actual mode of the broker (fund_mode - True/False) will
         be autodetected to decide if the returns are based on the total net
         asset value or on the fund value. See ``set_fund_mode`` in the broker
         documentation
@@ -104,12 +104,12 @@ class Returns(TimeFrameAnalyzerBase):
     def start(self):
         super(Returns, self).start()
         if self.p.fund is None:
-            self._fundmode = self.strategy.broker.fundmode
+            self._fundmode = self.strategy.broker.fund_mode
         else:
             self._fundmode = self.p.fund
 
         if not self._fundmode:
-            self._value_start = self.strategy.broker.getvalue()
+            self._value_start = self.strategy.broker.get_value()
         else:
             self._value_start = self.strategy.broker.fund_value
 
@@ -119,7 +119,7 @@ class Returns(TimeFrameAnalyzerBase):
         super(Returns, self).stop()
 
         if not self._fundmode:
-            self._value_end = self.strategy.broker.getvalue()
+            self._value_end = self.strategy.broker.get_value()
         else:
             self._value_end = self.strategy.broker.fund_value
 

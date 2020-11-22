@@ -42,10 +42,10 @@ class FixedPerc(bt.Sizer):
         ('perc', 0.20),  # perc of cash to use for operation
     )
 
-    def _getsizing(self, comminfo, cash, data, isbuy):
+    def _getsizing(self, comm_info, cash, data, isbuy):
         cashtouse = self.p.perc * cash
         if BTVERSION > (1, 7, 1, 93):
-            size = comminfo.getsize(data.close[0], cashtouse)
+            size = comm_info.getsize(data.close[0], cashtouse)
         else:
             size = cashtouse // data.close[0]
         return size
@@ -142,10 +142,10 @@ def runstrat(args=None):
 
     cerebro = bt.Cerebro()
     cerebro.broker.set_cash(args.cash)
-    comminfo = bt.commissions.CommInfo_Stocks_Perc(commission=args.commperc,
+    comm_info = bt.commissions.CommInfo_Stocks_Perc(commission=args.commperc,
                                                    percabs=True)
 
-    cerebro.broker.addcommissioninfo(comminfo)
+    cerebro.broker.add_commission_info(comm_info)
 
     dkwargs = dict()
     if args.fromdate is not None:

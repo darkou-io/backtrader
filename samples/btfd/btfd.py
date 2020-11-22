@@ -165,7 +165,7 @@ def runstrat(args=None):
     cerebro.broker = bt.brokers.BackBroker(**eval('dict(' + args.broker + ')'))
 
     # Add a commission
-    cerebro.broker.setcommission(**eval('dict(' + args.comminfo + ')'))
+    cerebro.broker.set_commission(**eval('dict(' + args.comm_info + ')'))
 
     # Strategy
     cerebro.add_strategy(St, **eval('dict(' + args.strat + ')'))
@@ -219,7 +219,7 @@ def parse_args(pargs=None):
                         default='approach="highlow"',
                         metavar='kwargs', help='kwargs in key=value format')
 
-    parser.add_argument('--comminfo', required=False, default='leverage=2.0',
+    parser.add_argument('--comm_info', required=False, default='leverage=2.0',
                         metavar='kwargs', help='kwargs in key=value format')
 
     parser.add_argument('--plot', required=False, default='',

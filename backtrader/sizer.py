@@ -48,15 +48,15 @@ class Sizer(with_metaclass(MetaParams, object)):
     broker = None
 
     def getsizing(self, data, isbuy):
-        comminfo = self.broker.getcommissioninfo(data)
-        return self._getsizing(comminfo, self.broker.getcash(), data, isbuy)
+        comm_info = self.broker.get_commission_info(data)
+        return self._getsizing(comm_info, self.broker.get_cash(), data, isbuy)
 
-    def _getsizing(self, comminfo, cash, data, isbuy):
+    def _getsizing(self, comm_info, cash, data, isbuy):
         '''This method has to be overriden by subclasses of Sizer to provide
         the sizing functionality
 
         Params:
-          - ``comminfo``: The CommissionInfo instance that contains
+          - ``comm_info``: The CommissionInfo instance that contains
             information about the commission for the data and allows
             calculation of position value, operation cost, commision for the
             operation

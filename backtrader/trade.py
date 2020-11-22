@@ -218,7 +218,7 @@ class Trade(object):
         return self.data.num2date(self.dtclose, tz=tz, naive=naive)
 
     def update(self, order, size, price, value, commission, pnl,
-               comminfo):
+               comm_info):
         '''
         Updates the current trade. The logic does not check if the
         trade is reversed, which is not conceptually supported by the
@@ -293,12 +293,12 @@ class Trade(object):
 
         else:  # abs(self.size) < abs(oldsize)
             # position reduced/closed
-            pnl = comminfo.profitandloss(-size, self.price, price)
+            pnl = comm_info.profitandloss(-size, self.price, price)
 
         self.pnl += pnl
         self.pnlcomm = self.pnl - self.commission
 
-        self.value = comminfo.getvaluesize(self.size, self.price)
+        self.value = comm_info.getvaluesize(self.size, self.price)
 
         # Update the history if needed
         if self.historyon:

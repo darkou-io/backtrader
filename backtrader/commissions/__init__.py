@@ -21,7 +21,7 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-from ..comminfo import CommInfoBase
+from ..comm_info import CommInfoBase
 
 
 class CommInfo(CommInfoBase):

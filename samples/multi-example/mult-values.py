@@ -31,7 +31,7 @@ import backtrader as bt
 class TestSizer(bt.Sizer):
     params = dict(stake=1)
 
-    def _getsizing(self, comminfo, cash, data, isbuy):
+    def _getsizing(self, comm_info, cash, data, isbuy):
         dt, i = self.strategy.datetime.date(), data._id
         s = self.p.stake * (1 + (not isbuy))
         print('{} Data {} OType {} Sizing to {}'.format(
@@ -156,7 +156,7 @@ def runstrat(args=None):
 
     # Broker
     cerebro.broker = bt.brokers.BackBroker(**eval('dict(' + args.broker + ')'))
-    cerebro.broker.setcommission(commission=0.001)
+    cerebro.broker.set_commission(commission=0.001)
 
     # Sizer
     # cerebro.add_sizer(bt.sizers.FixedSize, **eval('dict(' + args.sizer + ')'))

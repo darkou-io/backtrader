@@ -99,14 +99,14 @@ def runstrat(args=None):
         elif args.short:
             cerebro.add_signal(bt.signal.SIGNAL_SHORTEXIT, NoExit)
 
-    comminfo = bt.CommissionInfo(
+    comm_info = bt.CommissionInfo(
         mult=args.mult,
         margin=args.margin,
         stocklike=args.stocklike,
         interest=args.interest,
         interest_long=args.interest_long)
 
-    cerebro.broker.addcommissioninfo(comminfo)
+    cerebro.broker.add_commission_info(comm_info)
 
     cerebro.run()
     if args.plot:

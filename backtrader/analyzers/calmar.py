@@ -51,7 +51,7 @@ class Calmar(bt.TimeFrameAnalyzerBase):
 
       - ``fund`` (default: ``None``)
 
-        If ``None`` the actual mode of the broker (fundmode - True/False) will
+        If ``None`` the actual mode of the broker (fund_mode - True/False) will
         be autodetected to decide if the returns are based on the total net
         asset value or on the fund value. See ``set_fund_mode`` in the broker
         documentation
@@ -89,19 +89,19 @@ class Calmar(bt.TimeFrameAnalyzerBase):
         self._values = collections.deque([float('Nan')] * self.p.period,
                                          maxlen=self.p.period)
         if self.p.fund is None:
-            self._fundmode = self.strategy.broker.fundmode
+            self._fundmode = self.strategy.broker.fund_mode
         else:
             self._fundmode = self.p.fund
 
         if not self._fundmode:
-            self._values.append(self.strategy.broker.getvalue())
+            self._values.append(self.strategy.broker.get_value())
         else:
             self._values.append(self.strategy.broker.fund_value)
 
     def on_dt_over(self):
         self._mdd = max(self._mdd, self._maxdd.maxdd)
         if not self._fundmode:
-            self._values.append(self.strategy.broker.getvalue())
+            self._values.append(self.strategy.broker.get_value())
         else:
             self._values.append(self.strategy.broker.fund_value)
         rann = math.log(self._values[-1] / self._values[0]) / len(self._values)

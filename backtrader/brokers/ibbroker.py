@@ -35,11 +35,11 @@ from backtrader import (TimeFrame, num2date, date2num, BrokerBase,
                         Order, OrderBase, OrderData)
 from backtrader.utils.py3 import bytes, bstr, with_metaclass, queue, MAXFLOAT
 from backtrader.metabase import MetaParams
-from backtrader.comminfo import CommInfoBase
+from backtrader.comm_info import CommInfoBase
 from backtrader.position import Position
 from backtrader.stores import ibstore
 from backtrader.utils import AutoDict, AutoOrderedDict
-from backtrader.comminfo import CommInfoBase
+from backtrader.comm_info import CommInfoBase
 
 bytes = bstr  # py2/3 need for ibpy
 
@@ -293,12 +293,12 @@ class IBBroker(with_metaclass(MetaIBBroker, BrokerBase)):
         super(IBBroker, self).stop()
         self.ib.stop()
 
-    def getcash(self):
+    def get_cash(self):
         # This call cannot block if no answer is available from ib
         self.cash = self.ib.get_acc_cash()
         return self.cash
 
-    def getvalue(self, datas=None):
+    def get_value(self, datas=None):
         self.value = self.ib.get_acc_value()
         return self.value
 
@@ -339,7 +339,7 @@ class IBBroker(with_metaclass(MetaIBBroker, BrokerBase)):
 
         return order
 
-    def getcommissioninfo(self, data):
+    def get_commission_info(self, data):
         contract = data.tradecontract
         try:
             mult = float(contract.m_multiplier)
@@ -363,7 +363,7 @@ class IBBroker(with_metaclass(MetaIBBroker, BrokerBase)):
                         m_orderId=self.ib.nextOrderId(),
                         **kwargs)
 
-        order.addcomminfo(self.getcommissioninfo(data))
+        order.addcomminfo(self.get_commission_info(data))
         return order
 
     def buy(self, owner, data,
@@ -496,15 +496,15 @@ class IBBroker(with_metaclass(MetaIBBroker, BrokerBase)):
             closedcomm = comm * closed / size
             openedcomm = comm - closedcomm
 
-            comminfo = order.comminfo
-            closedvalue = comminfo.getoperationcost(closed, pprice_orig)
-            openedvalue = comminfo.getoperationcost(opened, price)
+            comm_info = order.comm_info
+            closedvalue = comm_info.getoperationcost(closed, pprice_orig)
+            openedvalue = comm_info.getoperationcost(opened, price)
 
             # default in m_pnl is MAXFLOAT
             pnl = cr.m_realizedPNL if closed else 0.0
 
             # The internal broker calc should yield the same result
-            # pnl = comminfo.profitandloss(-closed, pprice_orig, price)
+            # pnl = comm_info.profitandloss(-closed, pprice_orig, price)
 
             # Use the actual time provided by the execution object
             # The report from TWS is in actual local time, not the data's tz

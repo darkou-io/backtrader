@@ -211,7 +211,7 @@ class CommInfoBase(with_metaclass(MetaParams)):
 
         return size * price
 
-    def getvalue(self, position, price):
+    def get_value(self, position, price):
         '''Returns the value of a position given a price. For future-like
         objects it is fixed at size * margin'''
         if not self._stocklike:

@@ -470,7 +470,7 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
 
         # Internal Value Analyzer
         ainfo.Value.Begin = self.broker.startingcash
-        ainfo.Value.End = self.broker.getvalue()
+        ainfo.Value.End = self.broker.get_value()
 
         # no slave analyzers for writer
         for aname, analyzer in self.analyzers.getitems():
@@ -536,7 +536,7 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
                              exbit.closedvalue,
                              exbit.closedcomm,
                              exbit.pnl,
-                             comminfo=order.comminfo)
+                             comm_info=order.comm_info)
 
                 if trade.isclosed:
                     self._tradespending.append(copy.copy(trade))
@@ -556,7 +556,7 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
                              exbit.openedvalue,
                              exbit.openedcomm,
                              exbit.pnl,
-                             comminfo=order.comminfo)
+                             comm_info=order.comm_info)
 
                 # This extra check covers the case in which different tradeid
                 # orders have put the position down to 0 and the next order
@@ -601,8 +601,8 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
         if qorders:
             return  # cash is notified on a regular basis
 
-        cash = self.broker.getcash()
-        value = self.broker.getvalue()
+        cash = self.broker.get_cash()
+        value = self.broker.get_value()
         fund_value = self.broker.fund_value
         fund_shares = self.broker.fund_shares
 
@@ -1311,18 +1311,18 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
             return self.close(data=data, size=possize, price=price, **kwargs)
 
         else:
-            value = self.broker.getvalue(datas=[data])
-            comminfo = self.broker.getcommissioninfo(data)
+            value = self.broker.get_value(datas=[data])
+            comm_info = self.broker.get_commission_info(data)
 
             # Make sure a price is there
             price = price if price is not None else data.close[0]
 
             if target > value:
-                size = comminfo.getsize(price, target - value)
+                size = comm_info.getsize(price, target - value)
                 return self.buy(data=data, size=size, price=price, **kwargs)
 
             elif target < value:
-                size = comminfo.getsize(price, value - target)
+                size = comm_info.getsize(price, value - target)
                 return self.sell(data=data, size=size, price=price, **kwargs)
 
         return None  # no execution size == possize
@@ -1371,7 +1371,7 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
             data = self.data
 
         possize = self.get_position(data, self.broker).size
-        target *= self.broker.getvalue()
+        target *= self.broker.get_value()
 
         return self.order_target_value(data=data, target=target, **kwargs)
 

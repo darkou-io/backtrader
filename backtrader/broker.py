@@ -21,7 +21,7 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-from backtrader.comminfo import CommInfoBase
+from backtrader.comm_info import CommInfoBase
 from backtrader.metabase import MetaParams
 from backtrader.utils.py3 import with_metaclass
 
@@ -37,8 +37,8 @@ class MetaBroker(MetaParams):
         # Initialize the class
         super(MetaBroker, cls).__init__(name, bases, dct)
         translations = {
-            'get_cash': 'getcash',
-            'get_value': 'getvalue',
+            'get_cash': 'get_cash',
+            'get_value': 'get_value',
         }
 
         for attr, trans in translations.items():
@@ -52,13 +52,13 @@ class BrokerBase(with_metaclass(MetaBroker, object)):
     )
 
     def __init__(self):
-        self.comminfo = dict()
+        self.comm_info = dict()
         self.init()
 
     def init(self):
         # called from init and from start
-        if None not in self.comminfo:
-            self.comminfo = dict({None: self.p.commission})
+        if None not in self.comm_info:
+            self.comm_info = dict({None: self.p.commission})
 
     def start(self):
         self.init()
@@ -74,15 +74,15 @@ class BrokerBase(with_metaclass(MetaBroker, object)):
         '''Add fund history. See cerebro for details'''
         raise NotImplementedError
 
-    def getcommissioninfo(self, data):
+    def get_commission_info(self, data):
         '''Retrieves the ``CommissionInfo`` scheme associated with the given
         ``data``'''
-        if data._name in self.comminfo:
-            return self.comminfo[data._name]
+        if data._name in self.comm_info:
+            return self.comm_info[data._name]
 
-        return self.comminfo[None]
+        return self.comm_info[None]
 
-    def setcommission(self,
+    def set_commission(self,
                       commission=0.0, margin=None, mult=1.0,
                       commtype=None, percabs=True, stocklike=False,
                       interest=0.0, interest_long=False, leverage=1.0,
@@ -102,17 +102,17 @@ class BrokerBase(with_metaclass(MetaBroker, object)):
                             percabs=percabs,
                             interest=interest, interest_long=interest_long,
                             leverage=leverage, automargin=automargin)
-        self.comminfo[name] = comm
+        self.comm_info[name] = comm
 
-    def addcommissioninfo(self, comminfo, name=None):
+    def add_commission_info(self, comm_info, name=None):
         '''Adds a ``CommissionInfo`` object that will be the default for all assets if
         ``name`` is ``None``'''
-        self.comminfo[name] = comminfo
+        self.comm_info[name] = comm_info
 
-    def getcash(self):
+    def get_cash(self):
         raise NotImplementedError
 
-    def getvalue(self, datas=None):
+    def get_value(self, datas=None):
         raise NotImplementedError
 
     def get_fund_shares(self):
@@ -122,22 +122,22 @@ class BrokerBase(with_metaclass(MetaBroker, object)):
     fund_shares = property(get_fund_shares)
 
     def get_fund_value(self):
-        return self.getvalue()
+        return self.get_value()
 
     fund_value = property(get_fund_value)
 
-    def set_fund_mode(self, fundmode, fundstartval=None):
-        '''Set the actual fundmode (True or False)
+    def set_fund_mode(self, fund_mode, fundstartval=None):
+        '''Set the actual fund_mode (True or False)
 
         If the argument fundstartval is not ``None``, it will used
         '''
         pass  # do nothing, not all brokers can support this
 
     def get_fund_mode(self):
-        '''Returns the actual fundmode (True or False)'''
+        '''Returns the actual fund_mode (True or False)'''
         return False
 
-    fundmode = property(get_fund_mode, set_fund_mode)
+    fund_mode = property(get_fund_mode, set_fund_mode)
 
     def get_position(self, data):
         raise NotImplementedError

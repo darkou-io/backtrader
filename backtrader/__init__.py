@@ -32,7 +32,7 @@ from .linebuffer import *
 from .functions import *
 
 from .order import *
-from .comminfo import *
+from .comm_info import *
 from .trade import *
 from .position import *
 

@@ -156,7 +156,7 @@ class PairTradingStrategy(bt.Strategy):
     def stop(self):
         print('==================================================')
         print('Starting Value - %.2f' % self.broker.startingcash)
-        print('Ending   Value - %.2f' % self.broker.getvalue())
+        print('Ending   Value - %.2f' % self.broker.get_value())
         print('==================================================')
 
 
@@ -197,7 +197,7 @@ def runstrategy():
     cerebro.broker.setcash(args.cash)
 
     # Add the commission - only stocks like a for each operation
-    cerebro.broker.setcommission(commission=args.commperc)
+    cerebro.broker.set_commission(commission=args.commperc)
 
     # And run it
     cerebro.run(runonce=not args.runnext,

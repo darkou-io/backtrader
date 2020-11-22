@@ -31,11 +31,11 @@ from backtrader import (TimeFrame, num2date, date2num, BrokerBase,
                         Order, BuyOrder, SellOrder, OrderBase, OrderData)
 from backtrader.utils.py3 import bytes, with_metaclass, MAXFLOAT
 from backtrader.metabase import MetaParams
-from backtrader.comminfo import CommInfoBase
+from backtrader.comm_info import CommInfoBase
 from backtrader.position import Position
 from backtrader.stores import oandastore
 from backtrader.utils import AutoDict, AutoOrderedDict
-from backtrader.comminfo import CommInfoBase
+from backtrader.comm_info import CommInfoBase
 
 
 class OandaCommInfo(CommInfoBase):
@@ -116,7 +116,7 @@ class OandaBroker(with_metaclass(MetaOandaBroker, BrokerBase)):
                               exectype=Order.Market,
                               simulated=True)
 
-            order.addcomminfo(self.getcommissioninfo(data))
+            order.addcomminfo(self.get_commission_info(data))
             order.execute(0, pos.size, pos.price,
                           0, 0.0, 0.0,
                           pos.size, 0.0, 0.0,
@@ -132,7 +132,7 @@ class OandaBroker(with_metaclass(MetaOandaBroker, BrokerBase)):
                              exectype=Order.Market,
                              simulated=True)
 
-            order.addcomminfo(self.getcommissioninfo(data))
+            order.addcomminfo(self.get_commission_info(data))
             order.execute(0, pos.size, pos.price,
                           0, 0.0, 0.0,
                           pos.size, 0.0, 0.0,
@@ -146,12 +146,12 @@ class OandaBroker(with_metaclass(MetaOandaBroker, BrokerBase)):
         super(OandaBroker, self).stop()
         self.o.stop()
 
-    def getcash(self):
+    def get_cash(self):
         # This call cannot block if no answer is available from oanda
         self.cash = cash = self.o.get_cash()
         return cash
 
-    def getvalue(self, datas=None):
+    def get_value(self, datas=None):
         self.value = self.o.get_value()
         return self.value
 
@@ -258,7 +258,7 @@ class OandaBroker(with_metaclass(MetaOandaBroker, BrokerBase)):
         pos = self.get_position(data, clone=False)
         psize, pprice, opened, closed = pos.update(size, price)
 
-        comminfo = self.getcommissioninfo(data)
+        comm_info = self.get_commission_info(data)
 
         closedvalue = closedcomm = 0.0
         openedvalue = openedcomm = 0.0
@@ -317,7 +317,7 @@ class OandaBroker(with_metaclass(MetaOandaBroker, BrokerBase)):
                          parent=parent, transmit=transmit)
 
         order.addinfo(**kwargs)
-        order.addcomminfo(self.getcommissioninfo(data))
+        order.addcomminfo(self.get_commission_info(data))
         return self._transmit(order)
 
     def sell(self, owner, data,
@@ -334,7 +334,7 @@ class OandaBroker(with_metaclass(MetaOandaBroker, BrokerBase)):
                           parent=parent, transmit=transmit)
 
         order.addinfo(**kwargs)
-        order.addcomminfo(self.getcommissioninfo(data))
+        order.addcomminfo(self.get_commission_info(data))
         return self._transmit(order)
 
     def cancel(self, order):

@@ -26,7 +26,7 @@ from datetime import date, datetime, timedelta
 import threading
 
 from backtrader import BrokerBase, Order, BuyOrder, SellOrder
-from backtrader.comminfo import CommInfoBase
+from backtrader.comm_info import CommInfoBase
 from backtrader.feed import DataBase
 from backtrader.metabase import MetaParams
 from backtrader.position import Position
@@ -187,11 +187,11 @@ class VCBroker(with_metaclass(MetaVCBroker, BrokerBase)):
         super(VCBroker, self).stop()
         self.store.stop()
 
-    def getcash(self):
+    def get_cash(self):
         # This call cannot block if no answer is available from ib
         return self.cash
 
-    def getvalue(self, datas=None):
+    def get_value(self, datas=None):
         return self.value
 
     def get_notification(self):
@@ -211,13 +211,13 @@ class VCBroker(with_metaclass(MetaVCBroker, BrokerBase)):
 
         return pos
 
-    def getcommissioninfo(self, data):
-        if data._tradename in self.comminfo:
-            return self.comminfo[data._tradename]
+    def get_commission_info(self, data):
+        if data._tradename in self.comm_info:
+            return self.comm_info[data._tradename]
 
-        comminfo = self.comminfo[None]
-        if comminfo is not None:
-            return comminfo
+        comm_info = self.comm_info[None]
+        if comm_info is not None:
+            return comm_info
 
         stocklike = data._syminfo.Type in self._futlikes
 
@@ -300,7 +300,7 @@ class VCBroker(with_metaclass(MetaVCBroker, BrokerBase)):
         )
 
         order.vcorder = oid
-        order.addcomminfo(self.getcommissioninfo(order.data))
+        order.addcomminfo(self.get_commission_info(order.data))
 
         with self._lock_orders:
             self.orderbyid[oid] = order
@@ -407,15 +407,15 @@ class VCBroker(with_metaclass(MetaVCBroker, BrokerBase)):
         pprice_orig = position.price
         psize, pprice, opened, closed = position.update(size, price)
 
-        comminfo = border.comminfo
-        closedvalue = comminfo.getoperationcost(closed, pprice_orig)
-        closedcomm = comminfo.getcommission(closed, price)
+        comm_info = border.comm_info
+        closedvalue = comm_info.getoperationcost(closed, pprice_orig)
+        closedcomm = comm_info.getcommission(closed, price)
 
-        openedvalue = comminfo.getoperationcost(opened, price)
-        openedcomm = comminfo.getcommission(opened, price)
+        openedvalue = comm_info.getoperationcost(opened, price)
+        openedcomm = comm_info.getcommission(opened, price)
 
-        pnl = comminfo.profitandloss(-closed, pprice_orig, price)
-        margin = comminfo.getvaluesize(size, price)
+        pnl = comm_info.profitandloss(-closed, pprice_orig, price)
+        margin = comm_info.getvaluesize(size, price)
 
         # NOTE: No commission information available in the Trader interface
         # CHECK: Use reported time instead of last data time?

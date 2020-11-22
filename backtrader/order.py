@@ -291,7 +291,7 @@ class OrderBase(with_metaclass(MetaParams, object)):
         tojoin.append('TrailPercent: {}'.format(self.trailpercent))
         tojoin.append('ExecType: {}'.format(self.exectype))
         tojoin.append('ExecType: {}'.format(self.getordername()))
-        tojoin.append('CommInfo: {}'.format(self.comminfo))
+        tojoin.append('CommInfo: {}'.format(self.comm_info))
         tojoin.append('End of Session: {}'.format(self.dteos))
         tojoin.append('Info: {}'.format(self.info))
         tojoin.append('Broker: {}'.format(self.broker))
@@ -303,7 +303,7 @@ class OrderBase(with_metaclass(MetaParams, object)):
         self.ref = next(self.refbasis)
         self.broker = None
         self.info = AutoOrderedDict()
-        self.comminfo = None
+        self.comm_info = None
         self.triggered = False
 
         self._active = self.parent is None
@@ -421,9 +421,9 @@ class OrderBase(with_metaclass(MetaParams, object)):
         return self.status in [Order.Created, Order.Submitted,
                                Order.Partial, Order.Accepted]
 
-    def addcomminfo(self, comminfo):
+    def addcomminfo(self, comm_info):
         '''Stores a CommInfo scheme associated with the asset'''
-        self.comminfo = comminfo
+        self.comm_info = comm_info
 
     def addinfo(self, **kwargs):
         '''Add the keys, values of kwargs to the internal info dictionary to
@@ -579,7 +579,7 @@ class Order(OrderBase):
         else:
             self.status = Order.Completed
 
-        # self.comminfo = None
+        # self.comm_info = None
 
     def expire(self):
         if self.exectype == Order.Market:
