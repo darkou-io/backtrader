@@ -49,7 +49,7 @@ class Value(Observer):
 
         If ``None`` the actual mode of the broker (fundmode - True/False) will
         be autodetected to decide if the returns are based on the total net
-        asset value or on the fund value. See ``set_fundmode`` in the broker
+        asset value or on the fund value. See ``set_fund_mode`` in the broker
         documentation
 
         Set it to ``True`` or ``False`` for a specific behavior
@@ -75,7 +75,7 @@ class Value(Observer):
         if not self._fundmode:
             self.lines[0][0] = self._owner.broker.getvalue()
         else:
-            self.lines[0][0] = self._owner.broker.fundvalue
+            self.lines[0][0] = self._owner.broker.fund_value
 
 
 class Broker(Observer):
@@ -110,7 +110,7 @@ class Broker(Observer):
             self.lines.value[0] = value = self._owner.broker.getvalue()
             self.lines.cash[0] = self._owner.broker.getcash()
         else:
-            self.lines.value[0] = self._owner.broker.fundvalue
+            self.lines.value[0] = self._owner.broker.fund_value
 
 
 class FundValue(Observer):
@@ -126,7 +126,7 @@ class FundValue(Observer):
     plotinfo = dict(plot=True, subplot=True)
 
     def next(self):
-        self.lines.fundval[0] = self._owner.broker.fundvalue
+        self.lines.fundval[0] = self._owner.broker.fund_value
 
 
 class FundShares(Observer):
@@ -136,9 +136,9 @@ class FundShares(Observer):
     '''
     _stclock = True
 
-    lines = ('fundshares',)
+    lines = ('fund_shares',)
 
     plotinfo = dict(plot=True, subplot=True)
 
     def next(self):
-        self.lines.fundshares[0] = self._owner.broker.fundshares
+        self.lines.fund_shares[0] = self._owner.broker.fund_shares

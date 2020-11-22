@@ -42,7 +42,7 @@ class PercentSizer(bt.Sizer):
         pass
 
     def _getsizing(self, comminfo, cash, data, isbuy):
-        position = self.broker.getposition(data)
+        position = self.broker.get_position(data)
         if not position:
             size = cash / data.close[0] * (self.params.percents / 100)
         else:

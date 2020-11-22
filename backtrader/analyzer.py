@@ -157,11 +157,11 @@ class Analyzer(with_metaclass(MetaAnalyzer, object)):
 
         self.notify_cashvalue(cash, value)
 
-    def _notify_fund(self, cash, value, fundvalue, shares):
+    def _notify_fund(self, cash, value, fund_value, shares):
         for child in self._children:
-            child._notify_fund(cash, value, fundvalue, shares)
+            child._notify_fund(cash, value, fund_value, shares)
 
-        self.notify_fund(cash, value, fundvalue, shares)
+        self.notify_fund(cash, value, fund_value, shares)
 
     def _notify_trade(self, trade):
         for child in self._children:
@@ -203,8 +203,8 @@ class Analyzer(with_metaclass(MetaAnalyzer, object)):
         '''Receives the cash/value notification before each next cycle'''
         pass
 
-    def notify_fund(self, cash, value, fundvalue, shares):
-        '''Receives the current cash, value, fundvalue and fund shares'''
+    def notify_fund(self, cash, value, fund_value, shares):
+        '''Receives the current cash, value, fund_value and fund shares'''
         pass
 
     def notify_order(self, order):

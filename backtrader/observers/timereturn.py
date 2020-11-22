@@ -51,7 +51,7 @@ class TimeReturn(Observer):
 
         If ``None`` the actual mode of the broker (fundmode - True/False) will
         be autodetected to decide if the returns are based on the total net
-        asset value or on the fund value. See ``set_fundmode`` in the broker
+        asset value or on the fund value. See ``set_fund_mode`` in the broker
         documentation
 
         Set it to ``True`` or ``False`` for a specific behavior

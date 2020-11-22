@@ -37,7 +37,7 @@ class Sizer(with_metaclass(MetaParams, object)):
         Gives access to the entire api of the strategy, for example if the
         actual data position would be needed in ``_getsizing``::
 
-           position = self.strategy.getposition(data)
+           position = self.strategy.get_position(data)
 
       - ``broker``: will be set by the strategy in which the sizer is working
 

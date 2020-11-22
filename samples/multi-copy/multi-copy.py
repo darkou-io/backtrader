@@ -95,9 +95,9 @@ class TheStrategy(bt.Strategy):
         tfields = [self.p.myname,
                    len(self),
                    self.data.datetime.date(),
-                   self.getposition(self.data0).size]
+                   self.get_position(self.data0).size]
         if len(self.datas) > 1:
-            tfields.append(self.getposition(self.data1).size)
+            tfields.append(self.get_position(self.data1).size)
 
         print(','.join(str(x) for x in tfields))
 
@@ -108,7 +108,7 @@ class TheStrategy(bt.Strategy):
         if self.smasig[0] > 0.0:
             self.buy(data=self.dtarget, size=buysize)
 
-        size = self.getposition(self.dtarget).size
+        size = self.get_position(self.dtarget).size
 
         # if 2x in the market, let each potential close ... close 1/2
         if size == self.p.stake:

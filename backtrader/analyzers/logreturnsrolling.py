@@ -80,7 +80,7 @@ class LogReturnsRolling(bt.TimeFrameAnalyzerBase):
 
         If ``None`` the actual mode of the broker (fundmode - True/False) will
         be autodetected to decide if the returns are based on the total net
-        asset value or on the fund value. See ``set_fundmode`` in the broker
+        asset value or on the fund value. See ``set_fund_mode`` in the broker
         documentation
 
         Set it to ``True`` or ``False`` for a specific behavior
@@ -114,13 +114,13 @@ class LogReturnsRolling(bt.TimeFrameAnalyzerBase):
             if not self._fundmode:
                 self._lastvalue = self.strategy.broker.getvalue()
             else:
-                self._lastvalue = self.strategy.broker.fundvalue
+                self._lastvalue = self.strategy.broker.fund_value
 
-    def notify_fund(self, cash, value, fundvalue, shares):
+    def notify_fund(self, cash, value, fund_value, shares):
         if not self._fundmode:
             self._value = value if self.p.data is None else self.p.data[0]
         else:
-            self._value = fundvalue if self.p.data is None else self.p.data[0]
+            self._value = fund_value if self.p.data is None else self.p.data[0]
 
     def _on_dt_over(self):
         # next is called in a new timeframe period

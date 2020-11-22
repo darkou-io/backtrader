@@ -108,7 +108,7 @@ class OandaBroker(with_metaclass(MetaOandaBroker, BrokerBase)):
                 self.positions[p['instrument']] = Position(size, price)
 
     def data_started(self, data):
-        pos = self.getposition(data)
+        pos = self.get_position(data)
 
         if pos.size < 0:
             order = SellOrder(data=data,
@@ -155,15 +155,15 @@ class OandaBroker(with_metaclass(MetaOandaBroker, BrokerBase)):
         self.value = self.o.get_value()
         return self.value
 
-    def getposition(self, data, clone=True):
-        # return self.o.getposition(data._dataname, clone=clone)
+    def get_position(self, data, clone=True):
+        # return self.o.get_position(data._dataname, clone=clone)
         pos = self.positions[data._dataname]
         if clone:
             pos = pos.clone()
 
         return pos
 
-    def orderstatus(self, order):
+    def order_status(self, order):
         o = self.orders[order.ref]
         return o.status
 
@@ -255,7 +255,7 @@ class OandaBroker(with_metaclass(MetaOandaBroker, BrokerBase)):
                 return
 
         data = order.data
-        pos = self.getposition(data, clone=False)
+        pos = self.get_position(data, clone=False)
         psize, pprice, opened, closed = pos.update(size, price)
 
         comminfo = self.getcommissioninfo(data)

@@ -1374,7 +1374,7 @@ class IBStore(with_metaclass(MetaSingleton, object)):
                 # self.port_update = True
                 self.broker.push_portupdate()
 
-    def getposition(self, contract, clone=False):
+    def get_position(self, contract, clone=False):
         # Lock access to the position dicts. This is called from main thread
         # and updates could be happening in the background
         with self._lock_pos:

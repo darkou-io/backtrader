@@ -39,7 +39,7 @@ class DrawDown(bt.Analyzer):
 
         If ``None`` the actual mode of the broker (fundmode - True/False) will
         be autodetected to decide if the returns are based on the total net
-        asset value or on the fund value. See ``set_fundmode`` in the broker
+        asset value or on the fund value. See ``set_fund_mode`` in the broker
         documentation
 
         Set it to ``True`` or ``False`` for a specific behavior
@@ -87,13 +87,13 @@ class DrawDown(bt.Analyzer):
     def stop(self):
         self.rets._close()  # . notation cannot create more keys
 
-    def notify_fund(self, cash, value, fundvalue, shares):
+    def notify_fund(self, cash, value, fund_value, shares):
         if not self._fundmode:
             self._value = value  # record current value
             self._maxvalue = max(self._maxvalue, value)  # update peak value
         else:
-            self._value = fundvalue  # record current value
-            self._maxvalue = max(self._maxvalue, fundvalue)  # update peak
+            self._value = fund_value  # record current value
+            self._maxvalue = max(self._maxvalue, fund_value)  # update peak
 
     def next(self):
         r = self.rets
@@ -135,7 +135,7 @@ class TimeDrawDown(bt.TimeFrameAnalyzerBase):
 
         If ``None`` the actual mode of the broker (fundmode - True/False) will
         be autodetected to decide if the returns are based on the total net
-        asset value or on the fund value. See ``set_fundmode`` in the broker
+        asset value or on the fund value. See ``set_fund_mode`` in the broker
         documentation
 
         Set it to ``True`` or ``False`` for a specific behavior
@@ -177,7 +177,7 @@ class TimeDrawDown(bt.TimeFrameAnalyzerBase):
         if not self._fundmode:
             value = self.strategy.broker.getvalue()
         else:
-            value = self.strategy.broker.fundvalue
+            value = self.strategy.broker.fund_value
 
         # update the maximum seen peak
         if value > self.peak:

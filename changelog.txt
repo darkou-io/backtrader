@@ -127,7 +127,7 @@
   - Correct csv values output if object has no length
 
 1.9.57.122
-  - PR #326 Fix set_fundmode in bbroker
+  - PR #326 Fix set_fund_mode in bbroker
   - Synchronize fund history mode with master clock
   - Allow relocation of legend in plotting charts
   - Adapt broker observer to fund mode
@@ -152,7 +152,7 @@
   - Rework ix -> iloc pull request and autodetection algorithm in PandasData
 
 1.9.53.121
-  - Fix #323 by providing default properties/methods for fundvalue/fundshares
+  - Fix #323 by providing default properties/methods for fund_value/fund_shares
     for all brokers
 
 1.9.52.121

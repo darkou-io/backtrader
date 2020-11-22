@@ -68,7 +68,7 @@ class St(bt.Strategy):
         # Data 0
         for data in self.datas:
             toss = random.randint(1, 10)
-            curpos = self.getposition(data)
+            curpos = self.get_position(data)
             if curpos.size:
                 if toss > 5:
                     size = curpos.size // 2

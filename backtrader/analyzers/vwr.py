@@ -80,7 +80,7 @@ class VWR(TimeFrameAnalyzerBase):
 
         If ``None`` the actual mode of the broker (fundmode - True/False) will
         be autodetected to decide if the returns are based on the total net
-        asset value or on the fund value. See ``set_fundmode`` in the broker
+        asset value or on the fund value. See ``set_fund_mode`` in the broker
         documentation
 
         Set it to ``True`` or ``False`` for a specific behavior
@@ -128,7 +128,7 @@ class VWR(TimeFrameAnalyzerBase):
         if not self._fundmode:
             self._pis = [self.strategy.broker.getvalue()]  # keep initial value
         else:
-            self._pis = [self.strategy.broker.fundvalue]  # keep initial value
+            self._pis = [self.strategy.broker.fund_value]  # keep initial value
 
         self._pns = [None]  # keep final prices (value)
 
@@ -159,11 +159,11 @@ class VWR(TimeFrameAnalyzerBase):
         vwr = rnorm100 * (1.0 - pow(sdev_p / self.p.sdev_max, self.p.tau))
         self.rets['vwr'] = vwr
 
-    def notify_fund(self, cash, value, fundvalue, shares):
+    def notify_fund(self, cash, value, fund_value, shares):
         if not self._fundmode:
             self._pns[-1] = value  # annotate last seen pn for current period
         else:
-            self._pns[-1] = fundvalue  # annotate last pn for current period
+            self._pns[-1] = fund_value  # annotate last pn for current period
 
     def _on_dt_over(self):
         self._pis.append(self._pns[-1])  # last pn is pi in next period

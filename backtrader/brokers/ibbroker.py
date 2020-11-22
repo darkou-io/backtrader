@@ -302,8 +302,8 @@ class IBBroker(with_metaclass(MetaIBBroker, BrokerBase)):
         self.value = self.ib.get_acc_value()
         return self.value
 
-    def getposition(self, data, clone=True):
-        return self.ib.getposition(data.tradecontract, clone=clone)
+    def get_position(self, data, clone=True):
+        return self.ib.get_position(data.tradecontract, clone=clone)
 
     def cancel(self, order):
         try:
@@ -316,7 +316,7 @@ class IBBroker(with_metaclass(MetaIBBroker, BrokerBase)):
 
         self.ib.cancelOrder(order.m_orderId)
 
-    def orderstatus(self, order):
+    def order_status(self, order):
         try:
             o = self.orderbyid[order.m_orderId]
         except (ValueError, KeyError):
@@ -484,7 +484,7 @@ class IBBroker(with_metaclass(MetaIBBroker, BrokerBase)):
             order = self.orderbyid[oid]
             ostatus = self.ordstatus[oid].pop(ex.m_cumQty)
 
-            position = self.getposition(order.data, clone=False)
+            position = self.get_position(order.data, clone=False)
             pprice_orig = position.price
             size = ex.m_shares if ex.m_side[0] == 'B' else -ex.m_shares
             price = ex.m_price

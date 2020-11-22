@@ -68,7 +68,7 @@ class Returns(TimeFrameAnalyzerBase):
 
         If ``None`` the actual mode of the broker (fundmode - True/False) will
         be autodetected to decide if the returns are based on the total net
-        asset value or on the fund value. See ``set_fundmode`` in the broker
+        asset value or on the fund value. See ``set_fund_mode`` in the broker
         documentation
 
         Set it to ``True`` or ``False`` for a specific behavior
@@ -111,7 +111,7 @@ class Returns(TimeFrameAnalyzerBase):
         if not self._fundmode:
             self._value_start = self.strategy.broker.getvalue()
         else:
-            self._value_start = self.strategy.broker.fundvalue
+            self._value_start = self.strategy.broker.fund_value
 
         self._tcount = 0
 
@@ -121,7 +121,7 @@ class Returns(TimeFrameAnalyzerBase):
         if not self._fundmode:
             self._value_end = self.strategy.broker.getvalue()
         else:
-            self._value_end = self.strategy.broker.fundvalue
+            self._value_end = self.strategy.broker.fund_value
 
         # Compound return
         try:

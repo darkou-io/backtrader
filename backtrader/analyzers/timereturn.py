@@ -74,7 +74,7 @@ class TimeReturn(TimeFrameAnalyzerBase):
 
         If ``None`` the actual mode of the broker (fundmode - True/False) will
         be autodetected to decide if the returns are based on the total net
-        asset value or on the fund value. See ``set_fundmode`` in the broker
+        asset value or on the fund value. See ``set_fund_mode`` in the broker
         documentation
 
         Set it to ``True`` or ``False`` for a specific behavior
@@ -107,9 +107,9 @@ class TimeReturn(TimeFrameAnalyzerBase):
             if not self._fundmode:
                 self._lastvalue = self.strategy.broker.getvalue()
             else:
-                self._lastvalue = self.strategy.broker.fundvalue
+                self._lastvalue = self.strategy.broker.fund_value
 
-    def notify_fund(self, cash, value, fundvalue, shares):
+    def notify_fund(self, cash, value, fund_value, shares):
         if not self._fundmode:
             # Record current value
             if self.p.data is None:
@@ -118,7 +118,7 @@ class TimeReturn(TimeFrameAnalyzerBase):
                 self._value = self.p.data[0]  # the data value if tracking data
         else:
             if self.p.data is None:
-                self._value = fundvalue  # the fund value if tracking no data
+                self._value = fund_value  # the fund value if tracking no data
             else:
                 self._value = self.p.data[0]  # the data value if tracking data
 

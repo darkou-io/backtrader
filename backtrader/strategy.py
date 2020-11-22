@@ -603,14 +603,14 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
 
         cash = self.broker.getcash()
         value = self.broker.getvalue()
-        fundvalue = self.broker.fundvalue
-        fundshares = self.broker.fundshares
+        fund_value = self.broker.fund_value
+        fund_shares = self.broker.fund_shares
 
         self.notify_cashvalue(cash, value)
-        self.notify_fund(cash, value, fundvalue, fundshares)
+        self.notify_fund(cash, value, fund_value, fund_shares)
         for analyzer in itertools.chain(self.analyzers, self._slave_analyzers):
             analyzer._notify_cashvalue(cash, value)
-            analyzer._notify_fund(cash, value, fundvalue, fundshares)
+            analyzer._notify_fund(cash, value, fund_value, fund_shares)
 
     def add_timer(self, when,
                   offset=datetime.timedelta(), repeat=datetime.timedelta(),
@@ -729,9 +729,9 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
         '''
         pass
 
-    def notify_fund(self, cash, value, fundvalue, shares):
+    def notify_fund(self, cash, value, fund_value, shares):
         '''
-        Receives the current cash, value, fundvalue and fund shares
+        Receives the current cash, value, fund_value and fund shares
         '''
         pass
 
@@ -988,7 +988,7 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
         elif data is None:
             data = self.data
 
-        possize = self.getposition(data, self.broker).size
+        possize = self.get_position(data, self.broker).size
         size = abs(size if size is not None else possize)
 
         if possize > 0:
@@ -1268,7 +1268,7 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
         elif data is None:
             data = self.data
 
-        possize = self.getposition(data, self.broker).size
+        possize = self.get_position(data, self.broker).size
         if not target and possize:
             return self.close(data=data, size=possize, **kwargs)
 
@@ -1306,7 +1306,7 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
         elif data is None:
             data = self.data
 
-        possize = self.getposition(data, self.broker).size
+        possize = self.get_position(data, self.broker).size
         if not target and possize:  # closing a position
             return self.close(data=data, size=possize, price=price, **kwargs)
 
@@ -1370,12 +1370,12 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
         elif data is None:
             data = self.data
 
-        possize = self.getposition(data, self.broker).size
+        possize = self.get_position(data, self.broker).size
         target *= self.broker.getvalue()
 
         return self.order_target_value(data=data, target=target, **kwargs)
 
-    def getposition(self, data=None, broker=None):
+    def get_position(self, data=None, broker=None):
         '''
         Returns the current position for a given data in a given broker.
 
@@ -1385,9 +1385,9 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
         '''
         data = data if data is not None else self.datas[0]
         broker = broker or self.broker
-        return broker.getposition(data)
+        return broker.get_position(data)
 
-    position = property(getposition)
+    position = property(get_position)
 
     def getpositionbyname(self, name=None, broker=None):
         '''
@@ -1399,7 +1399,7 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
         '''
         data = self.datas[0] if not name else self.getdatabyname(name)
         broker = broker or self.broker
-        return broker.getposition(data)
+        return broker.get_position(data)
 
     positionbyname = property(getpositionbyname)
 
@@ -1685,7 +1685,7 @@ class SignalStrategy(with_metaclass(MetaSigStrategy, Strategy)):
         s_leave = not self._shortexit and s_leave
 
         # Take size and start logic
-        size = self.getposition(self._dtarget).size
+        size = self.get_position(self._dtarget).size
         if not size:
             if ls_long or l_enter:
                 self._sentinel = self.buy(self._dtarget)

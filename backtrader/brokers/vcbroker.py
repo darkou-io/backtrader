@@ -203,7 +203,7 @@ class VCBroker(with_metaclass(MetaVCBroker, BrokerBase)):
     def next(self):
         self.notifs.append(None)  # mark notificatino boundary
 
-    def getposition(self, data, clone=True):
+    def get_position(self, data, clone=True):
         with self._lock_pos:
             pos = self.positions[data._tradename]
             if clone:
@@ -403,7 +403,7 @@ class VCBroker(with_metaclass(MetaVCBroker, BrokerBase)):
             size *= -1
 
         # Find position and do a real update - accounting happens here
-        position = self.getposition(border.data, clone=False)
+        position = self.get_position(border.data, clone=False)
         pprice_orig = position.price
         psize, pprice, opened, closed = position.update(size, price)
 

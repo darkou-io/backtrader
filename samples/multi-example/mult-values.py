@@ -77,7 +77,7 @@ class St(bt.Strategy):
     def next(self):
         for i, d in enumerate(self.datas):
             dt, dn = self.datetime.date(), d._name
-            pos = self.getposition(d).size
+            pos = self.get_position(d).size
             print('{} {} Position {}'.format(dt, dn, pos))
 
             if not pos and not self.o.get(d, None):  # no market / no orders

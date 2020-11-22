@@ -288,22 +288,22 @@ class BackBroker(bt.BrokerBase):
 
         return None
 
-    def set_fundmode(self, fundmode, fundstartval=None):
+    def set_fund_mode(self, fundmode, fundstartval=None):
         '''Set the actual fundmode (True or False)
 
         If the argument fundstartval is not ``None``, it will used
         '''
         self.p.fundmode = fundmode
         if fundstartval is not None:
-            self.set_fundstartval(fundstartval)
+            self.set_fund_start_val(fundstartval)
 
-    def get_fundmode(self):
+    def get_fund_mode(self):
         '''Returns the actual fundmode (True or False)'''
         return self.p.fundmode
 
-    fundmode = property(get_fundmode, set_fundmode)
+    fundmode = property(get_fund_mode, set_fund_mode)
 
-    def set_fundstartval(self, fundstartval):
+    def set_fund_start_val(self, fundstartval):
         '''Set the starting value of the fund-like performance tracker'''
         self.p.fundstartval = fundstartval
 
@@ -319,7 +319,7 @@ class BackBroker(bt.BrokerBase):
         '''Configure the Cheat-On-Open method to buy the close on order bar'''
         self.p.coo = coo
 
-    def set_shortcash(self, shortcash):
+    def set_short_cash(self, shortcash):
         '''Configure the shortcash parameters'''
         self.p.shortcash = shortcash
 
@@ -349,15 +349,15 @@ class BackBroker(bt.BrokerBase):
         '''Sets a volume filler for volume filling execution'''
         self.p.filler = filler
 
-    def set_checksubmit(self, checksubmit):
+    def set_check_submit(self, checksubmit):
         '''Sets the checksubmit parameter'''
         self.p.checksubmit = checksubmit
 
-    def set_eosbar(self, eosbar):
+    def set_eos_bar(self, eosbar):
         '''Sets the eosbar parameter (alias: ``seteosbar``'''
         self.p.eosbar = eosbar
 
-    seteosbar = set_eosbar
+    seteosbar = set_eos_bar
 
     def get_cash(self):
         '''Returns the current cash (alias: ``getcash``)'''
@@ -376,17 +376,17 @@ class BackBroker(bt.BrokerBase):
         '''Add/Remove cash to the system (use a negative value to remove)'''
         self._cash_addition.append(cash)
 
-    def get_fundshares(self):
+    def get_fund_shares(self):
         '''Returns the current number of shares in the fund-like mode'''
         return self._fundshares
 
-    fundshares = property(get_fundshares)
+    fund_shares = property(get_fund_shares)
 
-    def get_fundvalue(self):
+    def get_fund_value(self):
         '''Returns the Fund-like share value'''
         return self._fundval
 
-    fundvalue = property(get_fundvalue)
+    fund_value = property(get_fund_value)
 
     def cancel(self, order, bracket=False):
         try:
@@ -461,7 +461,7 @@ class BackBroker(bt.BrokerBase):
 
         if not self._fundhist:
             self._value = v = self.cash + pos_value_unlever
-            self._fundval = self._value / self._fundshares  # update fundvalue
+            self._fundval = self._value / self._fundshares  # update fund_value
         else:
             # Try to fetch a value
             fval, fvalue = self._process_fund_history()
@@ -504,12 +504,12 @@ class BackBroker(bt.BrokerBase):
 
         return os
 
-    def getposition(self, data):
+    def get_position(self, data):
         '''Returns the current position status (a ``Position`` instance) for
         the given ``data``'''
         return self.positions[data]
 
-    def orderstatus(self, order):
+    def order_status(self, order):
         try:
             o = self.orders.index(order)
         except ValueError:
@@ -943,7 +943,7 @@ class BackBroker(bt.BrokerBase):
         if order.alive() and order.exectype == Order.StopTrail:
             order.trailadjust(pclose)
 
-    def _try_exec_stoplimit(self, order,
+    def _try_exec_stop_limit(self, order,
                             popen, phigh, plow, pclose,
                             pcreated, plimit):
         if order.isbuy():
@@ -1073,7 +1073,7 @@ class BackBroker(bt.BrokerBase):
             self._try_exec_stop(order, popen, phigh, plow, pcreated, pclose)
 
         elif order.exectype in [Order.StopLimit, Order.StopTrailLimit]:
-            self._try_exec_stoplimit(order,
+            self._try_exec_stop_limit(order,
                                      popen, phigh, plow, pclose,
                                      pcreated, plimit)
 

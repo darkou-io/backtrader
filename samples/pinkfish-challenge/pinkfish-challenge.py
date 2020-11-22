@@ -246,7 +246,7 @@ def runstrat():
 
     cerebro = bt.Cerebro()
     cerebro.broker.set_cash(args.cash)
-    cerebro.broker.set_eosbar(True)
+    cerebro.broker.set_eos_bar(True)
 
     dkwargs = dict()
     if args.fromdate:

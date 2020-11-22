@@ -34,7 +34,7 @@ class GrossLeverage(bt.Analyzer):
 
         If ``None`` the actual mode of the broker (fundmode - True/False) will
         be autodetected to decide if the returns are based on the total net
-        asset value or on the fund value. See ``set_fundmode`` in the broker
+        asset value or on the fund value. See ``set_fund_mode`` in the broker
         documentation
 
         Set it to ``True`` or ``False`` for a specific behavior
@@ -57,12 +57,12 @@ class GrossLeverage(bt.Analyzer):
         else:
             self._fundmode = self.p.fund
 
-    def notify_fund(self, cash, value, fundvalue, shares):
+    def notify_fund(self, cash, value, fund_value, shares):
         self._cash = cash
         if not self._fundmode:
             self._value = value
         else:
-            self._value = fundvalue
+            self._value = fund_value
 
     def next(self):
         # Updates the leverage for "dtkey" (see base class) for each cycle

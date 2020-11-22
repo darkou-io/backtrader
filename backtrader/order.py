@@ -467,7 +467,7 @@ class OrderBase(with_metaclass(MetaParams, object)):
 
         Defaults to last known status if no broker is associated'''
         if self.broker:
-            return self.broker.orderstatus(self)
+            return self.broker.order_status(self)
 
         return self.status
 
