@@ -46,8 +46,8 @@ class CloseSMA(bt.Strategy):
 class LongOnly(bt.Sizer):
     params = (('stake', 1),)
 
-    def _get_sizing(self, comm_info, cash, data, isbuy):
-        if isbuy:
+    def _get_sizing(self, comm_info, cash, data, is_buy):
+        if is_buy:
             return self.p.stake
 
         # Sell situation
@@ -61,7 +61,7 @@ class LongOnly(bt.Sizer):
 class FixedReverser(bt.Sizer):
     params = (('stake', 1),)
 
-    def _get_sizing(self, comm_info, cash, data, isbuy):
+    def _get_sizing(self, comm_info, cash, data, is_buy):
         position = self.strategy.get_position(data)
         size = self.p.stake * (1 + (position.size != 0))
         return size

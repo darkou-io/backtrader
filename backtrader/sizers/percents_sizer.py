@@ -41,7 +41,7 @@ class PercentSizer(bt.Sizer):
     def __init__(self):
         pass
 
-    def _get_sizing(self, comm_info, cash, data, isbuy):
+    def _get_sizing(self, comm_info, cash, data, is_buy):
         position = self.broker.get_position(data)
         if not position:
             size = cash / data.close[0] * (self.params.percents / 100)

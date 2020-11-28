@@ -96,7 +96,7 @@ class MultiTradeStrategy(bt.Strategy):
             return  # Await further notifications
 
         if order.status == order.Completed:
-            if order.isbuy():
+            if order.is_buy():
                 buytxt = 'BUY COMPLETE, %.2f' % order.executed.price
                 self.log(buytxt, order.executed.dt)
             else:

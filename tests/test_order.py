@@ -91,9 +91,9 @@ def test_run(main=False):
                         size=100, price=1.0,
                         exectype=bt.Order.Market,
                         simulated=True)
-    order.addcomminfo(comm_info)
+    order.add_comm_info(comm_info)
 
-    ### Test that partially updating order will maintain correct iterpending sequence
+    ### Test that partially updating order will maintain correct iter_pending sequence
     ### (Orders are cloned for each notification. The pending bits should be reported
     ###  related to the previous notification (clone))
 
@@ -102,7 +102,7 @@ def test_run(main=False):
     _execute(position, order, 20, 1.1, True)
 
     clone = order.clone()
-    pending = clone.executed.getpending()
+    pending = clone.executed.get_pending()
     assert len(pending) == 2
     assert pending[0].size == 10
     assert pending[0].price == 1.0
@@ -114,7 +114,7 @@ def test_run(main=False):
     _execute(position, order, 40, 1.3, False)
 
     clone = order.clone()
-    pending = clone.executed.getpending()
+    pending = clone.executed.get_pending()
     assert len(pending) == 2
     assert pending[0].size == 30
     assert pending[0].price == 1.2

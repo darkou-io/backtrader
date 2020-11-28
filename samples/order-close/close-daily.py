@@ -39,7 +39,7 @@ class St(bt.Strategy):
         curdtstr = self.data.datetime.datetime().strftime('%a %Y-%m-%d')
         if order.status in [order.Completed]:
             dtstr = bt.num2date(order.executed.dt).strftime('%a %Y-%m-%d')
-            if order.isbuy():
+            if order.is_buy():
                 print('%s: BUY  EXECUTED, on:' % curdtstr, dtstr)
             else:  # Sell
                 print('%s: SELL EXECUTED, on:' % curdtstr, dtstr)

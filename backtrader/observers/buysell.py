@@ -65,7 +65,7 @@ class BuySell(Observer):
             if order.data is not self.data or not order.executed.size:
                 continue
 
-            if order.isbuy():
+            if order.is_buy():
                 buy.append(order.executed.price)
             else:
                 sell.append(order.executed.price)

@@ -466,7 +466,7 @@ class OandaStore(with_metaclass(MetaSingleton, object)):
         okwargs = dict()
         okwargs['instrument'] = order.data._dataname
         okwargs['units'] = abs(order.created.size)
-        okwargs['side'] = 'buy' if order.isbuy() else 'sell'
+        okwargs['side'] = 'buy' if order.is_buy() else 'sell'
         okwargs['type'] = self._ORDEREXECS[order.exectype]
         if order.exectype != bt.Order.Market:
             okwargs['price'] = order.created.price

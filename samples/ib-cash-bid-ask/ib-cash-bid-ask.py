@@ -56,7 +56,7 @@ class St(bt.Strategy):
 
     # def notify_order(self, order):
     #     if order.status == order.Completed:
-    #         buysell = 'BUY ' if order.isbuy() else 'SELL'
+    #         buysell = 'BUY ' if order.is_buy() else 'SELL'
     #         txt = '{} {}@{}'.format(buysell, order.executed.size,
     #                                 order.executed.price)
     #         print(txt)

@@ -54,7 +54,7 @@ class TheStrategy(bt.Strategy):
 
     def notify_order(self, order):
         if not order.alive():
-            if not order.isbuy():  # going flat
+            if not order.is_buy():  # going flat
                 self.order = 0
 
             if order.status == order.Completed:
@@ -62,7 +62,7 @@ class TheStrategy(bt.Strategy):
                            len(self),
                            order.data.datetime.date(),
                            order.data._name,
-                           'BUY' * order.isbuy() or 'SELL',
+                           'BUY' * order.is_buy() or 'SELL',
                            order.executed.size, order.executed.price]
 
                 print(','.join(str(x) for x in tfields))

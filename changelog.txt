@@ -1,7 +1,7 @@
 1.9.76.123:
   - PR#405 Fix initial Renko bricks
   - Add option to select fixing of initial Renko bricks
-  - PR#403 partial order execution iterpending reported incorrectly
+  - PR#403 partial order execution iter_pending reported incorrectly
   - PR#402 bug fix: #5 fixing writer.py after 1.9.75.123 pull
   - PR#406 trade.py upgraded to be able to be unpickled. (#406)
   - PR#411 [bug fix] frompackages directive functionality seems to be
@@ -253,7 +253,7 @@
   - Oanda support for stop trailing order
   - Filling in plotting support numeric values and control of alpha blending
   - Documentation updates (filling, add_observer_multi)
-  - Fix wrong calling of sizer with fixed isbuy=True after refactoring for
+  - Fix wrong calling of sizer with fixed is_buy=True after refactoring for
     mixing of buy/sell and order_target_xxx
 
 1.9.42.116

@@ -363,7 +363,7 @@ class IBBroker(with_metaclass(MetaIBBroker, BrokerBase)):
                         m_orderId=self.ib.nextOrderId(),
                         **kwargs)
 
-        order.addcomminfo(self.get_commission_info(data))
+        order.add_comm_info(self.get_commission_info(data))
         return order
 
     def buy(self, owner, data,

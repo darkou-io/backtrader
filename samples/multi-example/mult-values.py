@@ -31,11 +31,11 @@ import backtrader as bt
 class TestSizer(bt.Sizer):
     params = dict(stake=1)
 
-    def _get_sizing(self, comm_info, cash, data, isbuy):
+    def _get_sizing(self, comm_info, cash, data, is_buy):
         dt, i = self.strategy.datetime.date(), data._id
-        s = self.p.stake * (1 + (not isbuy))
+        s = self.p.stake * (1 + (not is_buy))
         print('{} Data {} OType {} Sizing to {}'.format(
-            dt, data._name, ('buy' * isbuy) or 'sell', s))
+            dt, data._name, ('buy' * is_buy) or 'sell', s))
 
         return s
 
@@ -57,7 +57,7 @@ class St(bt.Strategy):
 
         dt, dn = self.datetime.date(), order.data._name
         print('{} {} Order {} Status {}'.format(
-            dt, dn, order.ref, order.getstatusname())
+            dt, dn, order.ref, order.get_status_name())
         )
 
         whichord = ['main', 'stop', 'limit', 'close']

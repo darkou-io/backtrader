@@ -200,7 +200,7 @@ class St(bt.Strategy):
                                      subplot=False)
 
     def notify_order(self, order):
-        if order.isbuy() and order.status == order.Completed:
+        if order.is_buy() and order.status == order.Completed:
             print('-- BUY Completed on:',
                   self.data.num2date(order.executed.dt).strftime('%Y-%m-%d'))
             print('-- BUY Price:', order.executed.price)

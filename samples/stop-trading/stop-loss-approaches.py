@@ -116,7 +116,7 @@ class AutoStopOrStopTrail(BaseStrategy):
     def notify_order(self, order):
         if order.status == order.Cancelled:
             print('CANCEL@price: {:.2f} {}'.format(
-                order.executed.price, 'buy' if order.isbuy() else 'sell'))
+                order.executed.price, 'buy' if order.is_buy() else 'sell'))
             return
 
         if not order.status == order.Completed:

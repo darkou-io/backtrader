@@ -160,13 +160,13 @@ class OrderData(object):
         self.psize = 0
         self.pprice = 0
 
-    def _getplimit(self):
+    def _get_plimit(self):
         return self._plimit
 
-    def _setplimit(self, val):
+    def _set_plimit(self, val):
         self._plimit = val
 
-    plimit = property(_getplimit, _setplimit)
+    plimit = property(_get_plimit, _set_plimit)
 
     def __len__(self):
         return len(self.exbits)
@@ -180,13 +180,13 @@ class OrderData(object):
             pnl=0.0,
             psize=0, pprice=0.0):
 
-        self.addbit(
+        self.add_bit(
             OrderExecutionBit(dt, size, price,
                               closed, closedvalue, closedcomm,
                               opened, openedvalue, openedcomm, pnl,
                               psize, pprice))
 
-    def addbit(self, exbit):
+    def add_bit(self, exbit):
         # Stores an ExecutionBit and recalculates own values from ExBit
         self.exbits.append(exbit)
 
@@ -203,18 +203,18 @@ class OrderData(object):
         self.psize = exbit.psize
         self.pprice = exbit.pprice
 
-    def getpending(self):
-        return list(self.iterpending())
+    def get_pending(self):
+        return list(self.iter_pending())
 
-    def iterpending(self):
+    def iter_pending(self):
         return itertools.islice(self.exbits, self.p1, self.p2)
 
-    def markpending(self):
+    def mark_pending(self):
         # rebuild the indices to mark which exbits are pending in clone
         self.p1, self.p2 = self.p2, len(self.exbits)
 
     def clone(self):
-        self.markpending()
+        self.mark_pending()
         obj = copy(self)
         return obj
 
@@ -259,13 +259,13 @@ class OrderBase(with_metaclass(MetaParams, object)):
 
     refbasis = itertools.count(1)  # for a unique identifier per order
 
-    def _getplimit(self):
+    def _get_plimit(self):
         return self._plimit
 
-    def _setplimit(self, val):
+    def _set_plimit(self, val):
         self._plimit = val
 
-    plimit = property(_getplimit, _setplimit)
+    plimit = property(_get_plimit, _set_plimit)
 
     def __getattr__(self, name):
         # Return attr from params if not found in order
@@ -281,16 +281,16 @@ class OrderBase(with_metaclass(MetaParams, object)):
         tojoin = list()
         tojoin.append('Ref: {}'.format(self.ref))
         tojoin.append('OrdType: {}'.format(self.ordtype))
-        tojoin.append('OrdType: {}'.format(self.ordtypename()))
+        tojoin.append('OrdType: {}'.format(self.ordtype_name()))
         tojoin.append('Status: {}'.format(self.status))
-        tojoin.append('Status: {}'.format(self.getstatusname()))
+        tojoin.append('Status: {}'.format(self.get_status_name()))
         tojoin.append('Size: {}'.format(self.size))
         tojoin.append('Price: {}'.format(self.price))
         tojoin.append('Price Limit: {}'.format(self.pricelimit))
         tojoin.append('TrailAmount: {}'.format(self.trailamount))
         tojoin.append('TrailPercent: {}'.format(self.trailpercent))
         tojoin.append('ExecType: {}'.format(self.exectype))
-        tojoin.append('ExecType: {}'.format(self.getordername()))
+        tojoin.append('ExecType: {}'.format(self.get_order_name()))
         tojoin.append('CommInfo: {}'.format(self.comm_info))
         tojoin.append('End of Session: {}'.format(self.dteos))
         tojoin.append('Info: {}'.format(self.info))
@@ -314,7 +314,7 @@ class OrderBase(with_metaclass(MetaParams, object)):
         if self.exectype is None:
             self.exectype = Order.Market
 
-        if not self.isbuy():
+        if not self.is_buy():
             self.size = -self.size
 
         # Set a reference price if price is not set using
@@ -338,8 +338,8 @@ class OrderBase(with_metaclass(MetaParams, object)):
         if self.exectype in [Order.StopTrail, Order.StopTrailLimit]:
             self._limitoffset = self.created.price - self.created.pricelimit
             price = self.created.price
-            self.created.price = float('inf' * self.isbuy() or '-inf')
-            self.trailadjust(price)
+            self.created.price = float('inf' * self.is_buy() or '-inf')
+            self.trail_adjust(price)
         else:
             self._limitoffset = 0.0
 
@@ -392,11 +392,11 @@ class OrderBase(with_metaclass(MetaParams, object)):
         obj.executed = self.executed.clone()
         return obj  # status could change in next to completed
 
-    def getstatusname(self, status=None):
+    def get_status_name(self, status=None):
         '''Returns the name for a given status or the one of the order'''
         return self.Status[self.status if status is None else status]
 
-    def getordername(self, exectype=None):
+    def get_order_name(self, exectype=None):
         '''Returns the name for a given exectype or the one of the order'''
         return self.ExecTypes[self.exectype if exectype is None else exectype]
 
@@ -404,7 +404,7 @@ class OrderBase(with_metaclass(MetaParams, object)):
     def ExecType(cls, exectype):
         return getattr(cls, exectype)
 
-    def ordtypename(self, ordtype=None):
+    def ordtype_name(self, ordtype=None):
         '''Returns the name for a given ordtype or the one of the order'''
         return self.OrdTypes[self.ordtype if ordtype is None else ordtype]
 
@@ -421,11 +421,11 @@ class OrderBase(with_metaclass(MetaParams, object)):
         return self.status in [Order.Created, Order.Submitted,
                                Order.Partial, Order.Accepted]
 
-    def addcomminfo(self, comm_info):
+    def add_comm_info(self, comm_info):
         '''Stores a CommInfo scheme associated with the asset'''
         self.comm_info = comm_info
 
-    def addinfo(self, **kwargs):
+    def add_info(self, **kwargs):
         '''Add the keys, values of kwargs to the internal info dictionary to
         hold custom information in the order
         '''
@@ -438,15 +438,15 @@ class OrderBase(with_metaclass(MetaParams, object)):
     def __ne__(self, other):
         return self.ref != other.ref
 
-    def isbuy(self):
+    def is_buy(self):
         '''Returns True if the order is a Buy order'''
         return self.ordtype == self.Buy
 
-    def issell(self):
+    def is_sell(self):
         '''Returns True if the order is a Sell order'''
         return self.ordtype == self.Sell
 
-    def setposition(self, position):
+    def set_position(self, position):
         '''Receives the current position for the asset and stotres it'''
         self.position = position
 
@@ -462,7 +462,7 @@ class OrderBase(with_metaclass(MetaParams, object)):
         self.status = Order.Accepted
         self.broker = broker
 
-    def brokerstatus(self):
+    def broker_status(self):
         '''Tries to retrieve the status from the broker in which the order is.
 
         Defaults to last known status if no broker is associated'''
@@ -521,7 +521,7 @@ class OrderBase(with_metaclass(MetaParams, object)):
         self.status = self.Expired
         return True
 
-    def trailadjust(self, price):
+    def trail_adjust(self, price):
         pass  # generic interface
 
 
@@ -552,14 +552,14 @@ class Order(OrderBase):
       - created: OrderData holding creation data
       - executed: OrderData holding execution data
 
-      - info: custom information passed over method :func:`addinfo`. It is kept
+      - info: custom information passed over method :func:`add_info`. It is kept
         in the form of an OrderedDict which has been subclassed, so that keys
         can also be specified using '.' notation
 
     User Methods:
 
-      - isbuy(): returns bool indicating if the order buys
-      - issell(): returns bool indicating if the order sells
+      - is_buy(): returns bool indicating if the order buys
+      - is_sell(): returns bool indicating if the order sells
       - alive(): returns bool if order is in status Partial or Accepted
     '''
 
@@ -592,7 +592,7 @@ class Order(OrderBase):
 
         return False
 
-    def trailadjust(self, price):
+    def trail_adjust(self, price):
         if self.trailamount:
             pamount = self.trailamount
         elif self.trailpercent:
@@ -601,7 +601,7 @@ class Order(OrderBase):
             pamount = 0.0
 
         # Stop sell is below (-), stop buy is above, move only if needed
-        if self.isbuy():
+        if self.is_buy():
             price += pamount
             if price < self.created.price:
                 self.created.price = price

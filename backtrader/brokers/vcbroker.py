@@ -300,7 +300,7 @@ class VCBroker(with_metaclass(MetaVCBroker, BrokerBase)):
         )
 
         order.vcorder = oid
-        order.addcomminfo(self.get_commission_info(order.data))
+        order.add_comm_info(self.get_commission_info(order.data))
 
         with self._lock_orders:
             self.orderbyid[oid] = order
@@ -316,7 +316,7 @@ class VCBroker(with_metaclass(MetaVCBroker, BrokerBase)):
                          size=size, price=price, pricelimit=plimit,
                          exectype=exectype, valid=valid, tradeid=tradeid)
 
-        order.addinfo(**kwargs)
+        order.add_info(**kwargs)
 
         vcorder = self._makeorder(order.ordtype, owner, data, size, price,
                                   plimit, exectype, valid, tradeid,
@@ -333,7 +333,7 @@ class VCBroker(with_metaclass(MetaVCBroker, BrokerBase)):
                           size=size, price=price, pricelimit=plimit,
                           exectype=exectype, valid=valid, tradeid=tradeid)
 
-        order.addinfo(**kwargs)
+        order.add_info(**kwargs)
 
         vcorder = self._makeorder(order.ordtype, owner, data, size, price,
                                   plimit, exectype, valid, tradeid,
@@ -399,7 +399,7 @@ class VCBroker(with_metaclass(MetaVCBroker, BrokerBase)):
 
         price = Order.Price
         size = Order.Volume
-        if border.issell():
+        if border.is_sell():
             size *= -1
 
         # Find position and do a real update - accounting happens here

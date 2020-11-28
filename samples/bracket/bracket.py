@@ -44,8 +44,8 @@ class St(bt.Strategy):
     def notify_order(self, order):
         print('{}: Order ref: {} / Type {} / Status {}'.format(
             self.data.datetime.date(0),
-            order.ref, 'Buy' * order.isbuy() or 'Sell',
-            order.getstatusname()))
+            order.ref, 'Buy' * order.is_buy() or 'Sell',
+            order.get_status_name()))
 
         if order.status == order.Completed:
             self.holdstart = len(self)

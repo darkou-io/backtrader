@@ -116,7 +116,7 @@ class OandaBroker(with_metaclass(MetaOandaBroker, BrokerBase)):
                               exectype=Order.Market,
                               simulated=True)
 
-            order.addcomminfo(self.get_commission_info(data))
+            order.add_comm_info(self.get_commission_info(data))
             order.execute(0, pos.size, pos.price,
                           0, 0.0, 0.0,
                           pos.size, 0.0, 0.0,
@@ -132,7 +132,7 @@ class OandaBroker(with_metaclass(MetaOandaBroker, BrokerBase)):
                              exectype=Order.Market,
                              simulated=True)
 
-            order.addcomminfo(self.get_commission_info(data))
+            order.add_comm_info(self.get_commission_info(data))
             order.execute(0, pos.size, pos.price,
                           0, 0.0, 0.0,
                           pos.size, 0.0, 0.0,
@@ -316,8 +316,8 @@ class OandaBroker(with_metaclass(MetaOandaBroker, BrokerBase)):
                          trailamount=trailamount, trailpercent=trailpercent,
                          parent=parent, transmit=transmit)
 
-        order.addinfo(**kwargs)
-        order.addcomminfo(self.get_commission_info(data))
+        order.add_info(**kwargs)
+        order.add_comm_info(self.get_commission_info(data))
         return self._transmit(order)
 
     def sell(self, owner, data,
@@ -333,8 +333,8 @@ class OandaBroker(with_metaclass(MetaOandaBroker, BrokerBase)):
                           trailamount=trailamount, trailpercent=trailpercent,
                           parent=parent, transmit=transmit)
 
-        order.addinfo(**kwargs)
-        order.addcomminfo(self.get_commission_info(data))
+        order.add_info(**kwargs)
+        order.add_comm_info(self.get_commission_info(data))
         return self._transmit(order)
 
     def cancel(self, order):

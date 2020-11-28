@@ -55,7 +55,7 @@ class MyStrategy(bt.Strategy):
             self.log('BUY EXPIRED')
 
         elif order.status in [order.Completed]:
-            if order.isbuy():
+            if order.is_buy():
                 self.log(
                     'BUY EXECUTED, Price: %.2f, Cost: %.2f, Comm %.2f' %
                     (order.executed.price,

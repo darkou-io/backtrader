@@ -65,7 +65,7 @@ class SmaCross(bt.SignalStrategy):
         if not order.alive():
             print(','.join(str(x) for x in
                            (self.data.num2date(order.executed.dt).date(),
-                            order.executed.size * 1 if order.isbuy() else -1,
+                            order.executed.size * 1 if order.is_buy() else -1,
                             order.executed.price)))
 
     def notify_trade(self, trade):
@@ -88,7 +88,7 @@ class St(bt.Strategy):
         if not order.alive():
             print(','.join(str(x) for x in
                            (self.data.num2date(order.executed.dt).date(),
-                            order.executed.size * 1 if order.isbuy() else -1,
+                            order.executed.size * 1 if order.is_buy() else -1,
                             order.executed.price)))
 
     def notify_trade(self, trade):

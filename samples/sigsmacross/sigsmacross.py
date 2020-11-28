@@ -34,7 +34,7 @@ class SmaCross(bt.SignalStrategy):
         if not order.alive():
             print('{} {} {}@{}'.format(
                 bt.num2date(order.executed.dt),
-                'buy' if order.isbuy() else 'sell',
+                'buy' if order.is_buy() else 'sell',
                 order.executed.size,
                 order.executed.price)
             )

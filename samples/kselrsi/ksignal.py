@@ -35,7 +35,7 @@ class TheStrategy(bt.SignalStrategy):
         super(TheStrategy, self).notify_order(order)
         if order.status == order.Completed:
             print('%s: Size: %d @ Price %f' %
-                  ('buy' if order.isbuy() else 'sell',
+                  ('buy' if order.is_buy() else 'sell',
                    order.executed.size, order.executed.price))
 
             d = order.data

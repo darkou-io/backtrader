@@ -47,7 +47,7 @@ class SlipSt(bt.SignalStrategy):
             t = ''
             t += '{:02d}'.format(next(self.opcounter))
             t += ' {}'.format(order.data.datetime.datetime())
-            t += ' BUY ' * order.isbuy() or ' SELL'
+            t += ' BUY ' * order.is_buy() or ' SELL'
             t += ' Size: {:+d} / Price: {:.2f}'
             print(t.format(order.executed.size, order.executed.price))
 

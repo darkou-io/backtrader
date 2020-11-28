@@ -40,7 +40,7 @@ class OrderObserver(bt.observer.Observer):
             if order.data is not self.data:
                 continue
 
-            if not order.isbuy():
+            if not order.is_buy():
                 continue
 
             # Only interested in "buy" orders, because the sell orders

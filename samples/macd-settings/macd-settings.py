@@ -42,7 +42,7 @@ class FixedPerc(bt.Sizer):
         ('perc', 0.20),  # perc of cash to use for operation
     )
 
-    def _get_sizing(self, comm_info, cash, data, isbuy):
+    def _get_sizing(self, comm_info, cash, data, is_buy):
         cashtouse = self.p.perc * cash
         if BTVERSION > (1, 7, 1, 93):
             size = comm_info.getsize(data.close[0], cashtouse)

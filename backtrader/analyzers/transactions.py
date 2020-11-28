@@ -81,7 +81,7 @@ class Transactions(bt.Analyzer):
             return  # It's not an execution
 
         pos = self._positions[order.data._name]
-        for exbit in order.executed.iterpending():
+        for exbit in order.executed.iter_pending():
             if exbit is None:
                 break  # end of pending reached
 

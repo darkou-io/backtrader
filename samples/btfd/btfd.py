@@ -103,11 +103,11 @@ class St(bt.Strategy):
 
     def notify_order(self, order):
         if order.status in [order.Margin, order.Rejected, order.Canceled]:
-            print('ORDER FAILED with status:', order.getstatusname())
+            print('ORDER FAILED with status:', order.get_status_name())
         elif order.status == order.Completed:
             if self.p.prorder:
                 print(','.join(map(str, [
-                    'ORDER', 'BUY' * order.isbuy() or 'SELL',
+                    'ORDER', 'BUY' * order.is_buy() or 'SELL',
                     self.data.num2date(order.executed.dt).date().isoformat(),
                     order.executed.price,
                     order.executed.size,

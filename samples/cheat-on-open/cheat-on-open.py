@@ -46,7 +46,7 @@ class St(bt.Strategy):
         self.order = None
         print('{} {} Executed at price {}'.format(
             bt.num2date(order.executed.dt).date(),
-            'Buy' * order.isbuy() or 'Sell', order.executed.price)
+            'Buy' * order.is_buy() or 'Sell', order.executed.price)
         )
 
     def operate(self, fromopen):

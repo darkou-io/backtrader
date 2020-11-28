@@ -659,7 +659,7 @@ class BackBroker(bt.BrokerBase):
                          parent=parent, transmit=transmit,
                          histnotify=histnotify)
 
-        order.addinfo(**kwargs)
+        order.add_info(**kwargs)
         self._ocoize(order, oco)
 
         return self.submit(order, check=_checksubmit)
@@ -679,7 +679,7 @@ class BackBroker(bt.BrokerBase):
                           parent=parent, transmit=transmit,
                           histnotify=histnotify)
 
-        order.addinfo(**kwargs)
+        order.add_info(**kwargs)
         self._ocoize(order, oco)
 
         return self.submit(order, check=_checksubmit)
@@ -696,7 +696,7 @@ class BackBroker(bt.BrokerBase):
         else:
             # Execution depends on volume filler
             size = self.p.filler(order, price, ago)
-            if not order.isbuy():
+            if not order.is_buy():
                 size = -size
 
         # Get comm_info object for the data
@@ -832,7 +832,7 @@ class BackBroker(bt.BrokerBase):
                           comm_info.margin, pnl,
                           psize, pprice)
 
-            order.addcomminfo(comm_info)
+            order.add_comm_info(comm_info)
 
             self.notify(order)
             self._ococheck(order)
@@ -862,7 +862,7 @@ class BackBroker(bt.BrokerBase):
             dtcoc = None
             exprice = popen
 
-        if order.isbuy():
+        if order.is_buy():
             p = self._slip_up(phigh, exprice, doslip=self.p.slip_open)
         else:
             p = self._slip_down(plow, exprice, doslip=self.p.slip_open)
@@ -896,7 +896,7 @@ class BackBroker(bt.BrokerBase):
         order.pannotated = pclose
 
     def _try_exec_limit(self, order, popen, phigh, plow, plimit):
-        if order.isbuy():
+        if order.is_buy():
             if plimit >= popen:
                 # open smaller/equal than requested - buy cheaper
                 pmax = min(phigh, plimit)
@@ -919,7 +919,7 @@ class BackBroker(bt.BrokerBase):
                 self._execute(order, ago=0, price=plimit)
 
     def _try_exec_stop(self, order, popen, phigh, plow, pcreated, pclose):
-        if order.isbuy():
+        if order.is_buy():
             if popen >= pcreated:
                 # price penetrated with an open gap - use open
                 p = self._slip_up(phigh, popen, doslip=self.p.slip_open)
@@ -941,12 +941,12 @@ class BackBroker(bt.BrokerBase):
 
         # not (completely) executed and trailing stop
         if order.alive() and order.exectype == Order.StopTrail:
-            order.trailadjust(pclose)
+            order.trail_adjust(pclose)
 
     def _try_exec_stop_limit(self, order,
                              popen, phigh, plow, pclose,
                              pcreated, plimit):
-        if order.isbuy():
+        if order.is_buy():
             if popen >= pcreated:
                 order.triggered = True
                 self._try_exec_limit(order, popen, phigh, plow, plimit)
@@ -989,7 +989,7 @@ class BackBroker(bt.BrokerBase):
 
         # not (completely) executed and trailing stop
         if order.alive() and order.exectype == Order.StopTrailLimit:
-            order.trailadjust(pclose)
+            order.trail_adjust(pclose)
 
     def _slip_up(self, pmax, price, doslip=True, lim=False):
         if not doslip:
@@ -1057,8 +1057,8 @@ class BackBroker(bt.BrokerBase):
         plimit = order.created.pricelimit
 
         # 处理一字涨跌停板
-        if (order.isbuy() and plow >= data.close[-1] * 1.1 - 0.02) or \
-                (order.issell() and phigh <= data.close[-1] * 0.9 + 0.02):
+        if (order.is_buy() and plow >= data.close[-1] * 1.1 - 0.02) or \
+                (order.is_sell() and phigh <= data.close[-1] * 0.9 + 0.02):
             order.reject()
             self.notify(order)
             return
