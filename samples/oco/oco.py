@@ -89,7 +89,7 @@ class St(bt.Strategy):
 
                 print('valid1 is:', valid1)
 
-                kargs = dict(exectype=bt.Order.Limit)
+                kargs = dict(exec_type=bt.Order.Limit)
                 kargs[('target' * self.p.usetarget) or 'size'] = 1
 
                 o1 = self._dobuy(price=p1, valid=valid1, **kargs)

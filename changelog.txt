@@ -299,7 +299,7 @@
   - PR #290 for child OCO orders
   - Oco and other generic parameters passed transparently from any order
     generating method (ex: order_target_size) down to buy and sell
-  - Correct pricelimit parameter in ib
+  - Correct price_limit parameter in ib
   - Use strategy datetime instead of data0 and ensure a complete header in
     Positions analyzer
 
@@ -890,7 +890,7 @@
 
 1.1.24.88
   - Fixes #51 - a trade may reopen a position but close a trade if overlapping
-    (different tradeid) trades are active
+    (different trade_id) trades are active
   - Address Pull Request #52 by adding Py 2/3 MAXINT compatible "constant" which
     is imported into TradeAnalyzer and used instead of sys.maxint
   - Fixes #50 by correcting open/popen typo in StopLimit order

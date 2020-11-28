@@ -53,11 +53,11 @@ class St(bt.Strategy):
         dtstr = self.data.datetime.datetime().strftime('%a %Y-%m-%d %H:%M:%S')
         if self.position and self.elapsed == 2:
             print('%s: SELL CREATED' % dtstr)
-            self.close(exectype=bt.Order.Close)
+            self.close(exec_type=bt.Order.Close)
             self.elapsed = 0
         elif self.order is None and self.elapsed == 2:  # no pending order
             print('%s: BUY  CREATED' % dtstr)
-            self.order = self.buy(exectype=bt.Order.Close)
+            self.order = self.buy(exec_type=bt.Order.Close)
             self.elapsed = 0
 
 

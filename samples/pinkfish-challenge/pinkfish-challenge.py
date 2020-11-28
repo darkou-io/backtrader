@@ -231,7 +231,7 @@ class St(bt.Strategy):
                     print('-- BUY on date:',
                           self.data.datetime.date().strftime('%Y-%m-%d'))
                     ex = bt.Order.Market if self.p.market else bt.Order.Close
-                    self.buy(exectype=ex)
+                    self.buy(exec_type=ex)
                     self.inmarket = len(self)  # reset period in market
 
         else:  # in the market

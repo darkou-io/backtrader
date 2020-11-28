@@ -106,7 +106,7 @@ class Trade(object):
 
       - ``ref``: unique trade identifier
       - ``status`` (``int``): one of Created, Open, Closed
-      - ``tradeid``: grouping tradeid passed to orders during creation
+      - ``trade_id``: grouping trade_id passed to orders during creation
         The default in orders is 0
       - ``size`` (``int``): current size of the trade
       - ``price`` (``float``): current price of the trade
@@ -151,7 +151,7 @@ class Trade(object):
 
     def __str__(self):
         toprint = (
-            'ref', 'data', 'tradeid',
+            'ref', 'data', 'trade_id',
             'size', 'price', 'value', 'commission', 'pnl', 'pnlcomm',
             'justopened', 'isopen', 'isclosed',
             'baropen', 'dtopen', 'barclose', 'dtclose', 'barlen',
@@ -162,12 +162,12 @@ class Trade(object):
             (':'.join((x, str(getattr(self, x)))) for x in toprint)
         )
 
-    def __init__(self, data=None, tradeid=0, historyon=False,
+    def __init__(self, data=None, trade_id=0, historyon=False,
                  size=0, price=0.0, value=0.0, commission=0.0):
 
         self.ref = next(self.refbasis)
         self.data = data
-        self.tradeid = tradeid
+        self.trade_id = trade_id
         self.size = size
         self.price = price
         self.value = value

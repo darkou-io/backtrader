@@ -38,7 +38,7 @@ class TestStrategy(bt.Strategy):
         smaperiod=5,
         trade=False,
         stake=10,
-        exectype=bt.Order.Market,
+        exec_type=bt.Order.Market,
         stopafter=0,
         valid=None,
         cancel=0,
@@ -134,14 +134,14 @@ class TestStrategy(bt.Strategy):
                     # price = round(self.data0.close[0] * 0.90, 2)
                     price = self.data0.close[0] - 0.005
                     self.order = self.buy(size=self.p.stake,
-                                          exectype=self.p.exectype,
+                                          exec_type=self.p.exec_type,
                                           price=price,
                                           valid=self.p.valid)
                 else:
                     # price = round(self.data0.close[0] * 1.10, 4)
                     price = self.data0.close[0] - 0.05
                     self.order = self.sell(size=self.p.stake,
-                                           exectype=self.p.exectype,
+                                           exec_type=self.p.exec_type,
                                            price=price,
                                            valid=self.p.valid)
 
@@ -149,7 +149,7 @@ class TestStrategy(bt.Strategy):
                 print('USING BRACKET')
                 price = self.data0.close[0] - 0.05
                 self.order, _, _ = self.buy_bracket(size=self.p.stake,
-                                                    exectype=bt.Order.Market,
+                                                    exec_type=bt.Order.Market,
                                                     price=price,
                                                     stopprice=price - 0.10,
                                                     limitprice=price + 0.10,
@@ -160,11 +160,11 @@ class TestStrategy(bt.Strategy):
             if self.order is None:
                 if not self.p.sell:
                     self.order = self.sell(size=self.p.stake // 2,
-                                           exectype=bt.Order.Market,
+                                           exec_type=bt.Order.Market,
                                            price=self.data0.close[0])
                 else:
                     self.order = self.buy(size=self.p.stake // 2,
-                                          exectype=bt.Order.Market,
+                                          exec_type=bt.Order.Market,
                                           price=self.data0.close[0])
 
             self.orderid.append(self.order)
@@ -297,7 +297,7 @@ def runstrategy():
     cerebro.add_strategy(TestStrategy,
                         smaperiod=args.smaperiod,
                         trade=args.trade,
-                        exectype=bt.Order.ExecType(args.exectype),
+                        exec_type=bt.Order.ExecType(args.exec_type),
                         stake=args.stake,
                         stopafter=args.stopafter,
                         valid=valid,
@@ -461,7 +461,7 @@ def parse_args(pargs=None):
                         required=False, action='store_true',
                         help='Do not counter the 1st operation')
 
-    parser.add_argument('--exectype', default=bt.Order.ExecTypes[0],
+    parser.add_argument('--exec_type', default=bt.Order.ExecTypes[0],
                         choices=bt.Order.ExecTypes,
                         required=False, action='store',
                         help='Execution to Use when opening position')

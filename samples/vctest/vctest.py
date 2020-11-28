@@ -35,7 +35,7 @@ class TestStrategy(bt.Strategy):
         smaperiod=5,
         trade=False,
         stake=10,
-        exectype=bt.Order.Market,
+        exec_type=bt.Order.Market,
         stopafter=0,
         valid=None,
         cancel=0,
@@ -124,7 +124,7 @@ class TestStrategy(bt.Strategy):
         # if True and len(self.orderid) < 1:
         if self.datastatus and not self.position and len(self.orderid) < 1:
             self.order = self.buy(size=self.p.stake,
-                                  exectype=self.p.exectype,
+                                  exec_type=self.p.exec_type,
                                   price=self.p.price,
                                   plimit=self.p.pstoplimit,
                                   valid=self.p.valid)
@@ -135,7 +135,7 @@ class TestStrategy(bt.Strategy):
                 size = self.p.stake // 2
                 if not size:
                     size = self.position.size  # use the remaining
-                self.order = self.sell(size=size, exectype=bt.Order.Market)
+                self.order = self.sell(size=size, exec_type=bt.Order.Market)
 
         elif self.order is not None and self.p.cancel:
             if self.datastatus > self.p.cancel:
@@ -249,7 +249,7 @@ def runstrategy():
     cerebro.add_strategy(TestStrategy,
                         smaperiod=args.smaperiod,
                         trade=args.trade,
-                        exectype=bt.Order.ExecType(args.exectype),
+                        exec_type=bt.Order.ExecType(args.exec_type),
                         stake=args.stake,
                         stopafter=args.stopafter,
                         valid=valid,
@@ -377,7 +377,7 @@ def parse_args():
                         required=False, action='store_true',
                         help='Do not sell after a buy')
 
-    parser.add_argument('--exectype', default=bt.Order.ExecTypes[0],
+    parser.add_argument('--exec_type', default=bt.Order.ExecTypes[0],
                         choices=bt.Order.ExecTypes,
                         required=False, action='store',
                         help='Execution to Use when opening position')

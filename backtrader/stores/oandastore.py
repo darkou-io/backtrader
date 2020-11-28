@@ -467,8 +467,8 @@ class OandaStore(with_metaclass(MetaSingleton, object)):
         okwargs['instrument'] = order.data._dataname
         okwargs['units'] = abs(order.created.size)
         okwargs['side'] = 'buy' if order.is_buy() else 'sell'
-        okwargs['type'] = self._ORDEREXECS[order.exectype]
-        if order.exectype != bt.Order.Market:
+        okwargs['type'] = self._ORDEREXECS[order.exec_type]
+        if order.exec_type != bt.Order.Market:
             okwargs['price'] = order.created.price
             if order.valid is None:
                 # 1 year and datetime.max fail ... 1 month works
@@ -478,12 +478,12 @@ class OandaStore(with_metaclass(MetaSingleton, object)):
                 # To timestamp with seconds precision
             okwargs['expiry'] = int((valid - self._DTEPOCH).total_seconds())
 
-        if order.exectype == bt.Order.StopLimit:
-            okwargs['lowerBound'] = order.created.pricelimit
-            okwargs['upperBound'] = order.created.pricelimit
+        if order.exec_type == bt.Order.StopLimit:
+            okwargs['lowerBound'] = order.created.price_limit
+            okwargs['upperBound'] = order.created.price_limit
 
-        if order.exectype == bt.Order.StopTrail:
-            okwargs['trailingStop'] = order.trailamount
+        if order.exec_type == bt.Order.StopTrail:
+            okwargs['trailingStop'] = order.trail_amount
 
         if stopside is not None:
             okwargs['stopLoss'] = stopside.price

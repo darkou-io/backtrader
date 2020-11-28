@@ -93,14 +93,14 @@ class St(bt.Strategy):
                         valid = datetime.timedelta(self.p.valid)
 
                         if self.p.rawbracket:
-                            o1 = self.buy(data=d, exectype=bt.Order.Limit,
+                            o1 = self.buy(data=d, exec_type=bt.Order.Limit,
                                           price=p, valid=valid, transmit=False)
 
-                            o2 = self.sell(data=d, exectype=bt.Order.Stop,
+                            o2 = self.sell(data=d, exec_type=bt.Order.Stop,
                                            price=pstp, size=o1.size,
                                            transmit=False, parent=o1)
 
-                            o3 = self.sell(data=d, exectype=bt.Order.Limit,
+                            o3 = self.sell(data=d, exec_type=bt.Order.Limit,
                                            price=plmt, size=o1.size,
                                            transmit=True, parent=o1)
 

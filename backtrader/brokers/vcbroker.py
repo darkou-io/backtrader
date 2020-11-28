@@ -225,24 +225,24 @@ class VCBroker(with_metaclass(MetaVCBroker, BrokerBase)):
 
     def _makeorder(self, ordtype, owner, data,
                    size, price=None, plimit=None,
-                   exectype=None, valid=None,
-                   tradeid=0, **kwargs):
+                   exec_type=None, valid=None,
+                   trade_id=0, **kwargs):
 
         order = self.store.vcctmod.Order()
         order.Account = self._acc_name
         order.SymbolCode = data._tradename
-        order.OrderType = self._otypes[exectype]
+        order.OrderType = self._otypes[exec_type]
         order.OrderSide = self._osides[ordtype]
 
         order.VolumeRestriction = self._ovrestriction[Order.V_None]
         order.HideVolume = 0
         order.MinVolume = 0
 
-        # order.UserName = 'danjrod'  # str(tradeid)
-        # order.OrderId = 'a' * 50  # str(tradeid)
+        # order.UserName = 'danjrod'  # str(trade_id)
+        # order.OrderId = 'a' * 50  # str(trade_id)
         order.UserOrderId = ''
-        if tradeid:
-            order.ExtendedInfo = 'TradeId {}'.format(tradeid)
+        if trade_id:
+            order.ExtendedInfo = 'TradeId {}'.format(trade_id)
         else:
             order.ExtendedInfo = ''
 
@@ -250,20 +250,20 @@ class VCBroker(with_metaclass(MetaVCBroker, BrokerBase)):
 
         order.StopPrice = 0.0
         order.Price = 0.0
-        if exectype == Order.Market:
+        if exec_type == Order.Market:
             pass
-        elif exectype == Order.Limit:
+        elif exec_type == Order.Limit:
             order.Price = price or plimit  # cover naming confusion cases
-        elif exectype == Order.Close:
+        elif exec_type == Order.Close:
             pass
-        elif exectype == Order.Stop:
+        elif exec_type == Order.Stop:
             order.StopPrice = price
-        elif exectype == Order.StopLimit:
+        elif exec_type == Order.StopLimit:
             order.StopPrice = price
             order.Price = plimit
 
         order.ValidDate = None
-        if exectype == Order.Close:
+        if exec_type == Order.Close:
             order.TimeRestriction = self._otrestriction[Order.T_Close]
         else:
             if valid is None:
@@ -309,34 +309,34 @@ class VCBroker(with_metaclass(MetaVCBroker, BrokerBase)):
 
     def buy(self, owner, data,
             size, price=None, plimit=None,
-            exectype=None, valid=None, tradeid=0,
+            exec_type=None, valid=None, trade_id=0,
             **kwargs):
 
         order = BuyOrder(owner=owner, data=data,
-                         size=size, price=price, pricelimit=plimit,
-                         exectype=exectype, valid=valid, tradeid=tradeid)
+                         size=size, price=price, price_limit=plimit,
+                         exec_type=exec_type, valid=valid, trade_id=trade_id)
 
         order.add_info(**kwargs)
 
         vcorder = self._makeorder(order.ordtype, owner, data, size, price,
-                                  plimit, exectype, valid, tradeid,
+                                  plimit, exec_type, valid, trade_id,
                                   **kwargs)
 
         return self.submit(order, vcorder)
 
     def sell(self, owner, data,
              size, price=None, plimit=None,
-             exectype=None, valid=None, tradeid=0,
+             exec_type=None, valid=None, trade_id=0,
              **kwargs):
 
         order = SellOrder(owner=owner, data=data,
-                          size=size, price=price, pricelimit=plimit,
-                          exectype=exectype, valid=valid, tradeid=tradeid)
+                          size=size, price=price, price_limit=plimit,
+                          exec_type=exec_type, valid=valid, trade_id=trade_id)
 
         order.add_info(**kwargs)
 
         vcorder = self._makeorder(order.ordtype, owner, data, size, price,
-                                  plimit, exectype, valid, tradeid,
+                                  plimit, exec_type, valid, trade_id,
                                   **kwargs)
 
         return self.submit(order, vcorder)

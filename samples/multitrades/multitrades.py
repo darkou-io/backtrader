@@ -64,9 +64,9 @@ class MultiTradeStrategy(bt.Strategy):
 
         # To alternate amongst different tradeids
         if self.p.mtrade:
-            self.tradeid = itertools.cycle([0, 1, 2])
+            self.trade_id = itertools.cycle([0, 1, 2])
         else:
-            self.tradeid = itertools.cycle([0])
+            self.trade_id = itertools.cycle([0])
 
     def next(self):
         if self.order:
@@ -75,21 +75,21 @@ class MultiTradeStrategy(bt.Strategy):
         if self.signal > 0.0:  # cross upwards
             if self.position:
                 self.log('CLOSE SHORT , %.2f' % self.data.close[0])
-                self.close(tradeid=self.curtradeid)
+                self.close(trade_id=self.curtradeid)
 
             self.log('BUY CREATE , %.2f' % self.data.close[0])
-            self.curtradeid = next(self.tradeid)
-            self.buy(size=self.p.stake, tradeid=self.curtradeid)
+            self.curtradeid = next(self.trade_id)
+            self.buy(size=self.p.stake, trade_id=self.curtradeid)
 
         elif self.signal < 0.0:
             if self.position:
                 self.log('CLOSE LONG , %.2f' % self.data.close[0])
-                self.close(tradeid=self.curtradeid)
+                self.close(trade_id=self.curtradeid)
 
             if not self.p.onlylong:
                 self.log('SELL CREATE , %.2f' % self.data.close[0])
-                self.curtradeid = next(self.tradeid)
-                self.sell(size=self.p.stake, tradeid=self.curtradeid)
+                self.curtradeid = next(self.trade_id)
+                self.sell(size=self.p.stake, trade_id=self.curtradeid)
 
     def notify_order(self, order):
         if order.status in [bt.Order.Submitted, bt.Order.Accepted]:

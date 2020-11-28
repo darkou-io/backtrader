@@ -36,7 +36,7 @@ import backtrader.indicators as btind
 class OrderExecutionStrategy(bt.Strategy):
     params = (
         ('smaperiod', 15),
-        ('exectype', 'Market'),
+        ('exec_type', 'Market'),
         ('perc1', 3),
         ('perc2', 1),
         ('valid', 4),
@@ -107,57 +107,57 @@ class OrderExecutionStrategy(bt.Strategy):
                 valid = None
 
             # Not in the market and signal to buy
-            if self.p.exectype == 'Market':
-                self.buy(exectype=bt.Order.Market)  # default if not given
+            if self.p.exec_type == 'Market':
+                self.buy(exec_type=bt.Order.Market)  # default if not given
 
-                self.log('BUY CREATE, exectype Market, price %.2f' %
+                self.log('BUY CREATE, exec_type Market, price %.2f' %
                          self.data.close[0])
 
-            elif self.p.exectype == 'Close':
-                self.buy(exectype=bt.Order.Close)
+            elif self.p.exec_type == 'Close':
+                self.buy(exec_type=bt.Order.Close)
 
-                self.log('BUY CREATE, exectype Close, price %.2f' %
+                self.log('BUY CREATE, exec_type Close, price %.2f' %
                          self.data.close[0])
 
-            elif self.p.exectype == 'Limit':
+            elif self.p.exec_type == 'Limit':
                 price = self.data.close * (1.0 - self.p.perc1 / 100.0)
 
-                self.buy(exectype=bt.Order.Limit, price=price, valid=valid)
+                self.buy(exec_type=bt.Order.Limit, price=price, valid=valid)
 
                 if self.p.valid:
-                    txt = 'BUY CREATE, exectype Limit, price %.2f, valid: %s'
+                    txt = 'BUY CREATE, exec_type Limit, price %.2f, valid: %s'
                     self.log(txt % (price, valid.strftime('%Y-%m-%d')))
                 else:
-                    txt = 'BUY CREATE, exectype Limit, price %.2f'
+                    txt = 'BUY CREATE, exec_type Limit, price %.2f'
                     self.log(txt % price)
 
-            elif self.p.exectype == 'Stop':
+            elif self.p.exec_type == 'Stop':
                 price = self.data.close * (1.0 + self.p.perc1 / 100.0)
 
-                self.buy(exectype=bt.Order.Stop, price=price, valid=valid)
+                self.buy(exec_type=bt.Order.Stop, price=price, valid=valid)
 
                 if self.p.valid:
-                    txt = 'BUY CREATE, exectype Stop, price %.2f, valid: %s'
+                    txt = 'BUY CREATE, exec_type Stop, price %.2f, valid: %s'
                     self.log(txt % (price, valid.strftime('%Y-%m-%d')))
                 else:
-                    txt = 'BUY CREATE, exectype Stop, price %.2f'
+                    txt = 'BUY CREATE, exec_type Stop, price %.2f'
                     self.log(txt % price)
 
-            elif self.p.exectype == 'StopLimit':
+            elif self.p.exec_type == 'StopLimit':
                 price = self.data.close * (1.0 + self.p.perc1 / 100.0)
 
                 plimit = self.data.close * (1.0 + self.p.perc2 / 100.0)
 
-                self.buy(exectype=bt.Order.StopLimit, price=price, valid=valid,
+                self.buy(exec_type=bt.Order.StopLimit, price=price, valid=valid,
                          plimit=plimit)
 
                 if self.p.valid:
-                    txt = ('BUY CREATE, exectype StopLimit, price %.2f,'
-                           ' valid: %s, pricelimit: %.2f')
+                    txt = ('BUY CREATE, exec_type StopLimit, price %.2f,'
+                           ' valid: %s, price_limit: %.2f')
                     self.log(txt % (price, valid.strftime('%Y-%m-%d'), plimit))
                 else:
-                    txt = ('BUY CREATE, exectype StopLimit, price %.2f,'
-                           ' pricelimit: %.2f')
+                    txt = ('BUY CREATE, exec_type StopLimit, price %.2f,'
+                           ' price_limit: %.2f')
                     self.log(txt % (price, plimit))
 
 
@@ -171,7 +171,7 @@ def runstrat():
 
     cerebro.add_strategy(
         OrderExecutionStrategy,
-        exectype=args.exectype,
+        exec_type=args.exec_type,
         perc1=args.perc1,
         perc2=args.perc2,
         valid=args.valid,
@@ -244,7 +244,7 @@ def parse_args():
     parser.add_argument('--smaperiod', '-s', required=False, default=15,
                         help='Simple Moving Average Period')
 
-    parser.add_argument('--exectype', '-e', required=False, default='Market',
+    parser.add_argument('--exec_type', '-e', required=False, default='Market',
                         help=('Execution Type: Market (default), Close, Limit,'
                               ' Stop, StopLimit'))
 

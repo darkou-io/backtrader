@@ -131,7 +131,7 @@ class IBOrder(OrderBase, ib.ext.Order.Order):
         ib.ext.Order.Order.__init__(self)  # Invoke 2nd base class
 
         # Now fill in the specific IB parameters
-        self.m_orderType = self._IBOrdTypes[self.exectype]
+        self.m_orderType = self._IBOrdTypes[self.exec_type]
         self.m_permid = 0
 
         # 'B' or 'S' should be enough
@@ -141,32 +141,32 @@ class IBOrder(OrderBase, ib.ext.Order.Order):
         self.m_lmtPrice = 0.0
         self.m_auxPrice = 0.0
 
-        if self.exectype == self.Market:  # is it really needed for Market?
+        if self.exec_type == self.Market:  # is it really needed for Market?
             pass
-        elif self.exectype == self.Close:  # is it ireally needed for Close?
+        elif self.exec_type == self.Close:  # is it ireally needed for Close?
             pass
-        elif self.exectype == self.Limit:
+        elif self.exec_type == self.Limit:
             self.m_lmtPrice = self.price
-        elif self.exectype == self.Stop:
+        elif self.exec_type == self.Stop:
             self.m_auxPrice = self.price  # stop price / exec is market
-        elif self.exectype == self.StopLimit:
-            self.m_lmtPrice = self.pricelimit  # req limit execution
+        elif self.exec_type == self.StopLimit:
+            self.m_lmtPrice = self.price_limit  # req limit execution
             self.m_auxPrice = self.price  # trigger price
-        elif self.exectype == self.StopTrail:
-            if self.trailamount is not None:
-                self.m_auxPrice = self.trailamount
-            elif self.trailpercent is not None:
+        elif self.exec_type == self.StopTrail:
+            if self.trail_amount is not None:
+                self.m_auxPrice = self.trail_amount
+            elif self.trail_percent is not None:
                 # value expected in % format ... multiply 100.0
-                self.m_trailingPercent = self.trailpercent * 100.0
-        elif self.exectype == self.StopTrailLimit:
+                self.m_trailingPercent = self.trail_percent * 100.0
+        elif self.exec_type == self.StopTrailLimit:
             self.m_trailStopPrice = self.m_lmtPrice = self.price
             # The limit offset is set relative to the price difference in TWS
-            self.m_lmtPrice = self.pricelimit
-            if self.trailamount is not None:
-                self.m_auxPrice = self.trailamount
-            elif self.trailpercent is not None:
+            self.m_lmtPrice = self.price_limit
+            if self.trail_amount is not None:
+                self.m_auxPrice = self.trail_amount
+            elif self.trail_percent is not None:
                 # value expected in % format ... multiply 100.0
-                self.m_trailingPercent = self.trailpercent * 100.0
+                self.m_trailingPercent = self.trail_percent * 100.0
 
         self.m_totalQuantity = abs(self.size)  # ib takes only positives
 
@@ -245,9 +245,9 @@ class IBBroker(with_metaclass(MetaIBBroker, BrokerBase)):
 
     Notes:
 
-      - ``tradeid`` is not really supported, because the profit and loss are
+      - ``trade_id`` is not really supported, because the profit and loss are
         taken directly from IB. Because (as expected) calculates it in FIFO
-        manner, the pnl is not accurate for the tradeid.
+        manner, the pnl is not accurate for the trade_id.
 
       - Position
 
@@ -256,7 +256,7 @@ class IBBroker(with_metaclass(MetaIBBroker, BrokerBase)):
         calculated in the ``Strategy`` in cerebro will not reflect the reality.
 
         To avoid this, this broker would have to do its own position
-        management which would also allow tradeid with multiple ids (profit and
+        management which would also allow trade_id with multiple ids (profit and
         loss would also be calculated locally), but could be considered to be
         defeating the purpose of working with a live broker
     '''
@@ -352,13 +352,13 @@ class IBBroker(with_metaclass(MetaIBBroker, BrokerBase)):
 
     def _makeorder(self, action, owner, data,
                    size, price=None, plimit=None,
-                   exectype=None, valid=None,
-                   tradeid=0, **kwargs):
+                   exec_type=None, valid=None,
+                   trade_id=0, **kwargs):
 
         order = IBOrder(action, owner=owner, data=data,
-                        size=size, price=price, pricelimit=plimit,
-                        exectype=exectype, valid=valid,
-                        tradeid=tradeid,
+                        size=size, price=price, price_limit=plimit,
+                        exec_type=exec_type, valid=valid,
+                        trade_id=trade_id,
                         m_clientId=self.ib.clientId,
                         m_orderId=self.ib.nextOrderId(),
                         **kwargs)
@@ -368,24 +368,24 @@ class IBBroker(with_metaclass(MetaIBBroker, BrokerBase)):
 
     def buy(self, owner, data,
             size, price=None, plimit=None,
-            exectype=None, valid=None, tradeid=0,
+            exec_type=None, valid=None, trade_id=0,
             **kwargs):
 
         order = self._makeorder(
             'BUY',
-            owner, data, size, price, plimit, exectype, valid, tradeid,
+            owner, data, size, price, plimit, exec_type, valid, trade_id,
             **kwargs)
 
         return self.submit(order)
 
     def sell(self, owner, data,
              size, price=None, plimit=None,
-             exectype=None, valid=None, tradeid=0,
+             exec_type=None, valid=None, trade_id=0,
              **kwargs):
 
         order = self._makeorder(
             'SELL',
-            owner, data, size, price, plimit, exectype, valid, tradeid,
+            owner, data, size, price, plimit, exec_type, valid, trade_id,
             **kwargs)
 
         return self.submit(order)

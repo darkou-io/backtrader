@@ -33,8 +33,8 @@ class St(bt.Strategy):
         p1=10,
         p2=30,
         stoptype=bt.Order.StopTrail,
-        trailamount=0.0,
-        trailpercent=0.0,
+        trail_amount=0.0,
+        trail_percent=0.0,
         limitoffset=0.0,
     )
 
@@ -58,16 +58,16 @@ class St(bt.Strategy):
                 price = None
                 plimit = None
 
-            self.order = self.sell(exectype=self.p.stoptype,
+            self.order = self.sell(exec_type=self.p.stoptype,
                                    price=price,
                                    plimit=plimit,
-                                   trailamount=self.p.trailamount,
-                                   trailpercent=self.p.trailpercent)
+                                   trail_amount=self.p.trail_amount,
+                                   trail_percent=self.p.trail_percent)
 
-            if self.p.trailamount:
-                tcheck = self.data.close - self.p.trailamount
+            if self.p.trail_amount:
+                tcheck = self.data.close - self.p.trail_amount
             else:
-                tcheck = self.data.close * (1.0 - self.p.trailpercent)
+                tcheck = self.data.close * (1.0 - self.p.trail_percent)
             print(','.join(
                 map(str, [self.datetime.date(), self.data.close[0],
                           self.order.created.price, tcheck])
@@ -75,10 +75,10 @@ class St(bt.Strategy):
             )
             print('-' * 10)
         else:
-            if self.p.trailamount:
-                tcheck = self.data.close - self.p.trailamount
+            if self.p.trail_amount:
+                tcheck = self.data.close - self.p.trail_amount
             else:
-                tcheck = self.data.close * (1.0 - self.p.trailpercent)
+                tcheck = self.data.close * (1.0 - self.p.trail_percent)
             print(','.join(
                 map(str, [self.datetime.date(), self.data.close[0],
                           self.order.created.price, tcheck])

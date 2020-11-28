@@ -113,7 +113,7 @@ class OandaBroker(with_metaclass(MetaOandaBroker, BrokerBase)):
         if pos.size < 0:
             order = SellOrder(data=data,
                               size=pos.size, price=pos.price,
-                              exectype=Order.Market,
+                              exec_type=Order.Market,
                               simulated=True)
 
             order.add_comm_info(self.get_commission_info(data))
@@ -129,7 +129,7 @@ class OandaBroker(with_metaclass(MetaOandaBroker, BrokerBase)):
         elif pos.size > 0:
             order = BuyOrder(data=data,
                              size=pos.size, price=pos.price,
-                             exectype=Order.Market,
+                             exec_type=Order.Market,
                              simulated=True)
 
             order.add_comm_info(self.get_commission_info(data))
@@ -305,15 +305,15 @@ class OandaBroker(with_metaclass(MetaOandaBroker, BrokerBase)):
 
     def buy(self, owner, data,
             size, price=None, plimit=None,
-            exectype=None, valid=None, tradeid=0, oco=None,
-            trailamount=None, trailpercent=None,
+            exec_type=None, valid=None, trade_id=0, oco=None,
+            trail_amount=None, trail_percent=None,
             parent=None, transmit=True,
             **kwargs):
 
         order = BuyOrder(owner=owner, data=data,
-                         size=size, price=price, pricelimit=plimit,
-                         exectype=exectype, valid=valid, tradeid=tradeid,
-                         trailamount=trailamount, trailpercent=trailpercent,
+                         size=size, price=price, price_limit=plimit,
+                         exec_type=exec_type, valid=valid, trade_id=trade_id,
+                         trail_amount=trail_amount, trail_percent=trail_percent,
                          parent=parent, transmit=transmit)
 
         order.add_info(**kwargs)
@@ -322,15 +322,15 @@ class OandaBroker(with_metaclass(MetaOandaBroker, BrokerBase)):
 
     def sell(self, owner, data,
              size, price=None, plimit=None,
-             exectype=None, valid=None, tradeid=0, oco=None,
-             trailamount=None, trailpercent=None,
+             exec_type=None, valid=None, trade_id=0, oco=None,
+             trail_amount=None, trail_percent=None,
              parent=None, transmit=True,
              **kwargs):
 
         order = SellOrder(owner=owner, data=data,
-                          size=size, price=price, pricelimit=plimit,
-                          exectype=exectype, valid=valid, tradeid=tradeid,
-                          trailamount=trailamount, trailpercent=trailpercent,
+                          size=size, price=price, price_limit=plimit,
+                          exec_type=exec_type, valid=valid, trade_id=trade_id,
+                          trail_amount=trail_amount, trail_percent=trail_percent,
                           parent=parent, transmit=transmit)
 
         order.add_info(**kwargs)

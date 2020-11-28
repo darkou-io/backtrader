@@ -149,15 +149,15 @@ class BrokerBase(with_metaclass(MetaBroker, object)):
         raise NotImplementedError
 
     def buy(self, owner, data, size, price=None, plimit=None,
-            exectype=None, valid=None, tradeid=0, oco=None,
-            trailamount=None, trailpercent=None,
+            exec_type=None, valid=None, trade_id=0, oco=None,
+            trail_amount=None, trail_percent=None,
             **kwargs):
 
         raise NotImplementedError
 
     def sell(self, owner, data, size, price=None, plimit=None,
-             exectype=None, valid=None, tradeid=0, oco=None,
-             trailamount=None, trailpercent=None,
+             exec_type=None, valid=None, trade_id=0, oco=None,
+             trail_amount=None, trail_percent=None,
              **kwargs):
 
         raise NotImplementedError

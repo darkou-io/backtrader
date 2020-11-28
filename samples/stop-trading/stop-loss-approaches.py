@@ -60,9 +60,9 @@ class ManualStopOrStopTrail(BaseStrategy):
 
         if not self.p.trail:
             stop_price = order.executed.price * (1.0 - self.p.stop_loss)
-            self.sell(exectype=bt.Order.Stop, price=stop_price)
+            self.sell(exec_type=bt.Order.Stop, price=stop_price)
         else:
-            self.sell(exectype=bt.Order.StopTrail, trailamount=self.p.trail)
+            self.sell(exec_type=bt.Order.StopTrail, trail_amount=self.p.trail)
 
     def next(self):
         if not self.position and self.crossup > 0:
@@ -98,10 +98,10 @@ class ManualStopOrStopTrailCheat(BaseStrategy):
 
             if not self.p.trail:
                 stop_price = self.data.close[0] * (1.0 - self.p.stop_loss)
-                self.sell(exectype=bt.Order.Stop, price=stop_price)
+                self.sell(exec_type=bt.Order.Stop, price=stop_price)
             else:
-                self.sell(exectype=bt.Order.StopTrail,
-                          trailamount=self.p.trail)
+                self.sell(exec_type=bt.Order.StopTrail,
+                          trail_amount=self.p.trail)
 
 
 class AutoStopOrStopTrail(BaseStrategy):
@@ -141,17 +141,17 @@ class AutoStopOrStopTrail(BaseStrategy):
                 price = self.data.close[0] * (1.0 - self.p.buy_limit)
 
                 # transmit = False ... await child order before transmission
-                self.buy_order = self.buy(price=price, exectype=bt.Order.Limit,
+                self.buy_order = self.buy(price=price, exec_type=bt.Order.Limit,
                                           transmit=False)
 
             # Setting parent=buy_order ... sends both together
             if not self.p.trail:
                 stop_price = self.data.close[0] * (1.0 - self.p.stop_loss)
-                self.sell(exectype=bt.Order.Stop, price=stop_price,
+                self.sell(exec_type=bt.Order.Stop, price=stop_price,
                           parent=self.buy_order)
             else:
-                self.sell(exectype=bt.Order.StopTrail,
-                          trailamount=self.p.trail,
+                self.sell(exec_type=bt.Order.StopTrail,
+                          trail_amount=self.p.trail,
                           parent=self.buy_order)
 
 

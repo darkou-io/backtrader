@@ -89,7 +89,7 @@ def test_run(main=False):
     comm_info = FakeCommInfo()
     order = bt.BuyOrder(data=FakeData(),
                         size=100, price=1.0,
-                        exectype=bt.Order.Market,
+                        exec_type=bt.Order.Market,
                         simulated=True)
     order.add_comm_info(comm_info)
 

@@ -82,7 +82,7 @@ class St(bt.Strategy):
                     valid1, valid2 = valid2, valid1
 
                 if not self.p.usebracket:
-                    o1 = self.buy(exectype=bt.Order.Limit,
+                    o1 = self.buy(exec_type=bt.Order.Limit,
                                   price=p1,
                                   valid=valid1,
                                   transmit=False)
@@ -90,7 +90,7 @@ class St(bt.Strategy):
                     print('{}: Oref {} / Buy at {}'.format(
                         self.datetime.date(), o1.ref, p1))
 
-                    o2 = self.sell(exectype=bt.Order.Stop,
+                    o2 = self.sell(exec_type=bt.Order.Stop,
                                    price=p2,
                                    valid=valid2,
                                    parent=o1,
@@ -99,7 +99,7 @@ class St(bt.Strategy):
                     print('{}: Oref {} / Sell Stop at {}'.format(
                         self.datetime.date(), o2.ref, p2))
 
-                    o3 = self.sell(exectype=bt.Order.Limit,
+                    o3 = self.sell(exec_type=bt.Order.Limit,
                                    price=p3,
                                    valid=valid3,
                                    parent=o1,

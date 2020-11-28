@@ -57,7 +57,7 @@ def test_run(main=False):
 
     order = bt.BuyOrder(data=FakeData(),
                         size=0, price=1.0,
-                        exectype=bt.Order.Market,
+                        exec_type=bt.Order.Market,
                         simulated=True)
 
     commrate = 0.025

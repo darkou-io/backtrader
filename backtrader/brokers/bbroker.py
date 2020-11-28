@@ -646,18 +646,18 @@ class BackBroker(bt.BrokerBase):
 
     def buy(self, owner, data,
             size, price=None, plimit=None,
-            exectype=None, valid=None, tradeid=0, oco=None,
-            trailamount=None, trailpercent=None,
+            exec_type=None, valid=None, trade_id=0, oco=None,
+            trail_amount=None, trail_percent=None,
             parent=None, transmit=True,
-            histnotify=False, _checksubmit=True,
+            hist_notify=False, _checksubmit=True,
             **kwargs):
 
         order = BuyOrder(owner=owner, data=data,
-                         size=size, price=price, pricelimit=plimit,
-                         exectype=exectype, valid=valid, tradeid=tradeid,
-                         trailamount=trailamount, trailpercent=trailpercent,
+                         size=size, price=price, price_limit=plimit,
+                         exec_type=exec_type, valid=valid, trade_id=trade_id,
+                         trail_amount=trail_amount, trail_percent=trail_percent,
                          parent=parent, transmit=transmit,
-                         histnotify=histnotify)
+                         hist_notify=hist_notify)
 
         order.add_info(**kwargs)
         self._ocoize(order, oco)
@@ -666,18 +666,18 @@ class BackBroker(bt.BrokerBase):
 
     def sell(self, owner, data,
              size, price=None, plimit=None,
-             exectype=None, valid=None, tradeid=0, oco=None,
-             trailamount=None, trailpercent=None,
+             exec_type=None, valid=None, trade_id=0, oco=None,
+             trail_amount=None, trail_percent=None,
              parent=None, transmit=True,
-             histnotify=False, _checksubmit=True,
+             hist_notify=False, _checksubmit=True,
              **kwargs):
 
         order = SellOrder(owner=owner, data=data,
-                          size=size, price=price, pricelimit=plimit,
-                          exectype=exectype, valid=valid, tradeid=tradeid,
-                          trailamount=trailamount, trailpercent=trailpercent,
+                          size=size, price=price, price_limit=plimit,
+                          exec_type=exec_type, valid=valid, trade_id=trade_id,
+                          trail_amount=trail_amount, trail_percent=trail_percent,
                           parent=parent, transmit=transmit,
-                          histnotify=histnotify)
+                          hist_notify=hist_notify)
 
         order.add_info(**kwargs)
         self._ocoize(order, oco)
@@ -730,7 +730,7 @@ class BackBroker(bt.BrokerBase):
                 # When doing cheat on open, the price to be considered for a
                 # market order is the opening price and not the default closing
                 # price with which the order was created
-                if order.exectype == Order.Market:
+                if order.exec_type == Order.Market:
                     price = pprice_orig = order.data.open[0]
                 else:
                     price = pprice_orig = order.created.price
@@ -940,7 +940,7 @@ class BackBroker(bt.BrokerBase):
                 self._execute(order, ago=0, price=p)
 
         # not (completely) executed and trailing stop
-        if order.alive() and order.exectype == Order.StopTrail:
+        if order.alive() and order.exec_type == Order.StopTrail:
             order.trail_adjust(pclose)
 
     def _try_exec_stop_limit(self, order,
@@ -988,7 +988,7 @@ class BackBroker(bt.BrokerBase):
                         self._execute(order, ago=0, price=p)
 
         # not (completely) executed and trailing stop
-        if order.alive() and order.exectype == Order.StopTrailLimit:
+        if order.alive() and order.exec_type == Order.StopTrailLimit:
             order.trail_adjust(pclose)
 
     def _slip_up(self, pmax, price, doslip=True, lim=False):
@@ -1054,7 +1054,7 @@ class BackBroker(bt.BrokerBase):
             pclose = data.close[0]
 
         pcreated = order.created.price
-        plimit = order.created.pricelimit
+        plimit = order.created.price_limit
 
         # 处理一字涨跌停板
         if (order.is_buy() and plow >= data.close[-1] * 1.1 - 0.02) or \
@@ -1063,28 +1063,28 @@ class BackBroker(bt.BrokerBase):
             self.notify(order)
             return
 
-        if order.exectype == Order.Market:
+        if order.exec_type == Order.Market:
             self._try_exec_market(order, popen, phigh, plow)
 
-        elif order.exectype == Order.Close:
+        elif order.exec_type == Order.Close:
             self._try_exec_close(order, pclose)
 
-        elif order.exectype == Order.Limit:
+        elif order.exec_type == Order.Limit:
             self._try_exec_limit(order, popen, phigh, plow, pcreated)
 
         elif (order.triggered and
-              order.exectype in [Order.StopLimit, Order.StopTrailLimit]):
+              order.exec_type in [Order.StopLimit, Order.StopTrailLimit]):
             self._try_exec_limit(order, popen, phigh, plow, plimit)
 
-        elif order.exectype in [Order.Stop, Order.StopTrail]:
+        elif order.exec_type in [Order.Stop, Order.StopTrail]:
             self._try_exec_stop(order, popen, phigh, plow, pcreated, pclose)
 
-        elif order.exectype in [Order.StopLimit, Order.StopTrailLimit]:
+        elif order.exec_type in [Order.StopLimit, Order.StopTrailLimit]:
             self._try_exec_stop_limit(order,
                                       popen, phigh, plow, pclose,
                                       pcreated, plimit)
 
-        elif order.exectype == Order.Historical:
+        elif order.exec_type == Order.Historical:
             self._try_exec_historical(order)
 
     def _process_fund_history(self):
@@ -1166,15 +1166,15 @@ class BackBroker(bt.BrokerBase):
                 if size > 0:
                     o = self.buy(owner=owner, data=d,
                                  size=size, price=price,
-                                 exectype=Order.Historical,
-                                 histnotify=uhnotify,
+                                 exec_type=Order.Historical,
+                                 hist_notify=uhnotify,
                                  _checksubmit=False)
 
                 elif size < 0:
                     o = self.sell(owner=owner, data=d,
                                   size=abs(size), price=price,
-                                  exectype=Order.Historical,
-                                  histnotify=uhnotify,
+                                  exec_type=Order.Historical,
+                                  hist_notify=uhnotify,
                                   _checksubmit=False)
 
                 # update to next potential order

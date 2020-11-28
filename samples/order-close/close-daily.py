@@ -55,10 +55,10 @@ class St(bt.Strategy):
         if not random.randint(0, 5):  # roll a dice to decide entering/exit
             if self.position:
                 print('%s: SELL CREATED' % dtstr)
-                self.order = self.close(exectype=bt.Order.Close)
+                self.order = self.close(exec_type=bt.Order.Close)
             else:  # no pending order
                 print('%s: BUY  CREATED' % dtstr)
-                self.order = self.buy(exectype=bt.Order.Close)
+                self.order = self.buy(exec_type=bt.Order.Close)
 
 
 class SessionEndFiller(with_metaclass(bt.metabase.MetaParams, object)):

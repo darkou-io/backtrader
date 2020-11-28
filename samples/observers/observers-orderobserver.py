@@ -98,7 +98,7 @@ class MyStrategy(bt.Strategy):
             valid = self.data.datetime.date(0) + \
                 datetime.timedelta(days=self.p.valid)
             self.log('BUY CREATE, %.2f' % plimit)
-            self.buy(exectype=bt.Order.Limit, price=plimit, valid=valid)
+            self.buy(exec_type=bt.Order.Limit, price=plimit, valid=valid)
 
 
 def runstrat():

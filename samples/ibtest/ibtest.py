@@ -34,15 +34,15 @@ class TestStrategy(bt.Strategy):
         smaperiod=5,
         trade=False,
         stake=10,
-        exectype=bt.Order.Market,
+        exec_type=bt.Order.Market,
         stopafter=0,
         valid=None,
         cancel=0,
         donotsell=False,
         stoptrail=False,
         stoptraillimit=False,
-        trailamount=None,
-        trailpercent=None,
+        trail_amount=None,
+        trail_percent=None,
         limitoffset=None,
         oca=False,
         bracket=False,
@@ -130,11 +130,11 @@ class TestStrategy(bt.Strategy):
             return
 
         if self.datastatus and not self.position and len(self.orderid) < 1:
-            exectype = self.p.exectype if not self.p.oca else bt.Order.Limit
+            exec_type = self.p.exec_type if not self.p.oca else bt.Order.Limit
             close = self.data0.close[0]
             price = round(close * 0.90, 2)
             self.order = self.buy(size=self.p.stake,
-                                  exectype=exectype,
+                                  exec_type=exec_type,
                                   price=price,
                                   valid=self.p.valid,
                                   transmit=not self.p.bracket)
@@ -144,7 +144,7 @@ class TestStrategy(bt.Strategy):
             if self.p.bracket:
                 # low side
                 self.sell(size=self.p.stake,
-                          exectype=bt.Order.Stop,
+                          exec_type=bt.Order.Stop,
                           price=round(price * 0.90, 2),
                           valid=self.p.valid,
                           transmit=False,
@@ -152,7 +152,7 @@ class TestStrategy(bt.Strategy):
 
                 # high side
                 self.sell(size=self.p.stake,
-                          exectype=bt.Order.Limit,
+                          exec_type=bt.Order.Limit,
                           price=round(close * 1.10, 2),
                           valid=self.p.valid,
                           transmit=True,
@@ -160,33 +160,33 @@ class TestStrategy(bt.Strategy):
 
             elif self.p.oca:
                 self.buy(size=self.p.stake,
-                         exectype=bt.Order.Limit,
+                         exec_type=bt.Order.Limit,
                          price=round(self.data0.close[0] * 0.80, 2),
                          oco=self.order)
 
             elif self.p.stoptrail:
                 self.sell(size=self.p.stake,
-                          exectype=bt.Order.StopTrail,
+                          exec_type=bt.Order.StopTrail,
                           # price=round(self.data0.close[0] * 0.90, 2),
                           valid=self.p.valid,
-                          trailamount=self.p.trailamount,
-                          trailpercent=self.p.trailpercent)
+                          trail_amount=self.p.trail_amount,
+                          trail_percent=self.p.trail_percent)
 
             elif self.p.stoptraillimit:
-                p = round(self.data0.close[0] - self.p.trailamount, 2)
+                p = round(self.data0.close[0] - self.p.trail_amount, 2)
                 # p = self.data0.close[0]
                 self.sell(size=self.p.stake,
-                          exectype=bt.Order.StopTrailLimit,
+                          exec_type=bt.Order.StopTrailLimit,
                           price=p,
                           plimit=p + self.p.limitoffset,
                           valid=self.p.valid,
-                          trailamount=self.p.trailamount,
-                          trailpercent=self.p.trailpercent)
+                          trail_amount=self.p.trail_amount,
+                          trail_percent=self.p.trail_percent)
 
         elif self.position.size > 0 and not self.p.donotsell:
             if self.order is None:
                 self.order = self.sell(size=self.p.stake // 2,
-                                       exectype=bt.Order.Market,
+                                       exec_type=bt.Order.Market,
                                        price=self.data0.close[0])
 
         elif self.order is not None and self.p.cancel:
@@ -318,7 +318,7 @@ def runstrategy():
     cerebro.add_strategy(TestStrategy,
                         smaperiod=args.smaperiod,
                         trade=args.trade,
-                        exectype=bt.Order.ExecType(args.exectype),
+                        exec_type=bt.Order.ExecType(args.exec_type),
                         stake=args.stake,
                         stopafter=args.stopafter,
                         valid=valid,
@@ -326,8 +326,8 @@ def runstrategy():
                         donotsell=args.donotsell,
                         stoptrail=args.stoptrail,
                         stoptraillimit=args.traillimit,
-                        trailamount=args.trailamount,
-                        trailpercent=args.trailpercent,
+                        trail_amount=args.trail_amount,
+                        trail_percent=args.trail_percent,
                         limitoffset=args.limitoffset,
                         oca=args.oca,
                         bracket=args.bracket)
@@ -503,7 +503,7 @@ def parse_args():
                         required=False, action='store_true',
                         help='Do not sell after a buy')
 
-    parser.add_argument('--exectype', default=bt.Order.ExecTypes[0],
+    parser.add_argument('--exec_type', default=bt.Order.ExecTypes[0],
                         choices=bt.Order.ExecTypes,
                         required=False, action='store',
                         help='Execution to Use when opening position')
@@ -534,13 +534,13 @@ def parse_args():
                         help='Test bracket orders by issuing high/low sides')
 
     pgroup = parser.add_mutually_exclusive_group(required=False)
-    pgroup.add_argument('--trailamount', default=None, type=float,
+    pgroup.add_argument('--trail_amount', default=None, type=float,
                         required=False, action='store',
-                        help='trailamount for StopTrail order')
+                        help='trail_amount for StopTrail order')
 
-    pgroup.add_argument('--trailpercent', default=None, type=float,
+    pgroup.add_argument('--trail_percent', default=None, type=float,
                         required=False, action='store',
-                        help='trailpercent for StopTrail order')
+                        help='trail_percent for StopTrail order')
 
     parser.add_argument('--limitoffset', default=None, type=float,
                         required=False, action='store',

@@ -517,9 +517,9 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
         if tradedata is None:
             tradedata = order.data
 
-        datatrades = self._trades[tradedata][order.tradeid]
+        datatrades = self._trades[tradedata][order.trade_id]
         if not datatrades:
-            trade = Trade(data=tradedata, tradeid=order.tradeid,
+            trade = Trade(data=tradedata, trade_id=order.trade_id,
                           historyon=self._tradehistoryon)
             datatrades.append(trade)
         else:
@@ -546,7 +546,7 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
             # Update it if needed
             if exbit.opened:
                 if trade.isclosed:
-                    trade = Trade(data=tradedata, tradeid=order.tradeid,
+                    trade = Trade(data=tradedata, trade_id=order.trade_id,
                                   historyon=self._tradehistoryon)
                     datatrades.append(trade)
 
@@ -558,7 +558,7 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
                              exbit.pnl,
                              comm_info=order.comm_info)
 
-                # This extra check covers the case in which different tradeid
+                # This extra check covers the case in which different trade_id
                 # orders have put the position down to 0 and the next order
                 # "opens" a position but "closes" the trade
                 if trade.isclosed:
@@ -586,7 +586,7 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
             proctrades = self._tradespending
 
         for order in procorders:
-            if order.exectype != order.Historical or order.histnotify:
+            if order.exec_type != order.Historical or order.hist_notify:
                 self.notify_order(order)
             for analyzer in itertools.chain(self.analyzers,
                                             self._slave_analyzers):
@@ -773,8 +773,8 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
 
     def buy(self, data=None,
             size=None, price=None, plimit=None,
-            exectype=None, valid=None, tradeid=0, oco=None,
-            trailamount=None, trailpercent=None,
+            exec_type=None, valid=None, trade_id=0, oco=None,
+            trail_amount=None, trail_percent=None,
             parent=None, transmit=True,
             **kwargs):
         '''Create a buy (long) order and send it to the broker
@@ -810,21 +810,21 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
             to set the implicit *Limit* order, once the *Stop* has been
             triggered (for which ``price`` has been used)
 
-          - ``trailamount`` (default: ``None``)
+          - ``trail_amount`` (default: ``None``)
 
             If the order type is StopTrail or StopTrailLimit, this is an
             absolute amount which determines the distance to the price (below
             for a Sell order and above for a buy order) to keep the trailing
             stop
 
-          - ``trailpercent`` (default: ``None``)
+          - ``trail_percent`` (default: ``None``)
 
             If the order type is StopTrail or StopTrailLimit, this is a
             percentage amount which determines the distance to the price (below
             for a Sell order and above for a buy order) to keep the trailing
-            stop (if ``trailamount`` is also specified it will be used)
+            stop (if ``trail_amount`` is also specified it will be used)
 
-          - ``exectype`` (default: ``None``)
+          - ``exec_type`` (default: ``None``)
 
             Possible values:
 
@@ -840,17 +840,17 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
 
             - ``Order.StopLimit``. An order which is triggered at ``price`` and
               executed as an implicit *Limit* order with price given by
-              ``pricelimit``
+              ``price_limit``
 
             - ``Order.Close``. An order which can only be executed with the
               closing price of the session (usually during a closing auction)
 
             - ``Order.StopTrail``. An order which is triggered at ``price``
-              minus ``trailamount`` (or ``trailpercent``) and which is updated
+              minus ``trail_amount`` (or ``trail_percent``) and which is updated
               if the price moves away from the stop
 
             - ``Order.StopTrailLimit``. An order which is triggered at
-              ``price`` minus ``trailamount`` (or ``trailpercent``) and which
+              ``price`` minus ``trail_amount`` (or ``trail_percent``) and which
               is updated if the price moves away from the stop
 
           - ``valid`` (default: ``None``)
@@ -875,10 +875,10 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
                 ``backtrader``) and will used to generate an order valid until
                 that time (*good till date*)
 
-          - ``tradeid`` (default: ``0``)
+          - ``trade_id`` (default: ``0``)
 
             This is an internal value applied by ``backtrader`` to keep track
-            of overlapping trades on the same asset. This ``tradeid`` is sent
+            of overlapping trades on the same asset. This ``trade_id`` is sent
             back to the *strategy* when notifying changes to the status of the
             orders.
 
@@ -933,8 +933,8 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
             return self.broker.buy(
                 self, data,
                 size=abs(size), price=price, plimit=plimit,
-                exectype=exectype, valid=valid, tradeid=tradeid, oco=oco,
-                trailamount=trailamount, trailpercent=trailpercent,
+                exec_type=exec_type, valid=valid, trade_id=trade_id, oco=oco,
+                trail_amount=trail_amount, trail_percent=trail_percent,
                 parent=parent, transmit=transmit,
                 **kwargs)
 
@@ -942,8 +942,8 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
 
     def sell(self, data=None,
              size=None, price=None, plimit=None,
-             exectype=None, valid=None, tradeid=0, oco=None,
-             trailamount=None, trailpercent=None,
+             exec_type=None, valid=None, trade_id=0, oco=None,
+             trail_amount=None, trail_percent=None,
              parent=None, transmit=True,
              **kwargs):
         '''
@@ -963,8 +963,8 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
             return self.broker.sell(
                 self, data,
                 size=abs(size), price=price, plimit=plimit,
-                exectype=exectype, valid=valid, tradeid=tradeid, oco=oco,
-                trailamount=trailamount, trailpercent=trailpercent,
+                exec_type=exec_type, valid=valid, trade_id=trade_id, oco=oco,
+                trail_amount=trail_amount, trail_percent=trail_percent,
                 parent=parent, transmit=transmit,
                 **kwargs)
 
@@ -999,8 +999,8 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
         return None
 
     def buy_bracket(self, data=None, size=None, price=None, plimit=None,
-                    exectype=bt.Order.Limit, valid=None, tradeid=0,
-                    trailamount=None, trailpercent=None, oargs={},
+                    exec_type=bt.Order.Limit, valid=None, trade_id=0,
+                    trail_amount=None, trail_percent=None, oargs={},
                     stopprice=None, stopexec=bt.Order.Stop, stopargs={},
                     limitprice=None, limitexec=bt.Order.Limit, limitargs={},
                     **kwargs):
@@ -1050,21 +1050,21 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
             to set the implicit *Limit* order, once the *Stop* has been
             triggered (for which ``price`` has been used)
 
-          - ``trailamount`` (default: ``None``)
+          - ``trail_amount`` (default: ``None``)
 
             If the order type is StopTrail or StopTrailLimit, this is an
             absolute amount which determines the distance to the price (below
             for a Sell order and above for a buy order) to keep the trailing
             stop
 
-          - ``trailpercent`` (default: ``None``)
+          - ``trail_percent`` (default: ``None``)
 
             If the order type is StopTrail or StopTrailLimit, this is a
             percentage amount which determines the distance to the price (below
             for a Sell order and above for a buy order) to keep the trailing
-            stop (if ``trailamount`` is also specified it will be used)
+            stop (if ``trail_amount`` is also specified it will be used)
 
-          - ``exectype`` (default: ``bt.Order.Limit``)
+          - ``exec_type`` (default: ``bt.Order.Limit``)
 
             Possible values: (see the documentation for the method ``buy``
 
@@ -1072,7 +1072,7 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
 
             Possible values: (see the documentation for the method ``buy``
 
-          - ``tradeid`` (default: ``0``)
+          - ``trade_id`` (default: ``0``)
 
             Possible values: (see the documentation for the method ``buy``
 
@@ -1136,9 +1136,9 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
         '''
 
         kargs = dict(size=size,
-                     data=data, price=price, plimit=plimit, exectype=exectype,
-                     valid=valid, tradeid=tradeid,
-                     trailamount=trailamount, trailpercent=trailpercent)
+                     data=data, price=price, plimit=plimit, exec_type=exec_type,
+                     valid=valid, trade_id=trade_id,
+                     trail_amount=trail_amount, trail_percent=trail_percent)
         kargs.update(oargs)
         kargs.update(kwargs)
         kargs['transmit'] = limitexec is None and stopexec is None
@@ -1146,8 +1146,8 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
 
         if stopexec is not None:
             # low side / stop
-            kargs = dict(data=data, price=stopprice, exectype=stopexec,
-                         valid=valid, tradeid=tradeid)
+            kargs = dict(data=data, price=stopprice, exec_type=stopexec,
+                         valid=valid, trade_id=trade_id)
             kargs.update(stopargs)
             kargs.update(kwargs)
             kargs['parent'] = o
@@ -1159,8 +1159,8 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
 
         if limitexec is not None:
             # high side / limit
-            kargs = dict(data=data, price=limitprice, exectype=limitexec,
-                         valid=valid, tradeid=tradeid)
+            kargs = dict(data=data, price=limitprice, exec_type=limitexec,
+                         valid=valid, trade_id=trade_id)
             kargs.update(limitargs)
             kargs.update(kwargs)
             kargs['parent'] = o
@@ -1174,8 +1174,8 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
 
     def sell_bracket(self, data=None,
                      size=None, price=None, plimit=None,
-                     exectype=bt.Order.Limit, valid=None, tradeid=0,
-                     trailamount=None, trailpercent=None,
+                     exec_type=bt.Order.Limit, valid=None, trade_id=0,
+                     trail_amount=None, trail_percent=None,
                      oargs={},
                      stopprice=None, stopexec=bt.Order.Stop, stopargs={},
                      limitprice=None, limitexec=bt.Order.Limit, limitargs={},
@@ -1208,9 +1208,9 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
         '''
 
         kargs = dict(size=size,
-                     data=data, price=price, plimit=plimit, exectype=exectype,
-                     valid=valid, tradeid=tradeid,
-                     trailamount=trailamount, trailpercent=trailpercent)
+                     data=data, price=price, plimit=plimit, exec_type=exec_type,
+                     valid=valid, trade_id=trade_id,
+                     trail_amount=trail_amount, trail_percent=trail_percent)
         kargs.update(oargs)
         kargs.update(kwargs)
         kargs['transmit'] = limitexec is None and stopexec is None
@@ -1218,8 +1218,8 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
 
         if stopexec is not None:
             # high side / stop
-            kargs = dict(data=data, price=stopprice, exectype=stopexec,
-                         valid=valid, tradeid=tradeid)
+            kargs = dict(data=data, price=stopprice, exec_type=stopexec,
+                         valid=valid, trade_id=trade_id)
             kargs.update(stopargs)
             kargs.update(kwargs)
             kargs['parent'] = o
@@ -1231,8 +1231,8 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
 
         if limitexec is not None:
             # low side / limit
-            kargs = dict(data=data, price=limitprice, exectype=limitexec,
-                         valid=valid, tradeid=tradeid)
+            kargs = dict(data=data, price=limitprice, exec_type=limitexec,
+                         valid=valid, trade_id=trade_id)
             kargs.update(limitargs)
             kargs.update(kwargs)
             kargs['parent'] = o

@@ -46,4 +46,4 @@ class MTradeObserver(bt.observer.Observer):
             if not trade.isclosed:
                 continue
 
-            self.lines[trade.tradeid][0] = trade.pnlcomm
+            self.lines[trade.trade_id][0] = trade.pnlcomm
