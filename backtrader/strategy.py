@@ -927,7 +927,7 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
             data = self.getdatabyname(data)
 
         data = data if data is not None else self.datas[0]
-        size = size if size is not None else self.getsizing(data, isbuy=True)
+        size = size if size is not None else self.get_sizing(data, isbuy=True)
 
         if size:
             return self.broker.buy(
@@ -957,7 +957,7 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
             data = self.getdatabyname(data)
 
         data = data if data is not None else self.datas[0]
-        size = size if size is not None else self.getsizing(data, isbuy=False)
+        size = size if size is not None else self.get_sizing(data, isbuy=False)
 
         if size:
             return self.broker.sell(
@@ -1460,13 +1460,13 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
 
     sizer = property(getsizer, setsizer)
 
-    def getsizing(self, data=None, isbuy=True):
+    def get_sizing(self, data=None, isbuy=True):
         '''
         Return the stake calculated by the sizer instance for the current
         situation
         '''
         data = data if data is not None else self.datas[0]
-        return self._sizer.getsizing(data, isbuy=isbuy)
+        return self._sizer.get_sizing(data, isbuy=isbuy)
 
 
 class MetaSigStrategy(Strategy.__class__):

@@ -28,14 +28,14 @@ from .metabase import MetaParams
 
 class Sizer(with_metaclass(MetaParams, object)):
     '''This is the base class for *Sizers*. Any *sizer* should subclass this
-    and override the ``_getsizing`` method
+    and override the ``_get_sizing`` method
 
     Member Attribs:
 
       - ``strategy``: will be set by the strategy in which the sizer is working
 
         Gives access to the entire api of the strategy, for example if the
-        actual data position would be needed in ``_getsizing``::
+        actual data position would be needed in ``_get_sizing``::
 
            position = self.strategy.get_position(data)
 
@@ -47,11 +47,11 @@ class Sizer(with_metaclass(MetaParams, object)):
     strategy = None
     broker = None
 
-    def getsizing(self, data, isbuy):
+    def get_sizing(self, data, isbuy):
         comm_info = self.broker.get_commission_info(data)
-        return self._getsizing(comm_info, self.broker.get_cash(), data, isbuy)
+        return self._get_sizing(comm_info, self.broker.get_cash(), data, isbuy)
 
-    def _getsizing(self, comm_info, cash, data, isbuy):
+    def _get_sizing(self, comm_info, cash, data, isbuy):
         '''This method has to be overriden by subclasses of Sizer to provide
         the sizing functionality
 

@@ -821,7 +821,7 @@
 
 1.2.6.88
   - Fix broken data-multitimeframe sample
-  - Address #72 by improving _getsizing method which not also takes data as
+  - Address #72 by improving _get_sizing method which not also takes data as
     parameter
   - Fixes #77 by correctly calculating when the current session ends for the
     last bar (when next session data is already in)
