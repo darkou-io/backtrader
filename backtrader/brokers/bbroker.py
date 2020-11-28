@@ -439,7 +439,7 @@ class BackBroker(bt.BrokerBase):
                 dvalue = comm_info.getvaluesize(position.size, data.close[0])
 
             dunrealized = comm_info.profitandloss(position.size, position.price,
-                                                 data.close[0])
+                                                  data.close[0])
             if datas and len(datas) == 1:
                 if lever and dvalue > 0:
                     dvalue -= dunrealized
@@ -758,8 +758,8 @@ class BackBroker(bt.BrokerBase):
                 # Cashadjust closed contracts: prev close vs exec price
                 # The operation can inject or take cash out
                 cash += comm_info.cashadjust(-closed,
-                                            position.adjbase,
-                                            price)
+                                             position.adjbase,
+                                             price)
 
                 # Update system cash
                 self.cash = cash
@@ -798,7 +798,7 @@ class BackBroker(bt.BrokerBase):
                     # close price
                     adjsize = psize - opened
                     cash += comm_info.cashadjust(adjsize,
-                                                position.adjbase, price)
+                                                 position.adjbase, price)
 
                 # record adjust price base for end of bar cash adjustment
                 position.adjbase = price
@@ -857,7 +857,7 @@ class BackBroker(bt.BrokerBase):
             exprice = order.created.pclose
         else:
             if not self.p.coo and order.data.datetime[0] <= order.created.dt:
-                return    # can only execute after creation time
+                return  # can only execute after creation time
 
             dtcoc = None
             exprice = popen
@@ -944,8 +944,8 @@ class BackBroker(bt.BrokerBase):
             order.trailadjust(pclose)
 
     def _try_exec_stop_limit(self, order,
-                            popen, phigh, plow, pclose,
-                            pcreated, plimit):
+                             popen, phigh, plow, pclose,
+                             pcreated, plimit):
         if order.isbuy():
             if popen >= pcreated:
                 order.triggered = True
@@ -1056,6 +1056,13 @@ class BackBroker(bt.BrokerBase):
         pcreated = order.created.price
         plimit = order.created.pricelimit
 
+        # 处理一字涨跌停板
+        if (order.isbuy() and plow >= data.close[-1] * 1.1 - 0.02) or \
+                (order.issell() and phigh <= data.close[-1] * 0.9 + 0.02):
+            order.reject()
+            self.notify(order)
+            return
+
         if order.exectype == Order.Market:
             self._try_exec_market(order, popen, phigh, plow)
 
@@ -1074,8 +1081,8 @@ class BackBroker(bt.BrokerBase):
 
         elif order.exectype in [Order.StopLimit, Order.StopTrailLimit]:
             self._try_exec_stop_limit(order,
-                                     popen, phigh, plow, pclose,
-                                     pcreated, plimit)
+                                      popen, phigh, plow, pclose,
+                                      pcreated, plimit)
 
         elif order.exectype == Order.Historical:
             self._try_exec_historical(order)
@@ -1225,8 +1232,8 @@ class BackBroker(bt.BrokerBase):
             if pos:
                 comm_info = self.get_commission_info(data)
                 self.cash += comm_info.cashadjust(pos.size,
-                                                 pos.adjbase,
-                                                 data.close[0])
+                                                  pos.adjbase,
+                                                  data.close[0])
                 # record the last adjustment price
                 pos.adjbase = data.close[0]
 
