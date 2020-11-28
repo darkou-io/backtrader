@@ -46,7 +46,7 @@ class FixedSize(bt.Sizer):
         else:
             return self.p.stake
 
-    def setsizing(self, stake):
+    def set_sizing(self, stake):
         if self.p.tranches > 1:
             self.p.stake = abs(int(self.p.stake / self.p.tranches))
         else:
@@ -99,7 +99,7 @@ class FixedSizeTarget(bt.Sizer):
         else:
             return self.p.stake
 
-    def setsizing(self, stake):
+    def set_sizing(self, stake):
         if self.p.tranches > 1:
             size = abs(int(self.p.stake / self.p.tranches))
             self.p.stake = min((self.strategy.position.size + size),
